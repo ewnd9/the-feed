@@ -1,0 +1,30 @@
+{
+  "name": "the-feed",
+  "version": "0.0.0",
+  "description": "INSERT_DESCRIPTION",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "preferGlobal": "false",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ewnd9/the-feed.git"
+  },
+  "keywords": [
+    "INSERT_KEYWORDS"
+  ],
+  "author": "ewnd9 <ewndnine@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "express": "^4.13.3",
+    "express-cors": "0.0.3",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "morgan": "^1.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.4.1"
+  }
+}
