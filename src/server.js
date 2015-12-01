@@ -4,6 +4,9 @@ var app = express();
 var morgan = require('morgan');
 var cors = require('express-cors');
 
+var PouchDB = require('pouchdb');
+PouchDB.plugin(require('pouchdb-hoodie-api'));
+
 app.use(morgan('request: :remote-addr :method :url :status'));
 app.use(express.static('public'));
 app.use(cors({
