@@ -3,12 +3,17 @@ import Promise from 'bluebird';
 
 const x = Xray();
 
-const task = (url, selector, titleSelector, urlSelector) => {
+const task = (url, selector, titleSelector, urlSelector, additional = {}) => {
 	return new Promise((resolve, reject) => {
+		const params = {
+			title: titleSelector,
+			url: urlSelector
+		};
+
 		x(url, {
 		  items: x(selector, [{
-		    title: titleSelector,
-				url: urlSelector
+				...params,
+				...additional
 			}])
 		})((err, result) => {
 			if (err) {

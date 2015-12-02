@@ -18,3 +18,19 @@ test('get reddit posts', async t => {
 
 	setTimeout(() => t.fail(), 1000);
 });
+
+test('get avito posts', async t => {
+	const url = 'https://www.avito.ru/moskva?bt=1&q=playstation';
+	const selector = '.js-catalog-item-enum';
+
+	const titleSelector = 'h3 a';
+	const urlSelector = 'h3 a@href';
+	const additional = {
+		price: '.description .about'
+	};
+
+	const items = await scrapeTask.task(url, selector, titleSelector, urlSelector, additional);
+	t.is(items.length, 50);
+
+	setTimeout(() => t.fail(), 1000);
+});
