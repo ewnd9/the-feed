@@ -1,25 +1,20 @@
-var fs = require('fs');                                                                                                                                                                                                                  [0/33]
-var expect = require('chai').expect;
+import test from 'ava';
+import 'babel-core/register';
+import githubTask from './../src/tasks/github-stars';
 
-describe('get github stars', function() {
+test('follow specification', t => {
+	t.true(typeof githubTask.task === 'function');
+});
 
-	var task = require('./../src/tasks/github-stars').default;
+test('get github stars', async t => {
+	const items = await githubTask.task();
 
-  it('follow specification', function() {
-		expect(task.task).to.exist;
-  });
+	t.true(items.length > 0);
 
-  it('get github stars', function(done) {
-		this.timeout(10000);
-		
-		task.task().then((items) => {
-			expect(items.length).to.be.above(1);
-			expect(items[0].id).to.exist;
-			expect(items[0].user_url).to.exist;
-			expect(items[0].title).to.exist;
-			expect(items[0].url).to.exist;
-			done();
-		}, (err) => done(err));
-  });
+	t.ok(items[0].id);
+	t.ok(items[0].user_url);
+	t.ok(items[0].title);
+	t.ok(items[0].url);
 
-})
+	setTimeout(() => t.fail(), 10000);
+});
