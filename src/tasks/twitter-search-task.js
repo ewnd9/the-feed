@@ -7,7 +7,7 @@ const task = (user) => {
 		count: 100,
 		result_type: 'recent'
 	};
-	
+
 	return twitter.getAsync('search/tweets', params).then((result) => {
 		return result.statuses.filter((status) => {
 			return status.user.screen_name !== user &&
@@ -19,7 +19,7 @@ const task = (user) => {
 			id: item.id_str,
 			title: `@${item.user.screen_name}: ${item.text}`,
 			url: `https://twitter.com/${item.user.screen_name}/status/${item.id_str}`,
-			url_url: `https://twitter.com/${item.user.screen_name}`
+			user_url: `https://twitter.com/${item.user.screen_name}`
 		}));
 	});
 };
