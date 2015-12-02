@@ -29,6 +29,7 @@
     "morgan": "^1.6.1",
     "pouchdb": "^5.1.0",
     "pouchdb-hoodie-api": "^1.6.0",
+    "twitter": "^1.2.5",
     "x-ray": "^2.0.2"
   },
   "devDependencies": {
