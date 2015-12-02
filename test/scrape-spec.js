@@ -6,19 +6,15 @@ test('follow specification', t => {
 	t.true(typeof scrapeTask.task === 'function');
 });
 
-test('get scraped items', async t => {
-	const url = 'http://mat.io';
-	const selector = '.Header-list-item';
+test('get reddit posts', async t => {
+	const url = 'https://www.reddit.com/r/node/search?q=node.js&sort=new&restrict_sr=on';
+	const selector = '.search-result';
 
-	const titleSelector = 'a';
-	const urlSelector = 'a@href';
+	const titleSelector = '.search-title';
+	const urlSelector = '.search-title@href';
 
 	const items = await scrapeTask.task(url, selector, titleSelector, urlSelector);
-
-	t.is(items.length, 4);
-	
-	t.is(items[0].title, 'Github');
-	t.is(items[0].url, 'http://github.com/matthewmueller');
+	t.is(items.length, 25);
 
 	setTimeout(() => t.fail(), 1000);
 });
