@@ -7,7 +7,8 @@ const task = (url, selector, titleSelector, urlSelector, additional = {}) => {
 	return new Promise((resolve, reject) => {
 		const params = {
 			title: titleSelector,
-			url: urlSelector
+			url: urlSelector,
+			id: urlSelector
 		};
 
 		x(url, {
