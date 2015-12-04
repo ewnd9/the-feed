@@ -4,12 +4,23 @@ const token = process.env[TOKEN_ENV_VARIABLE];
 
 const processEvents = (items, filterFn, action) => {
 	const mapFn = (action) => {
-		return (item) => ({
-			id: item.id,
-			user_url: `https://github.com/${item.actor.login}`,
-			title: `${item.actor.login} ${action} ${item.repo.name}`,
-			url: `https://github.com/${item.repo.name}`
-		});
+		return (item) => {
+			const user = item.actor.login;;
+			const userUrl = `https://github.com/${user}`;
+			const repo = item.repo.name;
+			const repoUrl = `https://github.com/${item.repo.name}`
+
+			return {
+				id: item.id,
+				user_url: userUrl,
+				title: [
+					[userUrl, user],
+					action,
+					[repoUrl, repo]
+				],
+				url: repoUrl
+			};
+		};
 	};
 
 	return items.filter(filterFn).map(mapFn(action));
