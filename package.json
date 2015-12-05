@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon app.js",
     "test": "ava",
-    "test:watch": "nodemon test/*.js --exec ava"
+    "test:watch": "nodemon test/*.js --exec ava",
+    "build": "babel -s -d lib src",
+    "build:watch": "babel --watch -s -d lib src"
   },
   "preferGlobal": "false",
   "repository": {
@@ -19,7 +21,6 @@
   "author": "ewnd9 <ewndnine@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel": "^5.8.21",
     "bluebird": "^3.0.6",
     "express": "^4.13.3",
     "express-cors": "0.0.3",
@@ -28,7 +29,9 @@
     "moment": "^2.10.6",
     "morgan": "^1.6.1",
     "pouchdb": "^5.1.0",
+    "pouchdb-find": "^0.8.0",
     "pouchdb-hoodie-api": "^1.6.0",
+    "source-map-support": "^0.4.0",
     "twitter": "^1.2.5",
     "user-home": "^2.0.0",
     "vk-universal-api": "0.0.2",
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "ava": "^0.7.0",
+    "babel": "^5.8.21",
     "nodemon": "^1.4.1"
   }
 }
