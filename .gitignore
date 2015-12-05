@@ -4,3 +4,5 @@
 play.js
 *.sh
 /lib
+/public/*
+!/public/.keep
