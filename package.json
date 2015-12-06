@@ -4,8 +4,9 @@
   "description": "INSERT_DESCRIPTION",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch lib app.js",
+    "start": "npm-run-all --parallel start:frontend start:backend",
     "start:frontend": "webpack-dev-server",
+    "start:backend": "nodemon --watch lib app.js",
     "test": "ava",
     "test:watch": "nodemon test/*.js --exec ava",
     "build": "babel -s -d lib src",
@@ -45,6 +46,7 @@
     "file-loader": "^0.8.5",
     "isomorphic-fetch": "^2.2.0",
     "nodemon": "^1.4.1",
+    "npm-run-all": "^1.3.4",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "webpack": "^1.12.9",
