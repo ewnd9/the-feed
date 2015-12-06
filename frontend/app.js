@@ -3,6 +3,8 @@ import fetch from 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import moment from 'moment';
+
 const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
 
 const ItemList = React.createClass({
@@ -12,8 +14,11 @@ const ItemList = React.createClass({
       .then((response) => {
         return response.json();
       })
-      .then((items) => {
-        this.setState({ items, page });
+      .then((_items) => {
+        this.setState({
+          items: [...this.state.items, ..._items],
+          page
+        });
       });
   },
   componentDidMount: function() {
@@ -26,21 +31,20 @@ const ItemList = React.createClass({
     return (
       <div>
         <div>
-          { this.state.page > 1 && (<a onClick={this.handleClick.bind(this, this.state.page - 1)}>Prev</a>) }
-          { ' ' }
-          <span>Page { this.state.page }</span>
-          { ' ' }
-          <a onClick={this.handleClick.bind(this, this.state.page + 1)}>Next</a>
-        </div>
-        <ul>
-          {this.state.items.map(function(result) {
+          {this.state.items.map((result) => {
+            const fromNow = moment(result.updatedAt).fromNow();
+
             return (
-              <li key={ result._id }>
-                <a href={ result.url } target="_blank">{ result.title }</a>
-              </li>
+              <div key={ result._id }>
+                <div><a href={ result.url } target="_blank">{ result.title }</a></div>
+                <div>{ fromNow }</div>
+              </div>
             );
           })}
-        </ul>
+        </div>
+        <div className="load-more-holder">
+          <a onClick={this.handleClick.bind(this, this.state.page + 1)}>Load More</a>
+        </div>
       </div>
     );
 	}
