@@ -1,0 +1,9 @@
+db: ~/the-feed-db
+tasks:
+  reddit-scrape:
+    task: scrape
+    params:
+      url: https://www.reddit.com/r/node/search?q=node.js&sort=new&restrict_sr=on
+      selector: .search-result
+      titleSelector: .search-title
+      urlSelector: .search-title@href

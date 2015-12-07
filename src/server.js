@@ -9,7 +9,14 @@ import Promise from 'bluebird';
 import dbInit from './db-init';
 import taskManager from './task-manager';
 
-dbInit().then(({ pouch, db }) => {
+import yaml from 'js-yaml';
+import fs from 'fs';
+import _ from 'lodash';
+
+const config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
+const tasks = _.map(config.tasks, (task, name) => ({ ...task, name }));
+
+dbInit(config.db).then(({ pouch, db }) => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
@@ -38,7 +45,7 @@ dbInit().then(({ pouch, db }) => {
 
   var server = app.listen(3000, () => {
     console.log('localhost:3000');
-    taskManager(pouch, db);
+    taskManager(pouch, db, tasks);
   });
 }).catch((err) => {
   console.log(err.stack);

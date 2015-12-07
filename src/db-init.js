@@ -2,9 +2,7 @@ var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-hoodie-api'));
 PouchDB.plugin(require('pouchdb-find'));
 
-var userHome = require('user-home');
-var pouch = new PouchDB(userHome + '/the-feed-db');
-var db = pouch.hoodieApi({});
+var path = require('expand-tilde');
 
 var createDesignDoc = (name, mapFunction) => {
   var ddoc = {
@@ -20,7 +18,10 @@ var ddoc = createDesignDoc('by_updated_at', function (doc) {
   emit(doc.updatedAt, doc);
 });
 
-export default () => {
+export default (dbPath) => {
+  var pouch = new PouchDB(path(dbPath));
+  var db = pouch.hoodieApi({});
+
 	return pouch.put(ddoc).then((doc) => {
 		// success
 	}, (err) => {

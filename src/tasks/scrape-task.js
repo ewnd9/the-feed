@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 
 const x = Xray();
 
-const task = (url, selector, titleSelector, urlSelector, additional = {}) => {
+const task = ({ url, selector, titleSelector, urlSelector, additional = {} }) => {
 	return new Promise((resolve, reject) => {
 		const params = {
 			title: titleSelector,

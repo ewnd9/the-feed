@@ -13,7 +13,14 @@ test('get reddit posts', async t => {
 	const titleSelector = '.search-title';
 	const urlSelector = '.search-title@href';
 
-	const items = await scrapeTask.task(url, selector, titleSelector, urlSelector);
+	const params = {
+		url,
+		selector,
+		titleSelector,
+		urlSelector
+	};
+
+	const items = await scrapeTask.task(params);
 	t.is(items.length, 25);
 
 	setTimeout(() => t.fail(), 1000);
@@ -29,7 +36,15 @@ test('get avito posts', async t => {
 		price: '.description .about'
 	};
 
-	const items = await scrapeTask.task(url, selector, titleSelector, urlSelector, additional);
+	const params = {
+		url,
+		selector,
+		titleSelector,
+		urlSelector,
+		additional
+	};
+
+	const items = await scrapeTask.task(params);
 	t.is(items.length, 50);
 
 	setTimeout(() => t.fail(), 1000);
