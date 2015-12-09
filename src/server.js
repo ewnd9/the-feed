@@ -32,7 +32,7 @@ dbInit(config.db).then(({ pouch, db }) => {
   app.get('/api/v1/data', (req, res) => {
     const page = Math.max(parseInt(req.query.page), 1);
 
-    const limit = 5;
+    const limit = 20;
     const skip = (page - 1) * limit;
 
     pouch.query('by_updated_at', { descending: true, limit, skip }).then((data) => {
