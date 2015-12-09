@@ -34,9 +34,27 @@ const ItemList = React.createClass({
           {this.state.items.map((result) => {
             const fromNow = moment(result.updatedAt).fromNow();
 
+            let title;
+
+            if (typeof result.title === 'string') {
+              title = [[result.url, result.title]];
+            } else {
+              title = result.title;
+            }
+
             return (
               <div key={ result._id }>
-                <div><a href={ result.url } target="_blank">{ result.title }</a></div>
+                <div>
+                  {
+                    title.map((title, i) => {
+                      if (typeof title === 'string') {
+                        return (<span key={i}>{ title }{' '}</span>);
+                      } else {
+                        return (<span key={i}><a href={ title[0] } target="_blank">{ title[1] }</a>{' '}</span>);
+                      }
+                    })
+                  }
+                </div>
                 <div>{ fromNow }</div>
               </div>
             );
