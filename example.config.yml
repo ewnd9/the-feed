@@ -7,3 +7,8 @@ tasks:
       selector: .search-result
       titleSelector: .search-title
       urlSelector: .search-title@href
+  github-stars:
+    task: github-stars
+    params:
+      username: ewnd9
+      token: <github-token>

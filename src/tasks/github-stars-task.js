@@ -1,6 +1,4 @@
 const got = require('got');
-const TOKEN_ENV_VARIABLE = 'GITHUB_TOKEN';
-const token = process.env[TOKEN_ENV_VARIABLE];
 
 const processEvents = (items, filterFn, action) => {
 	const mapFn = (action) => {
@@ -43,8 +41,8 @@ export const getRepoMadePublics = (items) => {
 	return processEvents(items, filterFn, 'made public');
 };
 
-const task = () => {
-	return got('https://api.github.com/users/ewnd9/received_events', {
+const task = ({ username, token }) => {
+	return got(`https://api.github.com/users/${username}/received_events`, {
 		json: true,
 		headers: {
 			'accept': 'application/vnd.github.v3+json',
@@ -57,6 +55,5 @@ const task = () => {
 };
 
 export default {
-	env: [TOKEN_ENV_VARIABLE],
 	task
 };

@@ -10,6 +10,8 @@ $ npm install
 
 ## Usage
 
+Copy `example.config.yml` to `config.yml`
+
 ```
 $ npm start
 ```

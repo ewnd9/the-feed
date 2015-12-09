@@ -3,14 +3,19 @@ var Promise = require('bluebird');
 export default (pouch, db, tasks) => {
 	tasks.forEach((task) => {
 		var currTask = require('./tasks/' + task.task + '-task');
+		if (currTask.default) {
+			currTask = currTask.default; // es6 import workaround
+		}
 
 		var job = {
 			name: task.name,
 			fn: () => currTask.task(task.params)
 		};
 
+		var log = (msg) => console.log(task.name, msg);
+
 		var fn = () => {
-			console.log(new Date());
+			log(new Date());
 
 			var stats = {
 				existed: 0,
@@ -26,17 +31,17 @@ export default (pouch, db, tasks) => {
 					}, (err) => {
 						if (err.reason === 'missing') {
 							return db.add(item).then(() => stats.added++, (err) => {
-								console.log(err);
+								log(err);
 							});
 						} else {
-							console.log(err);
+							log(err);
 						}
 					});
 				});
 			}).then(() => {
-				console.log(stats);
+				log(stats);
 			}).catch((err) => {
-				console.log(err.stack);
+				log(err.stack);
 			});
 		};
 
