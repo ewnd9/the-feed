@@ -7,11 +7,6 @@ export default (pouch, db, tasks) => {
 			currTask = currTask.default; // es6 import workaround
 		}
 
-		var job = {
-			name: task.name,
-			fn: () => currTask.task(task.params)
-		};
-
 		var log = (msg) => console.log(task.name, msg);
 
 		var fn = () => {
@@ -22,9 +17,10 @@ export default (pouch, db, tasks) => {
 				added: 0
 			};
 
-			job.fn().then((items) => {
+			currTask.task(task.params).then((items) => {
 				return Promise.map(items, (item) => {
-					item.id = job.name + ':' + item.id;
+					item.meta = { task : task.name };
+					item.id = task.name + ':' + item.id;
 
 					return db.find(item.id).then((item) => {
 						stats.existed++;

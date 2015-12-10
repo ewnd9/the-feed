@@ -45,6 +45,7 @@ const ItemList = React.createClass({
             return (
               <div key={ result._id }>
                 <div>
+                  <span>{ result.meta.task }:</span>{' '}
                   {
                     title.map((title, i) => {
                       if (typeof title === 'string') {
