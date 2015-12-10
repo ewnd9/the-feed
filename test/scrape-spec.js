@@ -1,23 +1,14 @@
 import test from 'ava';
 import 'babel-core/register';
 import scrapeTask from './../src/tasks/scrape-task';
-import nock, { back as nockBack } from 'nock';
 import fs from 'fs';
 import Promise from 'bluebird';
 
-const data = __filename.split('/');
-const fixtureName = data[data.length - 1] + '.json';
+import nockHelper from './utils/nock-helper';
+const nock = nockHelper(__filename);
 
-let nockDone = null;
-
-test.before(t => {
-	nockBack.fixtures = __dirname + '/fixtures'; //this only needs to be set once in your test helper
-	nockBack.setMode('record');
-
-	nockBack(fixtureName, (_nockDone) => nockDone = _nockDone);
-});
-
-test.after(() => nockDone());
+test.before(nock.beforeFn);
+test.after(nock.afterFn);
 
 test('follow specification', t => {
 	t.true(typeof scrapeTask.task === 'function');

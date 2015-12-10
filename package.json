@@ -24,6 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.0.6",
+    "cheerio": "^0.19.0",
+    "expand-tilde": "1.2.0",
     "express": "^4.13.3",
     "express-cors": "0.0.3",
     "got": "^5.1.0",
@@ -35,7 +37,6 @@
     "pouchdb-find": "^0.8.0",
     "pouchdb-hoodie-api": "^1.6.0",
     "source-map-support": "^0.4.0",
-    "expand-tilde": "1.2.0",
     "twitter": "^1.2.5",
     "user-home": "^2.0.0",
     "vk-universal-api": "0.0.2",
