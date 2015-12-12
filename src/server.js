@@ -9,12 +9,7 @@ import Promise from 'bluebird';
 import dbInit from './db-init';
 import taskManager from './task-manager';
 
-import yaml from 'js-yaml';
-import fs from 'fs';
-import _ from 'lodash';
-
-const config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
-const tasks = _.map(config.tasks, (task, name) => ({ ...task, name }));
+import config, { tasks } from './config';
 
 dbInit(config.db).then(({ pouch, db }) => {
   console.log('db init');

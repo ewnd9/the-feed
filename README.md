@@ -14,6 +14,12 @@ Copy `example.config.yml` to `config.yml`
 
 ```
 $ npm start
+
+  Usage
+  	$ the-feed
+  
+  Options
+  	-t, --test Interactive tasks testing
 ```
 
 ## License

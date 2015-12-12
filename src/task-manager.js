@@ -1,12 +1,19 @@
-var Promise = require('bluebird');
+import Promise from 'bluebird';
+
+export const createTask = (task) => {
+	let currTask = require('./tasks/' + task.task + '-task');
+
+	if (currTask.default) {
+		currTask = currTask.default; // es6 import workaround
+	}
+
+	currTask.makeJob = () => currTask.task(task.params);
+	return currTask;
+};
 
 export default (pouch, db, tasks) => {
 	tasks.forEach((task) => {
-		var currTask = require('./tasks/' + task.task + '-task');
-		if (currTask.default) {
-			currTask = currTask.default; // es6 import workaround
-		}
-
+		var currTask = createTask(task);
 		var log = (msg) => console.log(task.name, msg);
 
 		var fn = () => {
@@ -17,7 +24,7 @@ export default (pouch, db, tasks) => {
 				added: 0
 			};
 
-			currTask.task(task.params).then((items) => {
+			currTask.makeJob().then((items) => {
 				return Promise.map(items, (item) => {
 					item.meta = { task : task.name };
 					item.id = task.name + ':' + item.id;
