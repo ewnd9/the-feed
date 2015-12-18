@@ -86,7 +86,11 @@ const ItemList = React.createClass({
                 });
 
                 return (
-                  <div className={itemClass} key={ result._id } onMouseEnter={this.handleHover.bind(this, index)}>
+                  <div className={itemClass}
+                       key={ result._id }
+                       onMouseEnter={this.handleHover.bind(this, index)}
+                       onFocus={this.handleHover.bind(this, index)}
+                       tabIndex={index + 1}>
                     <div>
                       <span>{ result.meta.task }:</span>{' '}
                       {
