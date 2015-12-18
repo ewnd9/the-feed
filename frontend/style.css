@@ -8,8 +8,41 @@ a {
 
 .container {
 	display: flex;
-	width: 970px;
+	flex-direction: column;
+
+	width: 650px;
 	margin: 0 auto;
+}
+
+header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	height: 50px;
+}
+
+.logo {
+	font-size: xx-large;
+}
+
+.menu {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+
+	width: 200px;
+}
+
+.delimeter {
+	border-bottom: 1px solid black;
+	margin: 10px 0;
+}
+
+.main {
+	display: flex;
+	flex-direction: row;
 }
 
 aside {

@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import moment from 'moment';
+import Header from './components/header';
 
 const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
 
@@ -32,43 +33,47 @@ const ItemList = React.createClass({
   render: function() {
     return (
       <div className="container">
-        <aside>menu</aside>
-        <div className="content">
-          <div>
-            {this.state.items.map((result) => {
-              const fromNow = moment(result.updatedAt).fromNow();
+        <Header />
+        <div className="delimeter"></div>
+        <div className="main">
+          <aside>menu</aside>
+          <div className="content">
+            <div>
+              {this.state.items.map((result) => {
+                const fromNow = moment(result.updatedAt).fromNow();
 
-              let title;
+                let title;
 
-              if (typeof result.title === 'string') {
-                title = [[result.url, result.title]];
-              } else {
-                title = result.title;
-              }
+                if (typeof result.title === 'string') {
+                  title = [[result.url, result.title]];
+                } else {
+                  title = result.title;
+                }
 
-              return (
-                <div key={ result._id }>
-                  <div>
-                    <span>{ result.meta.task }:</span>{' '}
-                    {
-                      title.map((title, i) => {
-                        if (typeof title === 'string') {
-                          return (<span key={i}>{ title }{' '}</span>);
-                        } else {
-                          return (<span key={i}><a href={ title[0] } target="_blank">{ title[1] }</a>{' '}</span>);
-                        }
-                      })
-                    }
+                return (
+                  <div key={ result._id }>
+                    <div>
+                      <span>{ result.meta.task }:</span>{' '}
+                      {
+                        title.map((title, i) => {
+                          if (typeof title === 'string') {
+                            return (<span key={i}>{ title }{' '}</span>);
+                          } else {
+                            return (<span key={i}><a href={ title[0] } target="_blank">{ title[1] }</a>{' '}</span>);
+                          }
+                        })
+                      }
+                    </div>
+                    <div>{ fromNow }</div>
                   </div>
-                  <div>{ fromNow }</div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+            <div className="load-more-holder">
+              <a onClick={this.handleClick.bind(this, this.state.page + 1)}>Load More</a>
+            </div>
           </div>
-          <div className="load-more-holder">
-            <a onClick={this.handleClick.bind(this, this.state.page + 1)}>Load More</a>
-          </div>
-        </div>        
+        </div>
       </div>
     );
 	}
