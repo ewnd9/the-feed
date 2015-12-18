@@ -1,0 +1,21 @@
+a {
+	cursor: pointer;
+}
+
+.load-more-holder {
+	margin-top: 20px;
+}
+
+.container {
+	display: flex;
+	width: 970px;
+	margin: 0 auto;
+}
+
+aside {
+	flex: 2;
+}
+
+.content {
+	flex: 6;
+}
