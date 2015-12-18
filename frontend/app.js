@@ -6,6 +6,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import moment from 'moment';
+import classNames from 'classnames';
+
 import Header from './components/header';
 
 const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
@@ -13,7 +15,7 @@ const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
 const ItemList = React.createClass({
   getInitialState: () => ({ items: [], page: 1 }),
   getItems: function(page) {
-    fetch(baseUrl + '/api/v1/data?page=' + page)
+    fetch(baseUrl + '/api/v1/items?page=' + page)
       .then((response) => {
         return response.json();
       })
@@ -30,6 +32,34 @@ const ItemList = React.createClass({
   handleClick: function(page) {
     this.getItems(page);
   },
+  handleHover: function(index) {
+    const item = this.state.items[index];
+
+    this.setState({
+      ...this.state,
+      items: [
+        ...this.state.items.slice(0, index),
+        {
+          ...item,
+          seen: true
+        },
+        ...this.state.items.slice(index + 1)
+      ]
+    });
+
+    if (!item.seen) {
+      fetch(baseUrl + '/api/v1/items/' + item._id, {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          seen: true
+        })
+      });
+    }
+  },
   render: function() {
     return (
       <div className="container">
@@ -39,9 +69,8 @@ const ItemList = React.createClass({
           <aside>menu</aside>
           <div className="content">
             <div>
-              {this.state.items.map((result) => {
-                const fromNow = moment(result.updatedAt).fromNow();
-
+              {this.state.items.map((result, index) => {
+                const fromNow = moment(result.createdAt).fromNow();
                 let title;
 
                 if (typeof result.title === 'string') {
@@ -50,8 +79,14 @@ const ItemList = React.createClass({
                   title = result.title;
                 }
 
+                const itemClass = classNames({
+                  'item': true,
+                  'item-seen': result.seen,
+                  'item-unseen': !result.seen
+                });
+
                 return (
-                  <div key={ result._id }>
+                  <div className={itemClass} key={ result._id } onMouseEnter={this.handleHover.bind(this, index)}>
                     <div>
                       <span>{ result.meta.task }:</span>{' '}
                       {

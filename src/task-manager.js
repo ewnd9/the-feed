@@ -27,7 +27,7 @@ export default (pouch, db, tasks) => {
 			currTask.makeJob().then((items) => {
 				return Promise.map(items, (item) => {
 					item.meta = { task : task.name };
-					item.id = task.name + ':' + item.id;
+					item.id = task.name + ':' + item.id.replace(/\W/g, '');
 
 					return db.find(item.id).then((item) => {
 						stats.existed++;

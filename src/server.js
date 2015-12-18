@@ -24,14 +24,26 @@ dbInit(config.db).then(({ pouch, db }) => {
     ]
   }));
 
-  app.get('/api/v1/data', (req, res) => {
+  app.get('/api/v1/items', (req, res) => {
     const page = Math.max(parseInt(req.query.page), 1);
 
     const limit = 20;
     const skip = (page - 1) * limit;
 
-    pouch.query('by_updated_at', { descending: true, limit, skip }).then((data) => {
+    pouch.query('by_created_at', { descending: true, limit, skip }).then((data) => {
       const result = data.rows.map((row) => row.value);
+      res.json(result);
+    }).catch((err) => {
+      res.json(err);
+    });
+  });
+
+  // \\S\\s is an alternative for .+
+  app.put('/api/v1/items/:id([\\S\\s:]+)', (req, res) => {
+    db.find(req.params.id).then((item) => {
+      item.seen = true;
+      return db.update(item);
+    }).then((result) => {
       res.json(result);
     }).catch((err) => {
       res.json(err);

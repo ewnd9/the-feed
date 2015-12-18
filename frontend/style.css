@@ -33,6 +33,7 @@ header {
 	justify-content: space-around;
 
 	width: 200px;
+	text-transform: uppercase;
 }
 
 .delimeter {
@@ -52,3 +53,27 @@ aside {
 .content {
 	flex: 6;
 }
+
+.item-unseen {
+  background-color: #EEEEEE;
+}
+
+.item-seen {
+  background-color: white !important;
+}
+
+/* now working
+.item:hover {
+	animation-name: example;
+	animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes example {
+  from {
+		background-color: #EEEEEE;
+	}
+  to {
+		background-color: white;
+	}
+} */
