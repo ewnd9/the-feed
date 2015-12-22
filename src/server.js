@@ -30,12 +30,18 @@ dbInit(config.db).then(({ pouch, db }) => {
     const limit = 20;
     const skip = (page - 1) * limit;
 
-    pouch.query('by_created_at', { descending: true, limit, skip }).then((data) => {
-      const result = data.rows.map((row) => row.value);
-      res.json(result);
-    }).catch((err) => {
-      res.json(err);
-    });
+    pouch
+      .query('by_created_at', {
+        include_docs: true,
+        descending: true,
+        limit,
+        skip
+      }).then((data) => {
+        const result = data.rows.map((row) => row.doc);
+        res.json(result);
+      }).catch((err) => {
+        res.json(err);
+      });
   });
 
   // \\S\\s is an alternative for .+
