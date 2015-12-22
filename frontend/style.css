@@ -62,8 +62,7 @@ aside {
   background-color: white !important;
 }
 
-/* now working
-.item:hover {
+.item-unseen:hover {
 	animation-name: example;
 	animation-duration: 1s;
   animation-fill-mode: forwards;
@@ -76,4 +75,4 @@ aside {
   to {
 		background-color: white;
 	}
-} */
+}

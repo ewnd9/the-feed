@@ -35,6 +35,10 @@ const ItemList = React.createClass({
   handleHover: function(index) {
     const item = this.state.items[index];
 
+    if (item.seen) {
+      return;
+    }
+
     this.setState({
       ...this.state,
       items: [
@@ -47,18 +51,16 @@ const ItemList = React.createClass({
       ]
     });
 
-    if (!item.seen) {
-      fetch(baseUrl + '/api/v1/items/' + item._id, {
-        method: 'put',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          seen: true
-        })
-      });
-    }
+    fetch(baseUrl + '/api/v1/items/' + item._id, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        seen: true
+      })
+    });
   },
   render: function() {
     return (

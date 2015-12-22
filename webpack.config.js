@@ -5,7 +5,10 @@ var NODE_ENV = process.env.NODE_ENV || 'development';
 
 var plugins = [
   new webpack.DefinePlugin({
-    NODE_ENV: JSON.stringify(NODE_ENV)
+    NODE_ENV: JSON.stringify(NODE_ENV),
+    'process.env': {
+      'NODE_ENV': JSON.stringify(NODE_ENV)
+    }
   })
 ];
 
@@ -25,7 +28,7 @@ module.exports = {
     app: './frontend/app.js',
     html: './frontend/index.html'
   },
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   output: {
     filename: '[name].bundle.js',
     sourceMapFilename: '[file].map',
