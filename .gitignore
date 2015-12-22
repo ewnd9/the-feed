@@ -2,7 +2,8 @@
 /dist/
 *.log
 play.js
-*.sh
+/*.sh
+!/example.deploy.sh
 /lib
 /public/*
 !/public/.keep
