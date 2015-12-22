@@ -5,25 +5,27 @@ import React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 
+import * as api from './../api';
+
 export default React.createClass({
   getInitialState: () => ({ items: [], page: 1 }),
-  getItems: function(page) {
-    fetch(baseUrl + '/api/v1/items?page=' + page)
-      .then((response) => {
-        return response.json();
-      })
+  getItems: function(id, page, clear = false) {
+    return (id ? api.findByCategory(id, page) : api.findAll(page))
       .then((_items) => {
         this.setState({
-          items: [...this.state.items, ..._items],
+          items: clear ? _items : [...this.state.items, ..._items],
           page
         });
       });
   },
   componentDidMount: function() {
-    this.getItems(this.state.page);
+    this.getItems(this.props.categoryId, this.state.page);
+  },
+  componentWillReceiveProps: function(nextProps) {
+    this.getItems(nextProps.categoryId, 1, true);
   },
   handleClick: function(page) {
-    this.getItems(page);
+    this.getItems(this.props.categoryId, page);
   },
   handleHover: function(index) {
     const item = this.state.items[index];
@@ -44,16 +46,7 @@ export default React.createClass({
       ]
     });
 
-    fetch(baseUrl + '/api/v1/items/' + item._id, {
-      method: 'put',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        seen: true
-      })
-    });
+    api.putSeen(item);
   },
   render: function() {
     return (

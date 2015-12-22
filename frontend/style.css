@@ -27,6 +27,10 @@ header {
 	font-size: xx-large;
 }
 
+.logo a {
+	color: black;
+}
+
 .menu {
 	display: flex;
 	flex-direction: row;
@@ -75,4 +79,8 @@ aside {
   to {
 		background-color: white;
 	}
+}
+
+.side-menu-item {
+	margin-bottom: 20px;
 }

@@ -5,20 +5,28 @@ import ReactDOM from 'react-dom';
 
 import Header from './components/header';
 import ItemList from './components/item-list';
+import SideMenu from './components/side-menu';
 
-const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
+const App = React.createClass({
+  getInitialState: () => ({ categoryId: null }),
+  setCategoryId: function(categoryId) {
+    this.setState({ categoryId });
+  },
+  render: function() {
+    return (
+      <div className="container">
+        <Header />
+        <div className="delimeter"></div>
+        <div className="main">
+          <aside>
+            <SideMenu setCategoryId={this.setCategoryId} />
+          </aside>
 
-const App = () => {
-  return (
-    <div className="container">
-      <Header />
-      <div className="delimeter"></div>
-      <div className="main">
-        <aside>menu</aside>
-        <ItemList />
+          <ItemList categoryId={this.state.categoryId} />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+	}
+});
 
 ReactDOM.render(<App />, document.getElementById('root'));

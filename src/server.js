@@ -63,13 +63,14 @@ dbInit(config.db).then(({ pouch, db }) => {
 
     pouch
       .query('by_category', {
+        include_docs: true,
         descending: true,
 		    startkey: category + '$\uffff',
         limit,
         skip
       })
       .then((items) => {
-        res.json(items);
+        res.json(items.rows.map(_ => _.doc));
       })
       .catch((err) => {
         res.json(err);
