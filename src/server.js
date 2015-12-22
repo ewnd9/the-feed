@@ -50,6 +50,32 @@ dbInit(config.db).then(({ pouch, db }) => {
     });
   });
 
+  app.get('/api/v1/categories', (req, res) => {
+    res.json(tasks.map(_ => _.name));
+  });
+
+  app.get('/api/v1/categories/:id', (req, res) => {
+    const category = req.params.id;
+    const page = Math.max(parseInt(req.query.page), 1);
+
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    pouch
+      .query('by_category', {
+        descending: true,
+		    startkey: category + '$\uffff',
+        limit,
+        skip
+      })
+      .then((items) => {
+        res.json(items);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
   var server = app.listen(3000, () => {
     console.log('localhost:3000');
     taskManager(pouch, db, tasks);
