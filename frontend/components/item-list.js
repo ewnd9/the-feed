@@ -52,6 +52,30 @@ export default React.createClass({
 
     api.putSeen(item);
   },
+  handleLinkClick: function(index, link) {
+    const item = this.state.items[index];
+
+    if (item.meta.clicked) {
+      return;
+    }
+
+    this.setState({
+      ...this.state,
+      items: [
+        ...this.state.items.slice(0, index),
+        {
+          ...item,
+          meta: {
+            ...item.meta,
+            clicked: true
+          }
+        },
+        ...this.state.items.slice(index + 1)
+      ]
+    });
+
+    api.putClicked(item);
+  },
   render: function() {
     return (
 			<div className="content">
@@ -85,7 +109,16 @@ export default React.createClass({
 											if (typeof title === 'string') {
 												return (<span key={i}>{ title }{' '}</span>);
 											} else {
-												return (<span key={i}><a href={ title[0] } target="_blank">{ title[1] }</a>{' '}</span>);
+												return (
+                          <span key={i}>
+                            <a href={title[0]}
+                               target="_blank"
+                               onClick={this.handleLinkClick.bind(this, index, title[0])}>
+                              { title[1] }
+                            </a>
+                            {' '}
+                          </span>
+                        );
 											}
 										})
 									}

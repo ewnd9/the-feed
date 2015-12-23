@@ -18,6 +18,7 @@ const createDesignDoc = (name, mapFunction) => {
 
 export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen';
 export const BY_CATEGORY = 'by_category';
+export const BY_CLICKED = 'by_clicked';
 
 const indexes = [
   createDesignDoc(BY_CREATED_AT_AND_SEEN, (doc) => {
@@ -25,6 +26,11 @@ const indexes = [
   }),
   createDesignDoc(BY_CATEGORY, (doc) => {
     emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
+  }),
+  createDesignDoc(BY_CLICKED, (doc) => {
+    if (doc.meta.clicked_at) {
+      emit(doc.createdAt + '$' + doc._id);
+    }
   })
 ];
 
@@ -49,6 +55,21 @@ export default (dbPath) => {
       });
   };
 
+  const findAllClicked = (page) => {
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    return pouch
+      .query(BY_CLICKED, {
+        include_docs: true,
+        descending: true,
+        limit,
+        skip
+      }).then((data) => {
+        return data.rows.map((_) => _.doc);
+      });
+  };
+
   const findByCategory = (category, page) => {
     const limit = 20;
     const skip = (page - 1) * limit;
@@ -64,7 +85,7 @@ export default (dbPath) => {
       .then((items) => {
         return items.rows.map(_ => _.doc);
       });
-  }
+  };
 
   return Promise
     .map(indexes, (index) => {
@@ -79,6 +100,6 @@ export default (dbPath) => {
       });
     })
     .then(() => ({
-		  pouch, db, findAllByStatus, findByCategory
+		  pouch, db, findAllByStatus, findByCategory, findAllClicked
 	  }));
 };

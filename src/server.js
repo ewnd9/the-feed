@@ -11,7 +11,7 @@ import taskManager from './task-manager';
 
 import config, { tasks } from './config';
 
-dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory }) => {
+dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory, findAllClicked }) => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
@@ -31,9 +31,20 @@ dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory }) => {
   });
 
   // \\S\\s is an alternative for .+
-  app.put('/api/v1/items/:id([\\S\\s:]+)', (req, res) => {
+  app.put('/api/v1/items/:id([\\S\\s:]+)/seen', (req, res) => {
     db.find(req.params.id).then((item) => {
       item.meta.seen = true;
+      return db.update(item);
+    }).then((result) => {
+      res.json(result);
+    }).catch((err) => {
+      res.json(err);
+    });
+  });
+
+  app.put('/api/v1/items/:id([\\S\\s:]+)/clicked', (req, res) => {
+    db.find(req.params.id).then((item) => {
+      item.meta.clicked_at = new Date().toISOString();
       return db.update(item);
     }).then((result) => {
       res.json(result);
@@ -56,6 +67,8 @@ dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory }) => {
       fn = findAllByStatus(true, page);
     } else if (category === 'unseen') {
       fn = findAllByStatus(false, page);
+    } else if (category === 'clicked') {
+      fn = findAllClicked(page);
     } else {
       fn = findByCategory(category, page);
     }
