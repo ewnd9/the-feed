@@ -26,7 +26,11 @@ export default (pouch, db, tasks) => {
 
 			currTask.makeJob().then((items) => {
 				return Promise.map(items, (item) => {
-					item.meta = { task : task.name };
+					item.meta = {
+						task: task.name,
+						seen: false
+					};
+					
 					item.id = task.name + ':' + item.id.replace(/\W/g, '');
 
 					return db.find(item.id).then((item) => {

@@ -16,12 +16,12 @@ const createDesignDoc = (name, mapFunction) => {
   return ddoc;
 };
 
-export const BY_CREATED_AT = 'by_created_at';
+export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen';
 export const BY_CATEGORY = 'by_category';
 
 const indexes = [
-  createDesignDoc(BY_CREATED_AT, (doc) => {
-    emit([doc.createdAt, doc._id]);
+  createDesignDoc(BY_CREATED_AT_AND_SEEN, (doc) => {
+    emit(doc.meta.seen + '$' + doc.createdAt + '$' + doc._id);
   }),
   createDesignDoc(BY_CATEGORY, (doc) => {
     emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
@@ -31,6 +31,40 @@ const indexes = [
 export default (dbPath) => {
   const pouch = new PouchDB(path(dbPath));
   const db = pouch.hoodieApi({});
+
+  const findAllByStatus = (seen, page) => {
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    return pouch
+      .query(BY_CREATED_AT_AND_SEEN, {
+        include_docs: true,
+        descending: true,
+        endkey: `${seen}$`,
+        startkey: `${seen}$\uffff`,
+        limit,
+        skip
+      }).then((data) => {
+        return data.rows.map((_) => _.doc);
+      });
+  };
+
+  const findByCategory = (category, page) => {
+    const limit = 20;
+    const skip = (page - 1) * limit;
+
+    return pouch
+      .query(BY_CATEGORY, {
+        include_docs: true,
+        descending: true,
+		    startkey: category + '$\uffff',
+        limit,
+        skip
+      })
+      .then((items) => {
+        return items.rows.map(_ => _.doc);
+      });
+  }
 
   return Promise
     .map(indexes, (index) => {
@@ -45,6 +79,6 @@ export default (dbPath) => {
       });
     })
     .then(() => ({
-		  pouch, db
+		  pouch, db, findAllByStatus, findByCategory
 	  }));
 };

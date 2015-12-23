@@ -11,7 +11,7 @@ import taskManager from './task-manager';
 
 import config, { tasks } from './config';
 
-dbInit(config.db).then(({ pouch, db }) => {
+dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory }) => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
@@ -24,30 +24,16 @@ dbInit(config.db).then(({ pouch, db }) => {
     ]
   }));
 
-  app.get('/api/v1/items', (req, res) => {
-    const page = Math.max(parseInt(req.query.page), 1);
-
-    const limit = 20;
-    const skip = (page - 1) * limit;
-
-    pouch
-      .query('by_created_at', {
-        include_docs: true,
-        descending: true,
-        limit,
-        skip
-      }).then((data) => {
-        const result = data.rows.map((row) => row.doc);
-        res.json(result);
-      }).catch((err) => {
-        res.json(err);
-      });
+  app.get('/api/v1/items/debug', (req, res) => {
+    pouch.allDocs({
+      include_docs: true
+    }).then((data) => res.json(data));
   });
 
   // \\S\\s is an alternative for .+
   app.put('/api/v1/items/:id([\\S\\s:]+)', (req, res) => {
     db.find(req.params.id).then((item) => {
-      item.seen = true;
+      item.meta.seen = true;
       return db.update(item);
     }).then((result) => {
       res.json(result);
@@ -60,27 +46,23 @@ dbInit(config.db).then(({ pouch, db }) => {
     res.json(tasks.map(_ => _.name));
   });
 
-  app.get('/api/v1/categories/:id', (req, res) => {
+  app.get('/api/v1/categories/items/:id', (req, res) => {
     const category = req.params.id;
     const page = Math.max(parseInt(req.query.page), 1);
 
-    const limit = 20;
-    const skip = (page - 1) * limit;
+    let fn;
 
-    pouch
-      .query('by_category', {
-        include_docs: true,
-        descending: true,
-		    startkey: category + '$\uffff',
-        limit,
-        skip
-      })
-      .then((items) => {
-        res.json(items.rows.map(_ => _.doc));
-      })
-      .catch((err) => {
-        res.json(err);
-      });
+    if (category === 'seen') {
+      fn = findAllByStatus(true, page);
+    } else if (category === 'unseen') {
+      fn = findAllByStatus(false, page);
+    } else {
+      fn = findByCategory(category, page);
+    }
+
+    return fn
+      .then(data => res.json(data))
+      .catch(err => res.json(err));
   });
 
   var server = app.listen(3000, () => {

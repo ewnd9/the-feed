@@ -10,7 +10,8 @@ import * as api from './../api';
 export default React.createClass({
   getInitialState: () => ({ items: [], page: 1 }),
   getItems: function(id, page, clear = false) {
-    return (id ? api.findByCategory(id, page) : api.findAll(page))
+    return api
+      .findByCategory(id, page)
       .then((_items) => {
         this.setState({
           items: clear ? _items : [...this.state.items, ..._items],
@@ -30,7 +31,7 @@ export default React.createClass({
   handleHover: function(index) {
     const item = this.state.items[index];
 
-    if (item.seen) {
+    if (item.meta.seen) {
       return;
     }
 
@@ -40,7 +41,10 @@ export default React.createClass({
         ...this.state.items.slice(0, index),
         {
           ...item,
-          seen: true
+          meta: {
+            ...item.meta,
+            seen: true
+          }
         },
         ...this.state.items.slice(index + 1)
       ]
@@ -64,8 +68,8 @@ export default React.createClass({
 
 						const itemClass = classNames({
 							'item': true,
-							'item-seen': result.seen,
-							'item-unseen': !result.seen
+							'item-seen': result.meta.seen,
+							'item-unseen': !result.meta.seen
 						});
 
 						return (

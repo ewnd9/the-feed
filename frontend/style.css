@@ -84,3 +84,7 @@ aside {
 .side-menu-item {
 	margin-bottom: 20px;
 }
+
+a.active {
+	text-decoration: underline;
+}

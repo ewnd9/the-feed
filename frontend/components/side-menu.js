@@ -23,11 +23,12 @@ export default React.createClass({
     return (
 			<div className="side-menu">
 				{
-					this.state.items.map((result, index) => {
+					this.state.items.map((category, index) => {
 						return (
 							<div key={index} className="side-menu-item">
-								<a onClick={this.handleClick.bind(this, result)}>
-									{result}
+								<a className={this.props.categoryId === category && 'active'}
+                   onClick={this.handleClick.bind(this, category)}>
+									{category}
 								</a>
 							</div>
 						);
