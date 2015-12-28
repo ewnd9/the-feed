@@ -37,9 +37,9 @@ const indexes = [
 export default (dbPath) => {
   const pouch = new PouchDB(path(dbPath));
   const db = pouch.hoodieApi({});
+  const limit = 40;
 
   const findAllByStatus = (seen, page) => {
-    const limit = 20;
     const skip = (page - 1) * limit;
 
     return pouch
@@ -56,7 +56,6 @@ export default (dbPath) => {
   };
 
   const findAllClicked = (page) => {
-    const limit = 20;
     const skip = (page - 1) * limit;
 
     return pouch
@@ -71,7 +70,6 @@ export default (dbPath) => {
   };
 
   const findByCategory = (category, page) => {
-    const limit = 20;
     const skip = (page - 1) * limit;
 
     return pouch

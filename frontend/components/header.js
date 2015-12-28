@@ -20,7 +20,8 @@ export default React.createClass({
             categories.map(category => {
               return (
                 <a className={this.props.categoryId === category.toLowerCase() && 'active'}
-      						 onClick={this.handleClick.bind(this, category.toLowerCase())}>
+      						 onClick={this.handleClick.bind(this, category.toLowerCase())}
+                   key={category}>
                   {category}
                 </a>
               )

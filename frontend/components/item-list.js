@@ -2,31 +2,33 @@ import fetch from 'isomorphic-fetch';
 
 import React from 'react';
 
-import moment from 'moment';
-import classNames from 'classnames';
-
 import * as api from './../api';
+import Item from './item';
+
+const InfiniteScroll = require('react-infinite-scroll')(React);
 
 export default React.createClass({
-  getInitialState: () => ({ items: [], page: 1 }),
+  getInitialState: () => ({ items: [], page: 0, hasMore: true }),
   getItems: function(id, page, clear = false) {
     return api
       .findByCategory(id, page)
       .then((_items) => {
-        this.setState({
-          items: clear ? _items : [...this.state.items, ..._items],
-          page
-        });
+        if (_items.length === 0) {
+          this.setState({ hasMore: false })
+        } else {
+          this.setState({
+            items: clear ? _items : [...this.state.items, ..._items],
+            page
+          });
+        }
       });
   },
-  componentDidMount: function() {
-    this.getItems(this.props.categoryId, this.state.page);
-  },
   componentWillReceiveProps: function(nextProps) {
-    this.getItems(nextProps.categoryId, 1, true);
+    this.setState({ items: [], page: 0, hasMore: true });
+    this.forceUpdate();
   },
-  handleClick: function(page) {
-    this.getItems(this.props.categoryId, page);
+  handleClick: function() {
+    this.getItems(this.props.categoryId, this.state.page + 1);
   },
   handleHover: function(index) {
     const item = this.state.items[index];
@@ -79,58 +81,21 @@ export default React.createClass({
   render: function() {
     return (
 			<div className="content">
-				<div>
-					{this.state.items.map((result, index) => {
-						const fromNow = moment(result.createdAt).fromNow();
-						let title;
-
-						if (typeof result.title === 'string') {
-							title = [[result.url, result.title]];
-						} else {
-							title = result.title;
-						}
-
-						const itemClass = classNames({
-							'item': true,
-							'item-seen': result.meta.seen,
-							'item-unseen': !result.meta.seen
-						});
-
-						return (
-							<div className={itemClass}
-									 key={ result._id }
-									 onMouseEnter={this.handleHover.bind(this, index)}
-									 onFocus={this.handleHover.bind(this, index)}
-									 tabIndex={index + 1}>
-								<div>
-									<span>{ result.meta.task }:</span>{' '}
-									{
-										title.map((title, i) => {
-											if (typeof title === 'string') {
-												return (<span key={i}>{ title }{' '}</span>);
-											} else {
-												return (
-                          <span key={i}>
-                            <a href={title[0]}
-                               target="_blank"
-                               onClick={this.handleLinkClick.bind(this, index, title[0])}>
-                              { title[1] }
-                            </a>
-                            {' '}
-                          </span>
-                        );
-											}
-										})
-									}
-								</div>
-								<div>{ fromNow }</div>
-							</div>
-						);
-					})}
-				</div>
-				<div className="load-more-holder">
-					<a onClick={this.handleClick.bind(this, this.state.page + 1)}>Load More</a>
-				</div>
+        <InfiniteScroll
+            pageStart={0}
+            loadMore={this.handleClick}
+            hasMore={this.state.hasMore}
+            loader={<div className="loader">Loading ...</div>}>
+          {
+            this.state.items.map((result, index) => {
+  						return (<Item item={result}
+                    index={index}
+                    key={result._id}
+                    handleLinkClick={this.handleLinkClick}
+                    handleHover={this.handleHover} />);
+  				  })
+          }
+        </InfiniteScroll>
 			</div>
     );
 	}
