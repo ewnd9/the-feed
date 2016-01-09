@@ -77,6 +77,7 @@ export default (dbPath) => {
         include_docs: true,
         descending: true,
 		    startkey: category + '$\uffff',
+        endkey: category,
         limit,
         skip
       })
