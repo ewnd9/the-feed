@@ -85,11 +85,11 @@ aside {
 	margin-bottom: 20px;
 }
 
-a {
+a.category {
 	color: inherit;
 	text-decoration: none;
 }
 
-a.active {
+a.category.active {
 	text-decoration: underline;
 }
