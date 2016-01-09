@@ -8,6 +8,7 @@ const mapStateToProps = (state) => ({
   routing: state.routing
 });
 
+// @TODO it's not recommended to connect presenation level components to redux 
 export default connect(mapStateToProps)(React.createClass({
   render: function() {
     const category = this.props.category;
