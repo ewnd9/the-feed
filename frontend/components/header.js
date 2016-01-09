@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import CategoryLink from './category-link';
 
 export default React.createClass({
   render: function() {
@@ -16,13 +17,7 @@ export default React.createClass({
 				<div className="menu">
 					{
             categories.map(category => {
-              return (
-                <Link className={this.props.categoryId === category.toLowerCase() && 'active'}
-                      key={category}
-                      to={`/r/${category.toLowerCase()}`}>
-                  {category}
-                </Link>
-              )
+              return (<CategoryLink category={category} key={category} />);
             })
           }
 				</div>

@@ -1,7 +1,5 @@
-import fetch from 'isomorphic-fetch';
 import React from 'react';
-import classNames from 'classnames';
-import { Link } from 'react-router';
+import CategoryLink from './category-link';
 
 import * as api from './../api';
 
@@ -24,10 +22,7 @@ export default React.createClass({
 					this.state.items.map((category, index) => {
 						return (
 							<div key={index} className="side-menu-item">
-                <Link className={this.props.categoryId === category && 'active'}
-                      to={`/r/${category}`}>
-                  {category}
-                </Link>
+                <CategoryLink category={category} />
 							</div>
 						);
 					})
