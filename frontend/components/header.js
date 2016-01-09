@@ -1,9 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default React.createClass({
-  handleClick: function(category) {
-    this.props.setCategoryId(category);
-  },
   render: function() {
     const categories = [
       'Clicked',
@@ -13,17 +11,17 @@ export default React.createClass({
 		return (
 			<header>
 				<div className="logo">
-					<a href="/">the-feed</a>
+					<Link to="/">the-feed</Link>
 				</div>
 				<div className="menu">
 					{
             categories.map(category => {
               return (
-                <a className={this.props.categoryId === category.toLowerCase() && 'active'}
-      						 onClick={this.handleClick.bind(this, category.toLowerCase())}
-                   key={category}>
+                <Link className={this.props.categoryId === category.toLowerCase() && 'active'}
+                      key={category}
+                      to={`/r/${category.toLowerCase()}`}>
                   {category}
-                </a>
+                </Link>
               )
             })
           }

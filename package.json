@@ -53,6 +53,7 @@
     "classnames": "^2.2.1",
     "css-loader": "^0.23.0",
     "file-loader": "^0.8.5",
+    "history": "^1.17.0",
     "isomorphic-fetch": "^2.2.0",
     "nock": "^3.4.0",
     "nodemon": "^1.4.1",
@@ -60,6 +61,10 @@
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-infinite-scroll": "^0.1.5",
+    "react-redux": "^4.0.6",
+    "react-router": "^1.0.3",
+    "redux": "^3.0.5",
+    "redux-simple-router": "^1.0.2",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"

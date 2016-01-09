@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import React from 'react';
 import classNames from 'classnames';
+import { Link } from 'react-router';
 
 import * as api from './../api';
 
@@ -16,9 +17,6 @@ export default React.createClass({
   componentDidMount: function() {
     this.getItems(this.state.page);
   },
-  handleClick: function(category) {
-    this.props.setCategoryId(category);
-  },
   render: function() {
     return (
 			<div className="side-menu">
@@ -26,10 +24,10 @@ export default React.createClass({
 					this.state.items.map((category, index) => {
 						return (
 							<div key={index} className="side-menu-item">
-								<a className={this.props.categoryId === category && 'active'}
-                   onClick={this.handleClick.bind(this, category)}>
-									{category}
-								</a>
+                <Link className={this.props.categoryId === category && 'active'}
+                      to={`/r/${category}`}>
+                  {category}
+                </Link>
 							</div>
 						);
 					})

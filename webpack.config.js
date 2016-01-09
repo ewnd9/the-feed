@@ -62,6 +62,7 @@ module.exports = {
     contentBase: "./public",
     noInfo: true, //  --no-info option
     hot: false,
-    inline: true
+    inline: true,
+    historyApiFallback: true
   }
 };

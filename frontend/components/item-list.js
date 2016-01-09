@@ -28,7 +28,8 @@ export default React.createClass({
     this.forceUpdate();
   },
   handleClick: function() {
-    this.getItems(this.props.categoryId, this.state.page + 1);
+    const categoryId = this.props.params.categoryId || 'unseen';
+    this.getItems(categoryId, this.state.page + 1);
   },
   handleHover: function(index) {
     const item = this.state.items[index];

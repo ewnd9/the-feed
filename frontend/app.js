@@ -1,32 +1,32 @@
 require('./style.css');
 
-import React from 'react';
 import ReactDOM from 'react-dom';
+import React from 'react';
 
-import Header from './components/header';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { Router, Route, IndexRoute } from 'react-router';
+import { createHistory } from 'history';
+import { syncReduxAndRouter } from 'redux-simple-router';
+
+import Main from './components/main';
 import ItemList from './components/item-list';
-import SideMenu from './components/side-menu';
 
-const App = React.createClass({
-  getInitialState: () => ({ categoryId: 'unseen' }),
-  setCategoryId: function(categoryId) {
-    this.setState({ categoryId });
-  },
-  render: function() {
-    return (
-      <div className="container">
-        <Header setCategoryId={this.setCategoryId} categoryId={this.state.categoryId} />
-        <div className="delimeter"></div>
-        <div className="main">
-          <aside>
-            <SideMenu setCategoryId={this.setCategoryId} categoryId={this.state.categoryId} />
-          </aside>
+import rootReducer from './reducers/index';
 
-          <ItemList categoryId={this.state.categoryId} />
-        </div>
-      </div>
-    );
-	}
-});
+const store = createStore(rootReducer);
+const history = createHistory();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+syncReduxAndRouter(history, store);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path="/" component={Main}>
+        <IndexRoute component={ItemList} />
+        <Route path="/r/:categoryId" component={ItemList} />
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('root')
+);
