@@ -1,10 +1,11 @@
 # the-feed
 
-[WIP] kind of meta reddit idk
+[WIP] the programmable front page of the internet
 
 ## Install
 
 ```
+# clone and cd
 $ npm install
 ```
 
@@ -20,6 +21,42 @@ $ npm start
 
   Options
   	-t, --test Interactive tasks testing
+```
+
+## Available Tasks
+
+### `scrape-task`
+
+Generic html parsing
+
+```yaml
+task: scrape
+params:
+  url: https://www.reddit.com/r/node/search?q=node.js&sort=new&restrict_sr=on
+  selector: .search-result
+  titleSelector: .search-title
+  urlSelector: .search-title@href
+```
+
+### `github-stars-task`
+
+Collects projects which were stargazed by people you follow
+
+```yaml
+task: github-stars
+params:
+  username: <your-username>
+  token: <your-api-token>
+```
+
+### `reddit-task`
+
+```yaml
+task: reddit
+params:
+  subreddits: [
+    node, npm
+  ]
 ```
 
 ## Development
