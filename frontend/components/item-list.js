@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
 import React from 'react';
+import Swipeable from 'react-swipeable';
 import { connect } from 'react-redux';
 
 import * as api from './../api';
@@ -57,11 +58,15 @@ export default connect(mapStateToProps)(React.createClass({
             loader={<div className="loader">Loading ...</div>}>
           {
             this.props.posts.items.map((result, index) => {
-  						return (<Item item={result}
-                    index={index}
-                    key={result._id}
-                    handleLinkClick={this.handleLinkClick}
-                    handleHover={this.handleHover} />);
+  						return (
+                <Swipeable onSwipingLeft={this.handleHover.bind(this, index)}>
+                  <Item item={result}
+                      index={index}
+                      key={result._id}
+                      handleLinkClick={this.handleLinkClick}
+                      handleHover={this.handleHover} />
+                </Swipeable>
+              );
   				  })
           }
         </InfiniteScroll>
