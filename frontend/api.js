@@ -1,4 +1,4 @@
-const baseUrl = NODE_ENV === 'production' ? '' : 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000';
 
 export const findByCategory = (categoryId, page) => {
 	return fetch(baseUrl + `/api/v1/categories/items/${categoryId}?page=` + page)

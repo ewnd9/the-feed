@@ -5,10 +5,11 @@ var NODE_ENV = process.env.NODE_ENV || 'development';
 
 var plugins = [
   new webpack.DefinePlugin({
-    NODE_ENV: JSON.stringify(NODE_ENV),
-    'process.env': {
-      'NODE_ENV': JSON.stringify(NODE_ENV)
-    }
+    'process.env': { 'NODE_ENV': JSON.stringify(NODE_ENV) }
+  }),
+  new webpack.ProvidePlugin({
+    'Promise': 'bluebird',
+    'window.Promise': 'bluebird'
   })
 ];
 
