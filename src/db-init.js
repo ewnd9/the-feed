@@ -3,8 +3,12 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 
 import PouchDB from 'pouchdb';
-PouchDB.plugin(require('pouchdb-hoodie-api'));
-PouchDB.plugin(require('pouchdb-find'));
+
+import pouchHoodie from 'pouchdb-hoodie-api';
+import pouchFind from 'pouchdb-find';
+
+PouchDB.plugin(pouchHoodie);
+PouchDB.plugin(pouchFind);
 
 const createDesignDoc = (name, mapFunction) => {
   const ddoc = {
@@ -39,15 +43,16 @@ export default (dbPath) => {
   const db = pouch.hoodieApi({});
   const limit = 40;
 
-  const findAllByStatus = (seen, page) => {
-    const skip = (page - 1) * limit;
+  const findAllByStatus = (seen, id, date) => {
+    const skip = id && date && 1 | 0;
+    const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
 
     return pouch
       .query(BY_CREATED_AT_AND_SEEN, {
         include_docs: true,
         descending: true,
-        endkey: `${seen}$`,
-        startkey: `${seen}$\uffff`,
+        startkey: startkey,
+        endkey: seen,
         limit,
         skip
       }).then((data) => {
@@ -55,13 +60,15 @@ export default (dbPath) => {
       });
   };
 
-  const findAllClicked = (page) => {
-    const skip = (page - 1) * limit;
+  const findAllClicked = (id, date) => {
+    const skip = id && date && 1 | 0;
+    const startkey = id && date && `${date}$${id}` || undefined;
 
     return pouch
       .query(BY_CLICKED, {
         include_docs: true,
         descending: true,
+        startkey: startkey,
         limit,
         skip
       }).then((data) => {
@@ -69,14 +76,15 @@ export default (dbPath) => {
       });
   };
 
-  const findByCategory = (category, page) => {
-    const skip = (page - 1) * limit;
+  const findByCategory = (category, id, date) => {
+    const skip = id && date && 1 | 0;
+    const startkey = id && date && `${category}$${date}$${id}` || `${category}$\uffff`;
 
     return pouch
       .query(BY_CATEGORY, {
         include_docs: true,
         descending: true,
-		    startkey: category + '$\uffff',
+		    startkey: startkey,
         endkey: category,
         limit,
         skip

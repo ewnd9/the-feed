@@ -5,28 +5,28 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const MARK_POST_AS_SEEN = 'MARK_POST_AS_SEEN';
 export const MARK_POST_AS_CLICKED = 'MARK_POST_AS_CLICKED';
 
-function requestPosts(category, page) {
+function requestPosts(category) {
   return {
     type: REQUEST_POSTS,
-    category,
-    page
+    category
   };
 };
 
-function receivePosts(category, json) {
+function receivePosts(category, json, clear) {
   return {
     type: RECEIVE_POSTS,
-    items: json
+    items: json,
+    clear
   };
 };
 
-export function fetchPosts(category, page) {
+export function fetchPosts(category, id, date) {
   return (dispatch, getState) => {
-    dispatch(requestPosts(category, page));
+    dispatch(requestPosts(category));
 
     return api
-      .findByCategory(category, page)
-      .then(json => dispatch(receivePosts(category, json)));
+      .findByCategory(category, id, date)
+      .then(json => dispatch(receivePosts(category, json, !!!id)));
   };
 };
 

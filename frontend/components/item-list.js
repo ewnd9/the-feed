@@ -24,14 +24,19 @@ export default connect(mapStateToProps)(React.createClass({
     const { dispatch } = this.props;
 
     if (this.props.params.categoryId !== nextProps.params.categoryId) {
-      dispatch(fetchPosts(nextProps.params.categoryId, 1));
+      dispatch(fetchPosts(nextProps.params.categoryId));
     }
   },
   loadMore: function() {
     const categoryId = this.props.params.categoryId || 'unseen';
+    const items = this.props.posts.items;
+
+    const id = items.length > 0 ? items[items.length - 1]._id : undefined;
+    const date = items.length > 0 ? items[items.length - 1].createdAt : undefined;
+
     const { dispatch } = this.props;
 
-    return dispatch(fetchPosts(categoryId, this.props.posts.page + 1));
+    return dispatch(fetchPosts(categoryId, id, date));
   },
   handleHover: function(index) {
     const item = this.props.posts.items[index];

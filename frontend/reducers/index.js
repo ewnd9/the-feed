@@ -41,7 +41,7 @@ function posts(state = {
       return {
         ...state,
         isFetching: false,
-        items: state.page === 1 ? action.items : [...state.items, ...action.items],
+        items: action.clear ? action.items : [...state.items, ...action.items],
         hasMore: action.items.length === 40
       };
     case MARK_POST_AS_SEEN:

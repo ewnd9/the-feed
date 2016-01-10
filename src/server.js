@@ -60,18 +60,20 @@ dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory, findAllCli
 
   app.get('/api/v1/categories/items/:id', (req, res) => {
     const category = req.params.id;
-    const page = Math.max(parseInt(req.query.page), 1);
+
+    const id = req.query.id;
+    const date = req.query.date;
 
     let fn;
 
     if (category === 'seen') {
-      fn = findAllByStatus(true, page);
+      fn = findAllByStatus(true, id, date);
     } else if (category === 'unseen') {
-      fn = findAllByStatus(false, page);
+      fn = findAllByStatus(false, id, date);
     } else if (category === 'clicked') {
-      fn = findAllClicked(page);
+      fn = findAllClicked(id, date);
     } else {
-      fn = findByCategory(category, page);
+      fn = findByCategory(category, id, date);
     }
 
     return fn
