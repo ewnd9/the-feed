@@ -1,19 +1,26 @@
 import Promise from 'bluebird';
+import fs from 'fs';
+
+const tasksModules = fs.readdirSync(__dirname + '/tasks')
+	.filter(name => name.indexOf('.map') !== name.length - 4)
+	.reduce((total, name) => {
+		total[name] = require('./tasks/' + name);
+		return total;
+	}, {});
 
 export const createTask = (task) => {
-	let currTask = require('./tasks/' + task.task + '-task');
+	let currTask = tasksModules[task.task + '-task.js'];
 
 	if (currTask.default) {
 		currTask = currTask.default; // es6 import workaround
 	}
 
-	currTask.makeJob = () => currTask.task(task.params);
-	return currTask;
+	return () => currTask.task(task.params);
 };
 
 export default (pouch, db, tasks) => {
 	tasks.forEach((task) => {
-		var currTask = createTask(task);
+		var execTask = createTask(task);
 		var log = (msg) => console.log(task.name, msg);
 
 		var fn = () => {
@@ -24,20 +31,22 @@ export default (pouch, db, tasks) => {
 				added: 0
 			};
 
-			currTask.makeJob().then((items) => {
+			execTask().then((items) => {
 				return Promise.map(items, (item) => {
 					item.meta = {
 						task: task.name,
 						seen: false
 					};
-					
+
 					item.id = task.name + ':' + item.id.replace(/\W/g, '');
 
 					return db.find(item.id).then((item) => {
 						stats.existed++;
 					}, (err) => {
 						if (err.reason === 'missing') {
-							return db.add(item).then(() => stats.added++, (err) => {
+							return db.add(item).then(() => {
+								stats.added++;
+							}, (err) => {
 								log(err);
 							});
 						} else {
