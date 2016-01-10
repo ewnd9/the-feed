@@ -34,7 +34,7 @@
     "inquirer-question": "^1.1.1",
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
-    "meow": "^3.6.0",
+    "meow": "^3.7.0",
     "moment": "^2.10.6",
     "morgan": "^1.6.1",
     "pouchdb": "^5.1.0",
@@ -47,7 +47,7 @@
     "x-ray": "^2.0.2"
   },
   "devDependencies": {
-    "ava": "^0.7.0",
+    "ava": "^0.9.1",
     "babel": "^5.8.21",
     "babel-loader": "^5.3.2",
     "classnames": "^2.2.1",
@@ -64,7 +64,9 @@
     "react-redux": "^4.0.6",
     "react-router": "^1.0.3",
     "redux": "^3.0.5",
+    "redux-logger": "^2.3.1",
     "redux-simple-router": "^1.0.2",
+    "redux-thunk": "^1.0.3",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"

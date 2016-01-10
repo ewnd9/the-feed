@@ -1,94 +1,62 @@
 import fetch from 'isomorphic-fetch';
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import * as api from './../api';
+import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../actions';
 import Item from './item';
 
 const InfiniteScroll = require('react-infinite-scroll')(React);
 
-export default React.createClass({
-  getInitialState: () => ({ items: [], page: 0, hasMore: true }),
-  getItems: function(id, page, clear = false) {
-    return api
-      .findByCategory(id, page)
-      .then((_items) => {
-        if (_items.length === 0) {
-          this.setState({ hasMore: false })
-        } else {
-          this.setState({
-            items: clear ? _items : [...this.state.items, ..._items],
-            page
-          });
-        }
-      });
-  },
+function mapStateToProps(state) {
+  const { posts } = state;
+
+  return {
+    posts
+  };
+}
+
+export default connect(mapStateToProps)(React.createClass({
   componentWillReceiveProps: function(nextProps) {
-    this.setState({ items: [], page: 0, hasMore: true });
-    this.forceUpdate();
-  },
-  handleClick: function() {
     const categoryId = this.props.params.categoryId || 'unseen';
-    this.getItems(categoryId, this.state.page + 1);
+    const { dispatch } = this.props;
+
+    if (this.props.params.categoryId !== nextProps.params.categoryId) {
+      dispatch(fetchPosts(nextProps.params.categoryId, 1));
+    }
+  },
+  loadMore: function() {
+    const categoryId = this.props.params.categoryId || 'unseen';
+    const { dispatch } = this.props;
+
+    return dispatch(fetchPosts(categoryId, this.props.posts.page + 1));
   },
   handleHover: function(index) {
-    const item = this.state.items[index];
+    const item = this.props.posts.items[index];
+    const { dispatch } = this.props;
 
-    if (item.meta.seen) {
-      return;
+    if (!item.meta.seen) {
+      dispatch(markPostAsSeen(index, item));
     }
-
-    this.setState({
-      ...this.state,
-      items: [
-        ...this.state.items.slice(0, index),
-        {
-          ...item,
-          meta: {
-            ...item.meta,
-            seen: true
-          }
-        },
-        ...this.state.items.slice(index + 1)
-      ]
-    });
-
-    api.putSeen(item);
   },
   handleLinkClick: function(index, link) {
-    const item = this.state.items[index];
+    const item = this.props.posts.items[index];
+    const { dispatch } = this.props;
 
-    if (item.meta.clicked) {
-      return;
+    if (!item.meta.clicked) {
+      dispatch(markPostAsClicked(index, item));
     }
-
-    this.setState({
-      ...this.state,
-      items: [
-        ...this.state.items.slice(0, index),
-        {
-          ...item,
-          meta: {
-            ...item.meta,
-            clicked: true
-          }
-        },
-        ...this.state.items.slice(index + 1)
-      ]
-    });
-
-    api.putClicked(item);
   },
   render: function() {
     return (
 			<div className="content">
         <InfiniteScroll
-            pageStart={0}
-            loadMore={this.handleClick}
-            hasMore={this.state.hasMore}
+            loadMore={this.loadMore}
+            hasMore={!this.props.posts.isFetching && this.props.posts.hasMore}
             loader={<div className="loader">Loading ...</div>}>
           {
-            this.state.items.map((result, index) => {
+            this.props.posts.items.map((result, index) => {
   						return (<Item item={result}
                     index={index}
                     key={result._id}
@@ -100,4 +68,4 @@ export default React.createClass({
 			</div>
     );
 	}
-});
+}));

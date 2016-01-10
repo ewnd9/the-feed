@@ -12,9 +12,9 @@ import { syncReduxAndRouter } from 'redux-simple-router';
 import Main from './components/main';
 import ItemList from './components/item-list';
 
-import rootReducer from './reducers/index';
+import configureStore from './configure-store';
 
-const store = createStore(rootReducer);
+const store = configureStore();
 const history = createHistory();
 
 syncReduxAndRouter(history, store);
