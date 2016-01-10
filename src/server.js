@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 var app = express();
 
@@ -76,6 +77,10 @@ dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory, findAllCli
     return fn
       .then(data => res.json(data))
       .catch(err => res.json(err));
+  });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
   });
 
   var server = app.listen(3000, () => {
