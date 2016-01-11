@@ -11,8 +11,9 @@ import dbInit from './db-init';
 import taskManager from './task-manager';
 
 import config, { tasks } from './config';
+import itemsRoutes from './routes/items';
 
-dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory, findAllClicked }) => {
+dbInit(config.db).then(db => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
@@ -25,69 +26,14 @@ dbInit(config.db).then(({ pouch, db, findAllByStatus, findByCategory, findAllCli
     ]
   }));
 
-  app.get('/api/v1/items/debug', (req, res) => {
-    pouch.allDocs({
-      include_docs: true
-    }).then((data) => res.json(data));
-  });
-
-  // \\S\\s is an alternative for .+
-  app.put('/api/v1/items/:id([\\S\\s:]+)/seen', (req, res) => {
-    db.find(req.params.id).then((item) => {
-      item.meta.seen = true;
-      return db.update(item);
-    }).then((result) => {
-      res.json(result);
-    }).catch((err) => {
-      res.json(err);
-    });
-  });
-
-  app.put('/api/v1/items/:id([\\S\\s:]+)/clicked', (req, res) => {
-    db.find(req.params.id).then((item) => {
-      item.meta.clicked_at = new Date().toISOString();
-      return db.update(item);
-    }).then((result) => {
-      res.json(result);
-    }).catch((err) => {
-      res.json(err);
-    });
-  });
-
-  app.get('/api/v1/categories', (req, res) => {
-    res.json(tasks.map(_ => _.name));
-  });
-
-  app.get('/api/v1/categories/items/:id', (req, res) => {
-    const category = req.params.id;
-
-    const id = req.query.id;
-    const date = req.query.date;
-
-    let fn;
-
-    if (category === 'seen') {
-      fn = findAllByStatus(true, id, date);
-    } else if (category === 'unseen') {
-      fn = findAllByStatus(false, id, date);
-    } else if (category === 'clicked') {
-      fn = findAllClicked(id, date);
-    } else {
-      fn = findByCategory(category, id, date);
-    }
-
-    return fn
-      .then(data => res.json(data))
-      .catch(err => res.json(err));
-  });
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
+  app.use('/', itemsRoutes(db, tasks));
+  app.use(function(err, req, res, next) {
+    res.status(err && err.status || 500).json({ error: err.stack });
   });
 
   var server = app.listen(3000, () => {
     console.log('localhost:3000');
-    taskManager(pouch, db, tasks);
+    taskManager(db.pouch, db.db, tasks);
   });
 }).catch((err) => {
   console.log(err.stack);
