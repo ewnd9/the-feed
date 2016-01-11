@@ -3,7 +3,7 @@ import 'babel-core/register';
 import redditTask from './../src/tasks/reddit-task';
 import Promise from 'bluebird';
 
-import nockHelper from './utils/nock-helper';
+import nockHelper from './helpers/nock-helper';
 const nock = nockHelper(__filename);
 
 test.before(nock.beforeFn);

@@ -9,7 +9,7 @@
     "start:backend": "npm-run-all --parallel build:backend:watch start:nodemon",
     "start:nodemon": "nodemon --watch lib app.js",
     "test": "ava",
-    "test:watch": "nodemon test/*.js --exec ava",
+    "test:watch": "nodemon test/*.js --exec ava -- --serial --verbose",
     "build:backend": "babel -s -d lib src",
     "build:backend:watch": "babel --watch -s -d lib src"
   },
@@ -47,7 +47,7 @@
     "x-ray": "^2.0.2"
   },
   "devDependencies": {
-    "ava": "^0.7.0",
+    "ava": "^0.9.1",
     "babel-cli": "^6.4.0",
     "babel-core": "^6.4.0",
     "babel-loader": "^6.2.1",

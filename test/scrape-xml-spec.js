@@ -4,7 +4,7 @@ import scrapeTask from './../src/tasks/scrape-xml-task';
 import fs from 'fs';
 import Promise from 'bluebird';
 
-import nockHelper from './utils/nock-helper';
+import nockHelper from './helpers/nock-helper';
 const nock = nockHelper(__filename);
 
 test.before(nock.beforeFn);
