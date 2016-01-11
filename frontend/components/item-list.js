@@ -21,10 +21,12 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(React.createClass({
   componentWillReceiveProps: function(nextProps) {
     const categoryId = this.props.params.categoryId || 'unseen';
+    const nextCategoryId = nextProps.params.categoryId || 'unseen';
+
     const { dispatch } = this.props;
 
-    if (this.props.params.categoryId !== nextProps.params.categoryId) {
-      dispatch(fetchPosts(nextProps.params.categoryId));
+    if (categoryId !== nextCategoryId) {
+      dispatch(fetchPosts(nextCategoryId));
     }
   },
   loadMore: function() {
@@ -33,7 +35,6 @@ export default connect(mapStateToProps)(React.createClass({
 
     const id = items.length > 0 ? items[items.length - 1]._id : undefined;
     const date = items.length > 0 ? items[items.length - 1].createdAt : undefined;
-
     const { dispatch } = this.props;
 
     return dispatch(fetchPosts(categoryId, id, date));
