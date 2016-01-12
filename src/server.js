@@ -13,7 +13,7 @@ import taskManager from './task-manager';
 import config, { tasks } from './config';
 import itemsRoutes from './routes/items';
 
-dbInit(config.db).then(db => {
+dbInit(config.db, config.remote).then(db => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
@@ -33,7 +33,12 @@ dbInit(config.db).then(db => {
 
   var server = app.listen(3000, () => {
     console.log('localhost:3000');
-    taskManager(db.pouch, db.db, tasks);
+
+    if (process.env.NO_TASKS) {
+      console.log('tasks disabled');
+    } else {
+      taskManager(db.pouch, db.db, tasks);
+    }
   });
 }).catch((err) => {
   console.log(err.stack);

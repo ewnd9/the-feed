@@ -38,10 +38,15 @@ const indexes = [
   })
 ];
 
-export default (dbPath) => {
+export default (dbPath, remote) => {
   const pouch = new PouchDB(path(dbPath));
   const db = pouch.hoodieApi({});
   const limit = 40;
+
+  if (remote) {
+    pouch.replicate.to(remote, { continuous: true });
+    pouch.replicate.from(remote);
+  }
 
   const findAllByStatus = (seen, id, date) => {
     const skip = id && date && 1 | 0;
