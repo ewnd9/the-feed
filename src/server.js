@@ -34,7 +34,7 @@ dbInit(config.db, config.remote).then(db => {
   var server = app.listen(3000, () => {
     console.log('localhost:3000');
 
-    if (process.env.NO_TASKS) {
+    if (config['disable-tasks']) {
       console.log('tasks disabled');
     } else {
       taskManager(db.pouch, db.db, tasks);
