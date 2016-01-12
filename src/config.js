@@ -2,7 +2,44 @@ import yaml from 'js-yaml';
 import fs from 'fs';
 import _ from 'lodash';
 
+import table from 'table';
+import parseInterval from './utils/parse-interval';
+
 const config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
 
-export const tasks = _.map(config.tasks, (task, name) => ({ ...task, name }));
+const _tasks = _.map(config.tasks, (task, name) => ({ ...task, name }));
+const report = _tasks.map(task => {
+  let label;
+
+  if (!task.interval) {
+    task.interval = 40;
+    label = `40m (default)`;
+  } else {
+    let minutes;
+
+    try {
+      minutes = parseInterval(task.interval);
+    } catch (e) {
+      throw new Error(`${task.name} has incorrect interval: "${task.interval}"`);
+    }
+
+    if (minutes === 0) {
+      throw new Error(`"${task.interval}" is not correct`);
+    }
+
+    if (parseInt(task.interval) !== minutes) {
+      label = `${task.interval} (${minutes}m)`;
+    } else {
+      label = task.interval;
+    }
+
+    task.interval = minutes;
+  }
+
+  return [task.name, label];
+});
+
+console.log(table(report));
+
+export const tasks = _tasks;
 export default config;

@@ -61,7 +61,7 @@ export default (pouch, db, tasks) => {
 			});
 		};
 
-		setInterval(fn, 1000 * 60 * 5);
+		setInterval(fn, 1000 * 60 * task.interval);
 		fn();
 	});
 };

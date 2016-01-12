@@ -41,6 +41,7 @@
     "pouchdb-find": "^0.8.0",
     "pouchdb-hoodie-api": "^1.6.0",
     "source-map-support": "^0.4.0",
+    "table": "^3.7.4",
     "twitter": "^1.2.5",
     "user-home": "^2.0.0",
     "vk-universal-api": "0.0.2",
