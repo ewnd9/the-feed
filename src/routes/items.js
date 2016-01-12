@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 
 export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, tasks) => {
 
