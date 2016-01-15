@@ -8,7 +8,13 @@ const task = ({ subreddits }) => {
       return {
         title: `/r/${data.subreddit}: ${data.title}`,
         url: data.url,
-        id: data.url
+        id: `${data.subreddit}${data.id}`,
+        data: {
+          flair_label: data.link_flair_text,
+          comments_link: `https://reddit.com${data.permalink}`,
+          comments_link_count: data.num_comments,
+          text_blob: data.selftext
+        }
       };
     });
 	});
