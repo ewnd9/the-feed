@@ -15,6 +15,7 @@ test('get github stars', async t => {
 	t.ok(items[0].user_url);
 	t.ok(items[0].title);
 	t.ok(items[0].url);
+	t.ok(items[0].data.desc_label);
 
 	setTimeout(() => t.fail(), 10000);
 });

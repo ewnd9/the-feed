@@ -1,4 +1,16 @@
 const got = require('got');
+const Promise = require('bluebird');
+
+const get = (url, token) => {
+	return got(url, {
+		json: true,
+		headers: {
+			'accept': 'application/vnd.github.v3+json',
+			'authorization': 'token ' + token
+		}
+	})
+	.then(_ => _.body);
+};
 
 const processEvents = (items, filterFn, action) => {
 	const mapFn = (action) => {
@@ -8,7 +20,7 @@ const processEvents = (items, filterFn, action) => {
 			const repo = item.repo.name;
 			const repoUrl = `https://github.com/${item.repo.name}`
 
-			return {
+			return [{
 				id: item.id,
 				user_url: userUrl,
 				title: [
@@ -17,7 +29,7 @@ const processEvents = (items, filterFn, action) => {
 					[repoUrl, repo]
 				],
 				url: repoUrl
-			};
+			}, item];
 		};
 	};
 
@@ -41,17 +53,24 @@ export const getRepoMadePublics = (items) => {
 	return processEvents(items, filterFn, 'made public');
 };
 
+export const getInfo = (token, [post, item]) => {
+	return get(item.repo.url, token)
+		.then(res => {
+			post.data = post.data || {};
+			post.data.desc_label = res.description;
+			return post;
+		});
+};
+
 const task = ({ username, token }) => {
-	return got(`https://api.github.com/users/${username}/received_events`, {
-		json: true,
-		headers: {
-			'accept': 'application/vnd.github.v3+json',
-			'authorization': 'token ' + token
-		}
-	}).then((res) => {
-		return getStars(res.body).concat(getRepoCreations(res.body))
-														 .concat(getRepoMadePublics(res.body));
-	});
+	return get(`https://api.github.com/users/${username}/received_events`, token)
+		.then(res => {
+			const promises = getStars(res)
+				.concat(getRepoCreations(res))
+				.concat(getRepoMadePublics(res));
+
+			return Promise.map(promises, getInfo.bind(null, token));
+		});
 };
 
 export default {
