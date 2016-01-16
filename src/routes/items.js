@@ -58,7 +58,7 @@ export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, 
   });
 
   router.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..', '..', 'public', 'index.html'));
   });
 
   return router;
