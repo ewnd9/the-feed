@@ -21,7 +21,7 @@ export const createTask = (task) => {
 export default (pouch, db, tasks) => {
 	tasks.forEach((task) => {
 		var execTask = createTask(task);
-		var log = (msg) => console.log(task.name, msg);
+		var log = console.log.bind(console, task.name);
 
 		var fn = () => {
 			log(new Date());
@@ -57,7 +57,7 @@ export default (pouch, db, tasks) => {
 			}).then(() => {
 				log(stats);
 			}).catch((err) => {
-				log(err.stack);
+				log(err, err.stack);
 			});
 		};
 

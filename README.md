@@ -59,6 +59,20 @@ params:
   ]
 ```
 
+### `twitter-search-task`
+
+Collects tweets about user
+
+```yaml
+task: twitter-search
+params:
+  user: <user>
+  access_token_key: <secret>
+  access_token_secret: <secret>
+  consumer_key: <secret>
+  consumer_secret: <secret>
+```
+
 ## Development
 
 ### Setup deploy to raspberry script
