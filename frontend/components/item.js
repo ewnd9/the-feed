@@ -42,72 +42,82 @@ export default React.createClass({
       return _.endsWith(key, '_blob');
     });
 
-    console.log(blobs);
-
 		return (
 			<div className={itemClass}
 					 onMouseEnter={() => this.props.handleHover(index)}
 					 onFocus={() => this.props.handleHover(index)}
 					 tabIndex={index + 1}>
-				<div className="item-column">
-					<span className="data task">{ result.meta.task }:</span>{' '}
-					{
-						title.map((title, i) => {
-							if (typeof title === 'string') {
-								return (<span key={i}>{ title }{' '}</span>);
-							} else {
-								return (
-									<span key={i}>
-										<a href={title[0]}
-											 target="_blank"
-											 onClick={() => this.props.handleLinkClick(index, title[0])}>
-											{ title[1] }
-										</a>
-										{' '}
-									</span>
-								);
-							}
-						})
-					}
-				</div>
-				<div className="item-column">
+        <div className="item-top">
           {
-            labels.map(({ val, key }, index) => {
-              return (
-                <span className="data flair" key={index}>
-                  {key.replace('_label', '')}:{' '}{val}{' '}
-                </span>
-              );
-            })
+            result.images && (
+              <div className="item-image">
+                <img src={result.images[result.images.length - 1].url} />
+              </div>
+            )
           }
-          {
-            links.map(({ val, key }, index) => {
-              return (
-                <a href={val} target="_blank" className="data link" key={index}>
-                  {(typeof result.data[key + '_count'] !== 'undefined') ? result.data[key + '_count'] + ' ' : ''}
-                  {key.replace('_link', '')}
-                </a>
-              );
-            })
-          }
-          {
-            blobs.map(({ val, key }, index) => {
-              return (
-                <span className="data blob" key={result._id + key}>
-                  <span data-tip data-for={result._id + key}>
-                    {key.replace('_blob', '')}
+          <span>
+            <span className="data task">{ result.meta.task }:</span>{' '}
+            {
+              title.map((title, i) => {
+                if (typeof title === 'string') {
+                  return (<span key={i}>{ title }{' '}</span>);
+                } else {
+                  return (
+                    <span key={i}>
+                      <a href={title[0]}
+                         target="_blank"
+                         onClick={() => this.props.handleLinkClick(index, title[0])}>
+                        { title[1] }
+                      </a>
+                      {' '}
+                    </span>
+                  );
+                }
+              })
+            }
+          </span>
+        </div>
+
+				<div className="item-body">
+  				<div className="item-column">
+            {
+              labels.map(({ val, key }, index) => {
+                return (
+                  <span className="data flair" key={index}>
+                    {key.replace('_label', '')}:{' '}{val}{' '}
                   </span>
-                  <ReactTooltip id={result._id + key} class="tooltip" effect="solid">
-                    {val}
-                  </ReactTooltip>
-                </span>
-              );
-            })
-          }
-        </div>
-        <div className="item-column">
-          <span>{ fromNow }</span>
-        </div>
+                );
+              })
+            }
+            {
+              links.map(({ val, key }, index) => {
+                return (
+                  <a href={val} target="_blank" className="data link" key={index}>
+                    {(typeof result.data[key + '_count'] !== 'undefined') ? result.data[key + '_count'] + ' ' : ''}
+                    {key.replace('_link', '')}
+                  </a>
+                );
+              })
+            }
+            {
+              blobs.map(({ val, key }, index) => {
+                return (
+                  <span className="data blob" key={result._id + key}>
+                    <span data-tip data-for={result._id + key}>
+                      {key.replace('_blob', '')}
+                    </span>
+                    <ReactTooltip id={result._id + key} class="tooltip" effect="solid">
+                      {val}
+                    </ReactTooltip>
+                  </span>
+                );
+              })
+            }
+          </div>
+          <div className="item-column">
+            <span>{ fromNow }</span>
+          </div>
+				</div>
 			</div>
 		);
 	}

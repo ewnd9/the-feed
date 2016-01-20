@@ -63,8 +63,8 @@ aside {
 }
 
 .item {
-	padding-bottom: 10px;
 	border-bottom: 1px solid black;
+	padding: 10px 0;
 }
 
 .item-column {
@@ -83,6 +83,20 @@ aside {
 	animation-name: example;
 	animation-duration: 1s;
   animation-fill-mode: forwards;
+}
+
+.item-top {
+	display: flex;
+	flex-direction: row;
+}
+
+.item-image {
+	max-width: 100px;
+	margin-right: 10px;
+}
+
+.item-image img {
+	width: 100%;
 }
 
 @keyframes example {

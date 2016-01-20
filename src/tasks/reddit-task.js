@@ -5,6 +5,12 @@ const task = ({ subreddits }) => {
 		json: true
 	}).then((res) => {
     return res.body.data.children.map(({ data }) => {
+      let images;
+
+      if (data.preview) {
+        images = data.preview.images[0].resolutions.concat(data.preview.images[0].source);
+      }
+
       return {
         title: `/r/${data.subreddit}: ${data.title}`,
         url: data.url,
@@ -14,7 +20,8 @@ const task = ({ subreddits }) => {
           comments_link: `https://reddit.com${data.permalink}`,
           comments_link_count: data.num_comments,
           text_blob: data.selftext
-        }
+        },
+        images
       };
     });
 	});

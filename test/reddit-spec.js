@@ -14,7 +14,7 @@ test('follow specification', t => {
 });
 
 test('get reddit posts', async t => {
-	const subreddits = ['node'];
+	const subreddits = ['github'];
 
 	const items = await redditTask.task({ subreddits });
 	t.is(items.length, 25);
