@@ -13,6 +13,14 @@ import taskManager from './task-manager';
 import config, { tasks } from './config';
 import itemsRoutes from './routes/items';
 
+if (process.env.NODE_ENV === 'production') {
+  const opbeat = require('opbeat').start({
+    organizationId: config.opbeat.organizationId,
+    appId: config.opbeat.appId,
+    secretToken: config.opbeat.secretToken
+  });
+}
+
 dbInit(config.db, config.remote).then(db => {
   console.log('db init');
 
