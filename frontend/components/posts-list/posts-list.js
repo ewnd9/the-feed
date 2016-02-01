@@ -4,9 +4,9 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import { connect } from 'react-redux';
 
-import * as api from './../api';
-import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../actions';
-import Item from './item';
+import * as api from './../../api';
+import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions';
+import Post from './../posts-list-item/posts-list-item';
 
 const InfiniteScroll = require('react-infinite-scroll')(React);
 
@@ -66,7 +66,7 @@ export default connect(mapStateToProps)(React.createClass({
             this.props.posts.items.map((result, index) => {
   						return (
                 <Swipeable onSwipingLeft={this.handleHover.bind(this, index)}>
-                  <Item item={result}
+                  <Post item={result}
                       index={index}
                       key={result._id}
                       handleLinkClick={this.handleLinkClick}

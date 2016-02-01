@@ -1,7 +1,7 @@
 import React from 'react';
-import CategoryLink from './category-link';
+import CategoryLink from './../category-link/category-link';
 
-import * as api from './../api';
+import * as api from './../../api';
 
 export default React.createClass({
   getInitialState: () => ({ items: [] }),

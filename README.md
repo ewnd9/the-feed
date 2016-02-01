@@ -23,9 +23,17 @@ $ npm start
   	-t, --test Interactive tasks testing
 ```
 
-## Available Tasks
+## Design
 
-### `scrape-task`
+### Vocabulary
+
+- `Post`
+
+- `Task`
+
+- `Job`
+
+### Available tasks
 
 Generic html parsing
 

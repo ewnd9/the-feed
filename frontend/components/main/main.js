@@ -1,8 +1,7 @@
 import React from 'react';
 
-import Header from './header';
-import ItemList from './item-list';
-import SideMenu from './/side-menu';
+import Header from './../header/header';
+import SideMenu from './../side-menu/side-menu';
 
 export default React.createClass({
   render: function() {

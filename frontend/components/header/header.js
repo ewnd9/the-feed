@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import CategoryLink from './category-link';
+import CategoryLink from './../category-link/category-link';
 
 export default React.createClass({
   render: function() {
