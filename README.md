@@ -2,6 +2,20 @@
 
 [WIP] the programmable front page of the internet
 
+### Technologies
+
+Backend:
+
+- `express`
+- `pouchdb` (only as embedded db for now, without a syncing to browser or anywhere)
+
+Frontend:
+
+- `react`
+- `redux`
+
+Transpiled with `babel` (`es2015` + `stage-0` + `react`), frontend bundled with `webpack`
+
 ## Install
 
 ```
