@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routeReducer as routing } from 'redux-simple-router';
 
 import {
   REQUEST_POSTS,
@@ -60,7 +59,6 @@ function posts(state = {
 };
 
 const rootReducer = combineReducers({
-  routing,
   posts
 });
 
