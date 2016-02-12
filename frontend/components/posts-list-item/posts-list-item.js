@@ -42,6 +42,8 @@ export default React.createClass({
       return _.endsWith(key, '_blob');
     });
 
+    const createMarkup = val => ({__html: val });
+
 		return (
 			<div className={itemClass}
 					 onMouseEnter={() => this.props.handleHover(index)}
@@ -84,7 +86,10 @@ export default React.createClass({
               labels.map(({ val, key }, index) => {
                 return (
                   <span className="data flair" key={index}>
-                    {key.replace('_label', '')}:{' '}{val}{' '}
+                    {key.replace('_label', '')}
+                    {': '}
+                    <span dangerouslySetInnerHTML={createMarkup(val)} />
+                    {' '}
                   </span>
                 );
               })
@@ -107,7 +112,7 @@ export default React.createClass({
                       {key.replace('_blob', '')}
                     </span>
                     <ReactTooltip id={result._id + key} class="tooltip" effect="solid">
-                      {val}
+                      <span dangerouslySetInnerHTML={createMarkup(val)} />
                     </ReactTooltip>
                   </span>
                 );

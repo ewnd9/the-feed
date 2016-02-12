@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import sanitize from 'sanitize-html';
 
 export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, tasks) => {
 
@@ -53,7 +54,19 @@ export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, 
     }
 
     return fn
-      .then(data => res.json(data))
+      .then(posts => {
+        posts.forEach(post => {
+          Object.keys(post.data).forEach(key => {
+            post.data[key] = sanitize(post.data[key], {
+              allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
+              allowedAttributes: {
+                a: ['href']
+              }
+            });
+          });
+        });
+        res.json(posts);
+      })
       .catch(err => next(err));
   });
 
