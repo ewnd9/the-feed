@@ -16,7 +16,7 @@ const createDesignDoc = (name, mapFunction) => {
     views: {}
   };
 
-	ddoc.views[name] = { map: mapFunction.toString() };
+  ddoc.views[name] = { map: mapFunction.toString() };
   return ddoc;
 };
 
@@ -89,7 +89,7 @@ export default (dbPath, remote) => {
       .query(BY_CATEGORY, {
         include_docs: true,
         descending: true,
-		    startkey: startkey,
+        startkey: startkey,
         endkey: category,
         limit,
         skip
@@ -105,13 +105,13 @@ export default (dbPath, remote) => {
         console.log(`${index._id} was created`);
       }, (err) => {
         if (err.name !== 'conflict') {
-    	  	console.log(err);
-    		} else {
+          console.log(err);
+        } else {
           console.log(`${index._id} already exists`);
         }
       });
     })
     .then(() => ({
-		  pouch, db, findAllByStatus, findByCategory, findAllClicked
-	  }));
+      pouch, db, findAllByStatus, findByCategory, findAllClicked
+    }));
 };

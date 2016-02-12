@@ -17,17 +17,17 @@ export default React.createClass({
   },
   render: function() {
     return (
-			<div className="side-menu">
-				{
-					this.state.items.map((category, index) => {
-						return (
-							<div key={index} className="side-menu-item">
+      <div className="side-menu">
+        {
+          this.state.items.map((category, index) => {
+            return (
+              <div key={index} className="side-menu-item">
                 <CategoryLink category={category} />
-							</div>
-						);
-					})
-				}
-			</div>
+              </div>
+            );
+          })
+        }
+      </div>
     );
-	}
+  }
 });

@@ -57,14 +57,14 @@ export default connect(mapStateToProps)(React.createClass({
   },
   render: function() {
     return (
-			<div className="content">
+      <div className="content">
         <InfiniteScroll
             loadMore={this.loadMore}
             hasMore={!this.props.posts.isFetching && this.props.posts.hasMore}
             loader={<div className="loader">Loading ...</div>}>
           {
             this.props.posts.items.map((result, index) => {
-  						return (
+              return (
                 <Swipeable onSwipingLeft={this.handleHover.bind(this, index)}>
                   <Post item={result}
                       index={index}
@@ -73,10 +73,10 @@ export default connect(mapStateToProps)(React.createClass({
                       handleHover={this.handleHover} />
                 </Swipeable>
               );
-  				  })
+            })
           }
         </InfiniteScroll>
-			</div>
+      </div>
     );
-	}
+  }
 }));

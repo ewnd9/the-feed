@@ -2,8 +2,8 @@ import got from 'got';
 
 const task = ({ subreddits }) => {
   return got(`https://api.reddit.com/r/${subreddits.join('+')}/new`, {
-		json: true
-	}).then((res) => {
+    json: true
+  }).then((res) => {
     return res.body.data.children.map(({ data }) => {
       let images;
 
@@ -24,7 +24,7 @@ const task = ({ subreddits }) => {
         images
       };
     });
-	});
+  });
 };
 
 export default { task };

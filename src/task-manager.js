@@ -2,66 +2,66 @@ import Promise from 'bluebird';
 import fs from 'fs';
 
 const tasksModules = fs.readdirSync(__dirname + '/tasks')
-	.filter(name => name.indexOf('.map') !== name.length - 4)
-	.reduce((total, name) => {
-		total[name] = require('./tasks/' + name);
-		return total;
-	}, {});
+  .filter(name => name.indexOf('.map') !== name.length - 4)
+  .reduce((total, name) => {
+    total[name] = require('./tasks/' + name);
+    return total;
+  }, {});
 
 export const createTask = (task) => {
-	let currTask = tasksModules[task.task + '-task.js'];
+  let currTask = tasksModules[task.task + '-task.js'];
 
-	if (currTask.default) {
-		currTask = currTask.default; // es6 import workaround
-	}
+  if (currTask.default) {
+    currTask = currTask.default; // es6 import workaround
+  }
 
-	return () => currTask.task(task.params);
+  return () => currTask.task(task.params);
 };
 
 export default (pouch, db, tasks) => {
-	tasks.forEach((task) => {
-		var execTask = createTask(task);
-		var log = console.log.bind(console, task.name);
+  tasks.forEach((task) => {
+    var execTask = createTask(task);
+    var log = console.log.bind(console, task.name);
 
-		var fn = () => {
-			log(new Date());
+    var fn = () => {
+      log(new Date());
 
-			var stats = {
-				existed: 0,
-				added: 0
-			};
+      var stats = {
+        existed: 0,
+        added: 0
+      };
 
-			execTask().then((items) => {
-				return Promise.map(items, (item) => {
-					item.meta = {
-						task: task.name,
-						seen: false
-					};
+      execTask().then((items) => {
+        return Promise.map(items, (item) => {
+          item.meta = {
+            task: task.name,
+            seen: false
+          };
 
-					item.id = task.name + ':' + item.id.replace(/\W/g, '');
+          item.id = task.name + ':' + item.id.replace(/\W/g, '');
 
-					return db.find(item.id).then((item) => {
-						stats.existed++;
-					}, (err) => {
-						if (err.reason === 'missing') {
-							return db.add(item).then(() => {
-								stats.added++;
-							}, (err) => {
-								log(err);
-							});
-						} else {
-							log(err);
-						}
-					});
-				});
-			}).then(() => {
-				log(stats);
-			}).catch((err) => {
-				log(err, err.stack);
-			});
-		};
+          return db.find(item.id).then((item) => {
+            stats.existed++;
+          }, (err) => {
+            if (err.reason === 'missing') {
+              return db.add(item).then(() => {
+                stats.added++;
+              }, (err) => {
+                log(err);
+              });
+            } else {
+              log(err);
+            }
+          });
+        });
+      }).then(() => {
+        log(stats);
+      }).catch((err) => {
+        log(err, err.stack);
+      });
+    };
 
-		setInterval(fn, 1000 * 60 * task.interval);
-		fn();
-	});
+    setInterval(fn, 1000 * 60 * task.interval);
+    fn();
+  });
 };

@@ -10,14 +10,14 @@ test.before(nock.beforeFn);
 test.after(nock.afterFn);
 
 test('follow specification', t => {
-	t.true(typeof redditTask.task === 'function');
+  t.true(typeof redditTask.task === 'function');
 });
 
 test('get reddit posts', async t => {
-	const subreddits = ['github'];
+  const subreddits = ['github'];
 
-	const items = await redditTask.task({ subreddits });
-	t.is(items.length, 25);
+  const items = await redditTask.task({ subreddits });
+  t.is(items.length, 25);
 
-	setTimeout(() => t.fail(), 1000);
+  setTimeout(() => t.fail(), 1000);
 });

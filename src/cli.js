@@ -7,15 +7,15 @@ const cli = meow(`
   Options
     -t, --test Interactive tasks testing
 `, {
-	pkg: './../package.json',
+  pkg: './../package.json',
   alias: {
     t: 'test',
-		s: 'server'
+    s: 'server'
   }
 });
 
 if (cli.flags.test) {
-	require('./test-tasks-cli');
+  require('./test-tasks-cli');
 } else {
   require('./server');
 }

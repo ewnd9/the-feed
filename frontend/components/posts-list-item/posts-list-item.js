@@ -7,24 +7,24 @@ import ReactTooltip from 'react-tooltip';
 
 export default React.createClass({
   render: function() {
-		const result = this.props.item;
-		const index = this.props.index;
+    const result = this.props.item;
+    const index = this.props.index;
 
-		const fromNow = moment(result.createdAt).fromNow();
+    const fromNow = moment(result.createdAt).fromNow();
 
-		let title;
+    let title;
 
-		if (typeof result.title === 'string') {
-			title = [[result.url, result.title]];
-		} else {
-			title = result.title;
-		}
+    if (typeof result.title === 'string') {
+      title = [[result.url, result.title]];
+    } else {
+      title = result.title;
+    }
 
-		const itemClass = classNames({
-			'item': true,
-			'item-seen': result.meta.seen,
-			'item-unseen': !result.meta.seen
-		});
+    const itemClass = classNames({
+      'item': true,
+      'item-seen': result.meta.seen,
+      'item-unseen': !result.meta.seen
+    });
 
     const dataArray = _
       .map(result.data, (val, key) => ({ val, key }))
@@ -44,11 +44,11 @@ export default React.createClass({
 
     const createMarkup = val => ({__html: val });
 
-		return (
-			<div className={itemClass}
-					 onMouseEnter={() => this.props.handleHover(index)}
-					 onFocus={() => this.props.handleHover(index)}
-					 tabIndex={index + 1}>
+    return (
+      <div className={itemClass}
+           onMouseEnter={() => this.props.handleHover(index)}
+           onFocus={() => this.props.handleHover(index)}
+           tabIndex={index + 1}>
         <div className="item-top">
           {
             result.images && (
@@ -80,8 +80,8 @@ export default React.createClass({
           </span>
         </div>
 
-				<div className="item-body">
-  				<div className="item-column">
+        <div className="item-body">
+          <div className="item-column">
             {
               labels.map(({ val, key }, index) => {
                 return (
@@ -122,8 +122,8 @@ export default React.createClass({
           <div className="item-column">
             <span>{ fromNow }</span>
           </div>
-				</div>
-			</div>
-		);
-	}
+        </div>
+      </div>
+    );
+  }
 });

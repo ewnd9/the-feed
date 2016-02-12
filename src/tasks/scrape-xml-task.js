@@ -14,7 +14,7 @@ export default {
       return $(selector).toArray().map((el) => {
         const $el = $(el);
         const url = $el.find(urlSelector).text();
-        
+
         const data = Object.keys(additional).reduce((total, name) => {
           total[name] = $el.find(additional[name]).text();
           return total;

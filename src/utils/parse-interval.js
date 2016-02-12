@@ -8,7 +8,7 @@ export default (source) => {
     if (isNaN(minutes)) {
       throw new Error(`${part} is not a number`);
     }
-    
+
     return result + minutes;
   }, 0);
 };

@@ -9,19 +9,19 @@ export default React.createClass({
       'Seen'
     ];
 
-		return (
-			<header>
-				<div className="logo">
-					<Link to="/">the-feed</Link>
-				</div>
-				<div className="menu">
-					{
+    return (
+      <header>
+        <div className="logo">
+          <Link to="/">the-feed</Link>
+        </div>
+        <div className="menu">
+          {
             categories.map(category => {
               return (<CategoryLink category={category} key={category} />);
             })
           }
-				</div>
-			</header>
-		);
-	}
+        </div>
+      </header>
+    );
+  }
 });
