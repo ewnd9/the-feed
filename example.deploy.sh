@@ -1,5 +1,7 @@
+#!/bin/sh
+
 npm run build:backend
-NODE_ENV=production webpack
+npm run build:frontend
 
 REMOTE=user@ip
 DEST=/home/pi/the-feed
