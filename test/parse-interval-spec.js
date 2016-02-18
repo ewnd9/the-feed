@@ -1,6 +1,6 @@
 import test from 'ava';
 import 'babel-core/register';
-import parseInterval from './../src/utils/parse-date';
+import parseInterval from './../src/utils/parse-interval';
 
 test('#parseInterval', t => {
   t.is(10, parseInterval('10m'));

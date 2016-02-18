@@ -9,3 +9,5 @@ play.js
 !/public/.keep
 config*.yml
 ecosystem*.json
+.nyc_output
+coverage

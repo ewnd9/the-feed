@@ -13,7 +13,7 @@ test('follow specification', t => {
   t.true(typeof redditTask.task === 'function');
 });
 
-test('get reddit posts', async t => {
+test.skip('get reddit posts', async t => {
   const subreddits = ['github'];
 
   const items = await redditTask.task({ subreddits });

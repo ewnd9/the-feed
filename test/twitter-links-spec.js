@@ -19,6 +19,8 @@ test('get links', async t => {
     access_token_secret: process.env['TWITTER_ACCESS_TOKEN_SECRET']
   });
 
-  console.log(items);
-  setTimeout(() => t.fail(), 1000);
+  t.ok(items[0].id);
+  t.ok(items[0].title);
+  t.ok(items[0].url);
+  t.ok(items[0].data);
 });

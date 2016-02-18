@@ -6,7 +6,7 @@ test('follow specification', t => {
   t.true(typeof githubTask.task === 'function');
 });
 
-test('get github stars', async t => {
+test.skip('get github stars', async t => {
   const items = await githubTask.task({ username: 'ewnd9', token: process.env['GITHUB_TOKEN'] });
 
   t.true(items.length > 0);
