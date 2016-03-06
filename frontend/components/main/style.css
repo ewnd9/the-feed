@@ -3,20 +3,14 @@
   flex-wrap: wrap;
   flex-direction: column;
 
-  width: 650px;
+  width: 750px;
   margin: 0 auto;
-}
-
-@media screen and (max-width: 700px) {
-  .container {
-    width: 100%;
-    padding: 10px;
-  }
 }
 
 .main {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .aside {
@@ -25,4 +19,15 @@
 
 .content {
   flex: 6;
+}
+
+@media screen and (max-width: 700px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .content {
+    min-width: 300px;
+  }
 }
