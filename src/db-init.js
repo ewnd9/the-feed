@@ -23,6 +23,7 @@ const createDesignDoc = (name, mapFunction) => {
 export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen';
 export const BY_CATEGORY = 'by_category';
 export const BY_CLICKED = 'by_clicked';
+export const CATEGORIES_STATS = 'CATEGORIES_STATS';
 
 const indexes = [
   createDesignDoc(BY_CREATED_AT_AND_SEEN, (doc) => {
@@ -34,6 +35,11 @@ const indexes = [
   createDesignDoc(BY_CLICKED, (doc) => {
     if (doc.meta.clicked_at) {
       emit(doc.createdAt + '$' + doc._id);
+    }
+  }),
+  createDesignDoc(CATEGORIES_STATS, (doc) => {
+    if (doc._id.indexOf('system-unseen') === 0) {
+      emit(doc._id);
     }
   })
 ];
@@ -48,6 +54,8 @@ export default (dbPath, remote) => {
     pouch.replicate.from(remote);
   }
 
+  const mapDoc = data => data.rows.map(_ => _.doc).filter(_ => !!_);
+
   const findAllByStatus = (seen, id, date) => {
     const skip = id && date && 1 | 0;
     const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
@@ -60,9 +68,7 @@ export default (dbPath, remote) => {
         endkey: seen,
         limit,
         skip
-      }).then((data) => {
-        return data.rows.map((_) => _.doc);
-      });
+      }).then(mapDoc);
   };
 
   const findAllClicked = (id, date) => {
@@ -76,9 +82,7 @@ export default (dbPath, remote) => {
         startkey: startkey,
         limit,
         skip
-      }).then((data) => {
-        return data.rows.map((_) => _.doc);
-      });
+      }).then(mapDoc);
   };
 
   const findByCategory = (category, id, date) => {
@@ -94,9 +98,31 @@ export default (dbPath, remote) => {
         limit,
         skip
       })
-      .then((items) => {
-        return items.rows.map(_ => _.doc);
-      });
+      .then(mapDoc);
+  };
+
+  const Category = {
+    findUnseenCategories: () => {
+      return pouch
+        .query(CATEGORIES_STATS, {
+          include_docs: true,
+          startkey: 'system-unseen:',
+          endkey: 'system-unseen:\uffff'
+        })
+        .then(mapDoc);
+    },
+    setCategoryAsSeen: () => {
+      return db.
+        find(`system-unseen:${req.params.id}`)
+          .then(item => {
+            item.unseen = false;
+            return db.add(item);
+          }, err => {
+            if (err.reason !== 'missing') {
+              throw err;
+            }
+          });
+    }
   };
 
   return Promise
@@ -112,6 +138,7 @@ export default (dbPath, remote) => {
       });
     })
     .then(() => ({
-      pouch, db, findAllByStatus, findByCategory, findAllClicked
+      pouch, db, findAllByStatus, findByCategory, findAllClicked,
+      Category
     }));
 };

@@ -24,3 +24,4 @@ const put = (url, body) => {
 
 export const putSeen = (item) => put(baseUrl + `/api/v1/items/${item._id}/seen`, { seen: true });
 export const putClicked = (item) => put(baseUrl + `/api/v1/items/${item._id}/clicked`, { clicked: true });
+export const putCategorySeen = category => put(baseUrl + `/api/v1/categories/${category.name}`, {});

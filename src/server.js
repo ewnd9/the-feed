@@ -12,6 +12,7 @@ import taskManager from './task-manager';
 
 import config, { tasks } from './config';
 import itemsRoutes from './routes/items';
+import categoriesRoutes from './routes/categories';
 
 if (process.env.NODE_ENV === 'production') {
   const opbeat = require('opbeat').start({
@@ -35,8 +36,19 @@ dbInit(config.db, config.remote).then(db => {
   }));
 
   app.use('/', itemsRoutes(db, tasks));
+  app.use('/', categoriesRoutes(db, tasks));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
+  });
+
   app.use(function(err, req, res, next) {
-    res.status(err && err.status || 500).json({ error: err.stack });
+    if (!err) {
+      next();
+    }
+
+    console.log(err.stack);
+    res.status(err.status || 500).json({ error: err.stack });
   });
 
   var server = app.listen(3000, () => {

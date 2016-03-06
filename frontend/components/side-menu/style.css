@@ -5,3 +5,8 @@
   margin-bottom: -1px;
   padding: 10px;
 }
+
+.unseenBadge {
+  float: right;
+  color: #1dce73;
+}

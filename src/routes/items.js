@@ -31,10 +31,6 @@ export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, 
       });
   });
 
-  router.get('/api/v1/categories', (req, res) => {
-    res.json(tasks.map(_ => _.name));
-  });
-
   router.get('/api/v1/categories/items/:id', (req, res, next) => {
     const category = req.params.id;
 
@@ -68,10 +64,6 @@ export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, 
         res.json(posts);
       })
       .catch(err => next(err));
-  });
-
-  router.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', '..', 'public', 'index.html'));
   });
 
   return router;

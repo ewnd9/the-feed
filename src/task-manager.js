@@ -56,6 +56,27 @@ export default (pouch, db, tasks) => {
         });
       }).then(() => {
         log(stats);
+
+        if (stats.added > 0) {
+          const unseenStat = {
+            id: 'system-unseen:' + task.name,
+            unseen: true,
+            task: task.name
+          };
+
+          return db.find(unseenStat.id)
+            .then(item => {
+              item.unseen = true;
+              return db.add(item);
+            })
+            .catch(err => {
+              if (err.reason === 'missing') {
+                return db.add(unseenStat);
+              } else {
+                log(err);
+              }
+            });
+        }
       }).catch((err) => {
         log(err, err.stack);
       });
