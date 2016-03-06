@@ -1,0 +1,70 @@
+.item {
+  background-color: #fff;
+  border: 1px solid #e1e8ed;
+  border-bottom-color: rgb(41, 47, 51);
+  margin-bottom: -1px;
+  padding: 10px;
+}
+
+[data-reactid]:not(:first-child) > .item {
+  padding-top: 10px;
+}
+
+.itemColumn {
+  margin-top: 10px;
+}
+
+.itemUnseen {
+  background-color: #f5f8fa;
+}
+
+.itemUnseen:hover {
+  animation-name: example;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.itemSeen {
+  background-color: white !important;
+}
+
+.itemTop {
+  display: flex;
+  flex-direction: row;
+}
+
+.itemImage {
+  max-width: 100px;
+  margin-right: 10px;
+}
+
+.itemImage img {
+  width: 100%;
+}
+
+.data {
+  padding: 0 2px;
+  display: inline-block;
+}
+
+.data:not(.task) {
+  margin-right: 10px;
+}
+
+a.data.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.task, .date {
+  text-decoration: underline;
+}
+
+@keyframes example {
+  from {
+    background-color: #EEEEEE;
+  }
+  to {
+    background-color: white;
+  }
+}

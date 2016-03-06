@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './style.css';
+
 import { Link } from 'react-router';
 import CategoryLink from './../category-link/category-link';
 
@@ -10,11 +12,11 @@ export default React.createClass({
     ];
 
     return (
-      <header>
-        <div className="logo">
+      <header className={styles.header}>
+        <div className={styles.logo}>
           <Link to="/">the-feed</Link>
         </div>
-        <div className="menu">
+        <div className={styles.menu}>
           {
             categories.map(category => {
               return (<CategoryLink category={category} key={category} />);

@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './style.css';
+
 import CategoryLink from './../category-link/category-link';
 
 import * as api from './../../api';
@@ -17,11 +19,11 @@ export default React.createClass({
   },
   render: function() {
     return (
-      <div className="side-menu">
+      <div className={styles.sideMenu}>
         {
           this.state.items.map((category, index) => {
             return (
-              <div key={index} className="side-menu-item">
+              <div key={index} className={styles.sideMenuItem}>
                 <CategoryLink category={category} />
               </div>
             );

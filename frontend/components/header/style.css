@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 50px;
+
+  border: 1px solid #e1e8ed;
+  margin: 10px 0 -1px;
+  padding: 10px;
+}
+
+.logo {
+  font-size: xx-large;
+}
+
+.logo a {
+  color: inherit;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  width: 200px;
+  text-transform: uppercase;
+}

@@ -1,0 +1,8 @@
+.category {
+  color: inherit;
+  text-decoration: none;
+}
+
+.category.active {
+  text-decoration: underline;
+}

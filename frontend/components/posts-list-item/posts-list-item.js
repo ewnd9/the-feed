@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './style.css';
 
 import moment from 'moment';
 import classNames from 'classnames';
@@ -21,9 +22,9 @@ export default React.createClass({
     }
 
     const itemClass = classNames({
-      'item': true,
-      'item-seen': result.meta.seen,
-      'item-unseen': !result.meta.seen
+      [styles.item]: true,
+      [styles.itemSeen]: result.meta.seen,
+      [styles.itemUnseen]: !result.meta.seen
     });
 
     const dataArray = _
@@ -52,13 +53,16 @@ export default React.createClass({
         <div className="item-top">
           {
             result.images && (
-              <div className="item-image">
+              <div className={styles.itemImage}>
                 <img src={result.images[result.images.length - 1].url} />
               </div>
             )
           }
           <span>
-            <span className="data task">{ result.meta.task }:</span>{' '}
+            <span className={`${styles.data} ${styles.task}`}>
+              { result.meta.task }:
+            </span>
+            {' '}
             {
               title.map((title, i) => {
                 if (typeof title === 'string') {
@@ -80,12 +84,12 @@ export default React.createClass({
           </span>
         </div>
 
-        <div className="item-body">
-          <div className="item-column">
+        <div className={styles.itemBody}>
+          <div className={styles.itemColumn}>
             {
               labels.map(({ val, key }, index) => {
                 return (
-                  <span className="data flair" key={index}>
+                  <span className={`${styles.data} ${styles.flair}`} key={index}>
                     {key.replace('_label', '')}
                     {': '}
                     <span dangerouslySetInnerHTML={createMarkup(val)} />
@@ -97,7 +101,7 @@ export default React.createClass({
             {
               links.map(({ val, key }, index) => {
                 return (
-                  <a href={val} target="_blank" className="data link" key={index}>
+                  <a href={val} target="_blank" className={`${styles.data} ${styles.link}`} key={index}>
                     {(typeof result.data[key + '_count'] !== 'undefined') ? result.data[key + '_count'] + ' ' : ''}
                     {key.replace('_link', '')}
                   </a>
@@ -107,7 +111,7 @@ export default React.createClass({
             {
               blobs.map(({ val, key }, index) => {
                 return (
-                  <span className="data blob" key={result._id + key}>
+                  <span className={`${styles.data} ${styles.blob}`} key={result._id + key}>
                     <span data-tip data-for={result._id + key}>
                       {key.replace('_blob', '')}
                     </span>
@@ -119,8 +123,8 @@ export default React.createClass({
               })
             }
           </div>
-          <div className="item-column">
-            <span>{ fromNow }</span>
+          <div className={styles.itemColumn}>
+            <span className={styles.date}>{ fromNow }</span>
           </div>
         </div>
       </div>

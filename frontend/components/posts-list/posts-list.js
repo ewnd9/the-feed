@@ -57,7 +57,7 @@ export default connect(mapStateToProps)(React.createClass({
   },
   render: function() {
     return (
-      <div className="content">
+      <div>
         <InfiniteScroll
             loadMore={this.loadMore}
             hasMore={!this.props.posts.isFetching && this.props.posts.hasMore}
