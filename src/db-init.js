@@ -111,9 +111,9 @@ export default (dbPath, remote) => {
         })
         .then(mapDoc);
     },
-    setCategoryAsSeen: () => {
+    setCategoryAsSeen: categoryName => {
       return db.
-        find(`system-unseen:${req.params.id}`)
+        find(`system-unseen:${categoryName}`)
           .then(item => {
             item.unseen = false;
             return db.add(item);
