@@ -36,23 +36,23 @@ export default React.createClass({
   },
   render: function() {
     return (
-      <div className={styles.sideMenu}>
+      <ul className={styles.sideMenu}>
         {
           this.state.items.map((category, index) => {
             const { name, unseen } = category;
 
             return (
-              <div key={index} className={styles.sideMenuItem}>
+              <li key={index} className={styles.sideMenuItem}>
                 <CategoryLink category={name} onClick={this.onClick.bind(this, index)} />
 
                 { unseen && (
                   <span className={styles.unseenBadge}>●</span>
                 )}
-              </div>
+              </li>
             );
           })
         }
-      </div>
+      </ul>
     );
   }
 });

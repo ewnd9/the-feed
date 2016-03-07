@@ -1,10 +1,21 @@
 @import '../../variables.css';
 
+.sideMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .sideMenuItem {
   border: 1px solid var(--borderColor);
+  margin: 0 -1px -1px 0;
   margin-right: -1px;
   margin-bottom: -1px;
   padding: 10px;
+}
+
+.sideMenuItem:hover {
+  background-color: var(--hoverGrey);
 }
 
 .unseenBadge {

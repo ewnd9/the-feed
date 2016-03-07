@@ -1,6 +1,9 @@
 :root {
   --unreadGreen: #8BC34A;
   --borderColor: #CFD8DC;
+  --backgroundGrey: #FAFAFA;
+  --hoverGrey: #ECEFF1;
+  --white: #FFF;
   --unseenPost: #ECEFF1;
 }
 
