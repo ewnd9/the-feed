@@ -1,3 +1,5 @@
+@import '../../variables.css';
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -10,7 +12,6 @@
 .main {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
 }
 
 .aside {
@@ -21,10 +22,14 @@
   flex: 6;
 }
 
-@media screen and (max-width: 700px) {
+@media (--small-viewport) {
   .container {
     width: 100%;
     padding: 10px;
+  }
+
+  .main {
+    flex-wrap: wrap;
   }
 
   .content {

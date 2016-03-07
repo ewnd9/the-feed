@@ -1,0 +1,7 @@
+:root {
+  --unreadGreen: #8BC34A;
+  --borderColor: #CFD8DC;
+  --unseenPost: #ECEFF1;
+}
+
+@custom-media --small-viewport (max-width: 700px);

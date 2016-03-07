@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all --parallel start:frontend start:backend",
-    "start:frontend": "wserve --x-entry frontend/app.js --x-html frontend/index.html --x-dist public",
+    "start:frontend": "wserve --config webpackman.config.js --x-entry frontend/app.js --x-html frontend/index.html --x-dist public",
     "start:backend": "CONFIG=config-dev.yml npm-run-all --parallel build:backend:watch start:nodemon",
     "start:nodemon": "nodemon --watch lib app.js",
     "test": "nyc --require babel-register --all --reporter=lcov --reporter=text ava",
     "test:watch": "nodemon test/*.js --exec ava -- --serial --verbose",
     "build:backend": "babel -s -d lib src",
     "build:backend:watch": "babel --watch -s -d lib src",
-    "build:frontend": "rm -rf public/* && NODE_ENV=production wbuild --x-entry frontend/app.js --x-html frontend/index.html --x-dist public"
+    "build:frontend": "rm -rf public/* && NODE_ENV=production wbuild --config webpackman.config.js --x-entry frontend/app.js --x-html frontend/index.html --x-dist public"
   },
   "private": "true",
   "repository": {
@@ -25,7 +25,9 @@
   "author": "ewnd9 <ewndnine@gmail.com>",
   "license": "MIT",
   "nyc": {
-    "include": ["src/**/*.js"]
+    "include": [
+      "src/**/*.js"
+    ]
   },
   "dependencies": {
     "bluebird": "^3.0.6",
@@ -67,6 +69,8 @@
     "nodemon": "^1.4.1",
     "npm-run-all": "^1.3.4",
     "nyc": "^5.6.0",
+    "postcss-cssnext": "^2.4.0",
+    "postcss-import": "^8.0.2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-infinite-scroll": "^0.1.5",

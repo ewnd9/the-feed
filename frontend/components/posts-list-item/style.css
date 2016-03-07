@@ -1,7 +1,7 @@
+@import '../../variables.css';
+
 .item {
-  background-color: #fff;
-  border: 1px solid #e1e8ed;
-  border-bottom-color: rgb(41, 47, 51);
+  border: 1px solid var(--borderColor);
   margin-bottom: -1px;
   padding: 10px;
 }
@@ -15,7 +15,7 @@
 }
 
 .itemUnseen {
-  background-color: #f5f8fa;
+  background-color: var(--unseenPost);
 }
 
 .itemUnseen:hover {
@@ -62,7 +62,7 @@ a.data.link {
 
 @keyframes example {
   from {
-    background-color: #EEEEEE;
+    background-color: var(--unseenPost);
   }
   to {
     background-color: white;

@@ -1,6 +1,7 @@
+@import '../../variables.css';
+
 .sideMenuItem {
-  background-color: #fff;
-  border: 1px solid #e1e8ed;
+  border: 1px solid var(--borderColor);
   margin-right: -1px;
   margin-bottom: -1px;
   padding: 10px;
@@ -8,5 +9,11 @@
 
 .unseenBadge {
   float: right;
-  color: #1dce73;
+  color: var(--unreadGreen);
+}
+
+@media (--small-viewport) {
+  .sideMenuItem {
+    margin-right: 0;
+  }
 }
