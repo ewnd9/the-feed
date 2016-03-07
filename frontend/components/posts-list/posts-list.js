@@ -5,7 +5,7 @@ import Swipeable from 'react-swipeable';
 import { connect } from 'react-redux';
 
 import * as api from './../../api';
-import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions';
+import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions/posts-actions';
 import Post from './../posts-list-item/posts-list-item';
 
 const InfiniteScroll = require('react-infinite-scroll')(React);

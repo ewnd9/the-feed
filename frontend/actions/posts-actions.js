@@ -1,4 +1,4 @@
-import * as api from './api';
+import * as api from '../api';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
