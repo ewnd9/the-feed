@@ -1,44 +1,36 @@
 import React from 'react';
 import styles from './style.css';
 
+import { connect } from 'react-redux';
+import { fetchCategories, markCategoryAsSeen } from '../../actions/categories-actions';
+
 import CategoryLink from './../category-link/category-link';
 
-import * as api from './../../api';
+function mapStateToProps(state) {
+  const { categories } = state;
 
-export default React.createClass({
+  return {
+    categories
+  };
+};
+
+export default connect(mapStateToProps)(React.createClass({
   getInitialState: () => ({ items: [] }),
-  getItems: function(page) {
-    api
-      .findCategories()
-      .then((items) => {
-        this.setState({ items });
-      });
-  },
   componentDidMount: function() {
-    this.getItems(this.state.page);
+    this.props.dispatch(fetchCategories());
   },
   onClick(index) {
-    const category = this.state.items[index];
+    const category = this.props.categories.categories[index];
 
     if (category.unseen === true) {
-      api.putCategorySeen(category)
-        .then(() => {
-          this.setState({ items: [
-            ...this.state.items.slice(0, index),
-            {
-              ...category,
-              unseen: false
-            },
-            ...this.state.items.slice(index + 1)
-          ]});
-        });
+      this.props.dispatch(markCategoryAsSeen(index));
     }
   },
   render: function() {
     return (
       <ul className={styles.sideMenu}>
         {
-          this.state.items.map((category, index) => {
+          this.props.categories.categories.map((category, index) => {
             const { name, unseen } = category;
 
             return (
@@ -55,4 +47,4 @@ export default React.createClass({
       </ul>
     );
   }
-});
+}));
