@@ -30,9 +30,8 @@ export function fetchCategories() {
 export function markCategoryAsSeen(index) {
   return (dispatch, getState) => {
     const category = getState().categories.categories[index];
-    console.log(category, index, getState().categories.categories);
 
-    return api.putCategorySeen(category.name)
+    return api.putCategorySeen(category)
       .then(() => dispatch({ type: MARK_CATEGORY_AS_SEEN, index }));
   };
 };
