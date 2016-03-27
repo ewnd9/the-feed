@@ -4,6 +4,7 @@
   border: 1px solid var(--borderColor);
   margin-bottom: -1px;
   padding: 10px;
+  word-break: break-word;
 }
 
 [data-reactid]:not(:first-child) > .item {

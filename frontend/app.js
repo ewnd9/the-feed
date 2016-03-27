@@ -1,4 +1,5 @@
-require('./style.css');
+import './style.css';
+import 'babel-polyfill';
 
 import ReactDOM from 'react-dom';
 import React from 'react';

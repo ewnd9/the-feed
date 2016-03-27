@@ -1,4 +1,4 @@
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : `http://${location.hostname}:3000`;
 
 export const findByCategory = (categoryId, id, date) => {
   const params = (id && date) ? `id=${id}&date=${date}` : '';
