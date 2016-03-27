@@ -18,70 +18,74 @@ export const createTask = (task) => {
   return () => currTask.task(task.params);
 };
 
-export default (pouch, db, tasks) => {
-  tasks.forEach((task) => {
-    var execTask = createTask(task);
-    var log = console.log.bind(console, task.name);
+export const runTask = (pouch, db, task) => {
+  const log = console.log.bind(console, task.name);
+  log(new Date());
 
-    var fn = () => {
-      log(new Date());
+  const stats = {
+    existed: 0,
+    added: 0
+  };
 
-      var stats = {
-        existed: 0,
-        added: 0
-      };
+  var execTask = createTask(task);
 
-      execTask().then((items) => {
-        return Promise.map(items, (item) => {
-          item.meta = {
-            task: task.name,
-            seen: false
-          };
+  return execTask()
+    .then((items) => {
+      return Promise.map(items, (item) => {
+        item.meta = {
+          task: task.name,
+          seen: false
+        };
 
-          item.id = task.name + ':' + item.id.replace(/\W/g, '');
+        item.id = task.name + ':' + item.id.replace(/\W/g, '');
 
-          return db.find(item.id).then((item) => {
-            stats.existed++;
-          }, (err) => {
+        return db.find(item.id).then((item) => {
+          stats.existed++;
+        }, (err) => {
+          if (err.reason === 'missing') {
+            return db.add(item).then(() => {
+              stats.added++;
+            }, (err) => {
+              log(err);
+            });
+          } else {
+            log(err);
+          }
+        });
+      });
+    })
+    .then(() => {
+      log(stats);
+
+      if (stats.added > 0) {
+        const unseenStat = {
+          id: 'system-unseen:' + task.name,
+          unseen: true,
+          task: task.name
+        };
+
+        return db.find(unseenStat.id)
+          .then(item => {
+            item.unseen = true;
+            return db.add(item);
+          })
+          .catch(err => {
             if (err.reason === 'missing') {
-              return db.add(item).then(() => {
-                stats.added++;
-              }, (err) => {
-                log(err);
-              });
+              return db.add(unseenStat);
             } else {
               log(err);
             }
           });
-        });
-      }).then(() => {
-        log(stats);
+      }
+    })
+    .catch((err) => {
+      log(err, err.stack);
+    });
+};
 
-        if (stats.added > 0) {
-          const unseenStat = {
-            id: 'system-unseen:' + task.name,
-            unseen: true,
-            task: task.name
-          };
-
-          return db.find(unseenStat.id)
-            .then(item => {
-              item.unseen = true;
-              return db.add(item);
-            })
-            .catch(err => {
-              if (err.reason === 'missing') {
-                return db.add(unseenStat);
-              } else {
-                log(err);
-              }
-            });
-        }
-      }).catch((err) => {
-        log(err, err.stack);
-      });
-    };
-
+export default (pouch, db, tasks) => {
+  tasks.forEach(task => {
+    const fn = runTask.bind(null, pouch, db, task);
     setInterval(fn, 1000 * 60 * task.interval);
     fn();
   });

@@ -41,11 +41,11 @@ $ npm start
 
 ### Vocabulary
 
-- `Post`
+- `Post` - information entity
 
-- `Task`
+- `Task` - logic behind fetching data
 
-- `Job`
+- `Job` - process of running a task
 
 ### Available tasks
 
