@@ -8,79 +8,105 @@ const tasksModules = fs.readdirSync(__dirname + '/tasks')
     return total;
   }, {});
 
-export const createTask = (task) => {
-  let currTask = tasksModules[task.task + '-task.js'];
-
-  if (currTask.default) {
-    currTask = currTask.default; // es6 import workaround
-  }
-
-  return () => currTask.task(task.params);
-};
-
 export const runTask = (pouch, db, task) => {
   const log = console.log.bind(console, task.name);
   log(new Date());
 
   const stats = {
     existed: 0,
-    added: 0
+    added: 0,
+    overLimit: 0
   };
 
-  var execTask = createTask(task);
+  let currTask = tasksModules[task.task + '-task.js'];
 
-  return execTask()
+  if (currTask.default) {
+    currTask = currTask.default; // es6 import workaround
+  }
+
+  let refineCount = 0;
+
+  return currTask.task(task.params)
     .then((items) => {
-      return Promise.map(items, (item) => {
-        item.meta = {
-          task: task.name,
-          seen: false
-        };
+      stats.total = items.length;
+      return Promise.map(items, processItem);
+    })
+    .then(() => addUnseenCategoriesStatuses())
+    .catch((err) => {
+      log(err, err.stack);
+    });
 
-        item.id = task.name + ':' + item.id.replace(/\W/g, '');
+  function processItem(item) {
+    item.meta = {
+      task: task.name,
+      seen: false
+    };
 
-        return db.find(item.id).then((item) => {
-          stats.existed++;
-        }, (err) => {
-          if (err.reason === 'missing') {
-            return db.add(item).then(() => {
+    item.id = task.name + ':' + item.id.replace(/\W/g, '');
+
+    return db.find(item.id)
+      .then(item => {
+        stats.existed++;
+      }, (err) => {
+        if (err.reason === 'missing') {
+          return addIfNotFound(item);
+        } else {
+          log(err);
+        }
+      });
+  };
+
+  function addIfNotFound(item) {
+    if (currTask.refine) {
+      if (currTask.refineLimit) {
+        if (refineCount < currTask.refineLimit) {
+          refineCount++;
+
+          return currTask.refine(task.params, item)
+            .then(item => db.add(item))
+            .then(() => {
               stats.added++;
             }, (err) => {
               log(err);
             });
+        } else {
+          stats.overLimit++;
+        }
+      }
+    } else {
+      return db.add(item)
+        .then(() => {
+          stats.added++;
+        }, (err) => {
+          log(err);
+        });
+    }
+  };
+
+  function addUnseenCategoriesStatuses() {
+    log(stats);
+
+    if (stats.added > 0) {
+      const unseenStat = {
+        id: 'system-unseen:' + task.name,
+        unseen: true,
+        task: task.name
+      };
+
+      return db.find(unseenStat.id)
+        .then(item => {
+          item.unseen = true;
+          return db.add(item);
+        })
+        .catch(err => {
+          if (err.reason === 'missing') {
+            return db.add(unseenStat);
           } else {
             log(err);
           }
         });
-      });
-    })
-    .then(() => {
-      log(stats);
-
-      if (stats.added > 0) {
-        const unseenStat = {
-          id: 'system-unseen:' + task.name,
-          unseen: true,
-          task: task.name
-        };
-
-        return db.find(unseenStat.id)
-          .then(item => {
-            item.unseen = true;
-            return db.add(item);
-          })
-          .catch(err => {
-            if (err.reason === 'missing') {
-              return db.add(unseenStat);
-            } else {
-              log(err);
-            }
-          });
-      }
-    })
-    .catch((err) => {
-      log(err, err.stack);
-    });
+    }
+  };
 };
 
 export default (pouch, db, tasks) => {

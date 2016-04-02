@@ -52,7 +52,7 @@ export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, 
     return fn
       .then(posts => {
         posts.forEach(post => {
-          Object.keys(post.data).forEach(key => {
+          Object.keys(post.data || {}).forEach(key => {
             post.data[key] = sanitize(post.data[key], {
               allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
               allowedAttributes: {

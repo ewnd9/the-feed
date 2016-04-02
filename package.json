@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all --parallel start:frontend start:backend",
+    "start:dev": "CONFIG=config-dev.yml npm run start",
     "start:frontend": "wserve --x-entry frontend/app.js --x-html frontend/index.html --x-dist public",
     "start:backend": "CONFIG=config-dev.yml npm-run-all --parallel build:backend:watch start:nodemon",
     "start:nodemon": "nodemon --watch lib app.js",
@@ -33,6 +34,7 @@
     "bluebird": "^3.0.6",
     "chalk": "^1.1.1",
     "cheerio": "^0.19.0",
+    "curl-to-node": "^0.1.0",
     "expand-tilde": "1.2.0",
     "express": "^4.13.3",
     "express-cors": "0.0.3",
