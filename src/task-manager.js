@@ -110,9 +110,11 @@ export const runTask = (pouch, db, task) => {
 };
 
 export default (pouch, db, tasks) => {
-  tasks.forEach(task => {
-    const fn = runTask.bind(null, pouch, db, task);
-    setInterval(fn, 1000 * 60 * task.interval);
-    fn();
+  tasks.forEach((task, i) => {
+    setTimeout(() => {
+      const fn = runTask.bind(null, pouch, db, task);
+      setInterval(fn, 1000 * 60 * task.interval);
+      fn();
+    }, i * 1000 * 10);
   });
 };
