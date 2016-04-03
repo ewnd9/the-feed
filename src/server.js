@@ -14,23 +14,7 @@ import config, { jobs } from './config';
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
 
-let opbeat;
-
-if (process.env.NODE_ENV === 'production') {
-  opbeat = require('opbeat').start({
-    organizationId: config.opbeat.organizationId,
-    appId: config.opbeat.appId,
-    secretToken: config.opbeat.secretToken
-  });
-}
-
-function captureError(err) {
-  console.error(err.stack);
-
-  if (opbeat) {
-    opbeat.captureError(err);
-  }
-};
+import { captureError } from './utils/capture-error';
 
 dbInit(config.db, config.remote).then(db => {
   console.log('db init');

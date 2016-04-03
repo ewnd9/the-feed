@@ -10,6 +10,8 @@ import pouchFind from 'pouchdb-find';
 PouchDB.plugin(pouchHoodie);
 PouchDB.plugin(pouchFind);
 
+import { captureError } from './utils/capture-error';
+
 const createDesignDoc = (name, mapFunction) => {
   const ddoc = {
     _id: '_design/' + name,
@@ -27,13 +29,17 @@ export const CATEGORIES_STATS = 'CATEGORIES_STATS';
 
 const indexes = [
   createDesignDoc(BY_CREATED_AT_AND_SEEN, (doc) => {
-    emit(doc.meta.seen + '$' + doc.createdAt + '$' + doc._id);
+    if (doc.meta) {
+      emit(doc.meta.seen + '$' + doc.createdAt + '$' + doc._id);
+    }
   }),
   createDesignDoc(BY_CATEGORY, (doc) => {
-    emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
+    if (doc.meta) {
+      emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
+    }
   }),
   createDesignDoc(BY_CLICKED, (doc) => {
-    if (doc.meta.clicked_at) {
+    if (doc.meta && doc.meta.clicked_at) {
       emit(doc.createdAt + '$' + doc._id);
     }
   }),
@@ -46,6 +52,8 @@ const indexes = [
 
 export default (dbPath, remote) => {
   const pouch = new PouchDB(path(dbPath));
+  pouch.on('error', captureError);
+
   const db = pouch.hoodieApi({});
   const limit = 40;
 
