@@ -22,7 +22,7 @@ const createDesignDoc = (name, mapFunction) => {
   return ddoc;
 };
 
-export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen';
+export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen_0';
 export const BY_CATEGORY = 'by_category_0';
 export const BY_CLICKED = 'by_clicked';
 export const CATEGORIES_STATS = 'CATEGORIES_STATS';
