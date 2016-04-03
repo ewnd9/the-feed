@@ -3,19 +3,25 @@ import Twitter from 'twitter';
 import Promise from 'bluebird';
 import url from 'url';
 
-const task = ({
-  ignored,
+import getTitleFromUrl from '../utils/get-title-from-url';
+
+const getTwitter = ({
   consumer_key,
   consumer_secret,
   access_token_key,
   access_token_secret
 }) => {
-  const twitter = Promise.promisifyAll(new Twitter({
+  return Promise.promisifyAll(new Twitter({
     consumer_key,
     consumer_secret,
     access_token_key,
     access_token_secret
   }));
+};
+
+const task = params => {
+  const { ignored } = params;
+  const twitter = getTwitter(params);
 
   return twitter
     .getAsync('statuses/home_timeline')
@@ -29,13 +35,28 @@ const task = ({
       return result.map((item) => ({
         id: item.id_str,
         title: `@${item.user.screen_name}: ${item.text}`,
-        url: `https://twitter.com/${item.user.screen_name}/status/${item.id_str}`,
+        url: item.entities.urls[0].expanded_url,
         data: {
           user_label: item.user.screen_name,
-          user_link: `https://twitter.com/${item.user.screen_name}`
+          user_link: `https://twitter.com/${item.user.screen_name}`,
+          tweet_label: 'tweet',
+          tweet_link: `https://twitter.com/${item.user.screen_name}/status/${item.id_str}`
         }
       }));
     });
 };
 
-export default { task };
+const refine = (params, item) => {
+  return getTitleFromUrl(item.url).then(title => {
+    item.title = title;
+    item.data.site_label = url.parse(item.url).hostname;
+    item.data.site_link = url.parse(item.url).hostname;
+
+    return item;
+  });
+};
+
+export default {
+  task,
+  refine
+};
