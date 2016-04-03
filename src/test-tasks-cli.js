@@ -1,31 +1,47 @@
 import chalk from 'chalk';
-import _ from 'lodash';
+import { startCase } from 'lodash';
 import inquirer from 'inquirer-question';
 
-import config, { tasks } from './config';
-import { createTask } from './task-manager';
+import config, { tasks as jobs } from './config';
 
-const choices = tasks.reduce((total, task) => {
-  total[_.startCase(task.name)] = () => {
-    createTask(task)().then((items) => {
-      console.log();
+function printObject(obj) {
+  Object.keys(obj).forEach(key => {
+    console.log(`  ${chalk.underline(key)}: ${obj[key]}`);
+  });
+  console.log(); // newline
+};
 
-      items.forEach((item) => {
-        _.each(item, (val, key) => {
-          console.log(`  ${chalk.underline(key)}: ${val}`)
+export default flags => {
+  const choices = jobs.reduce((total, job) => {
+    const task = require(`./tasks/${job.task}-task.js`).default;
+
+    total[startCase(job.name)] = () => {
+      task
+        .task(job.params)
+        .then(items => {
+          items.forEach(printObject);
+          console.log(`  ${chalk.red('Total count')}: ${items.length}\n`);
+
+          if (flags.refine) {
+            if (task.refine) {
+              console.log('  refine: \n');
+
+              task
+                .refine(job.params, items[0])
+                .then(printObject);
+            } else {
+              console.log(`  ${job.task} doesn't have "refine" function`);
+            }
+          }
         });
-        console.log();
-      });
+    };
 
-      console.log(`  ${chalk.red('Total count')}: ${items.length}\n`);
-    });
-  };
+    return total;
+  }, {});
 
-  return total;
-}, {});
-
-inquirer.prompt({
-  type: 'list',
-  message: 'Select Task',
-  choices
-});
+  inquirer.prompt({
+    type: 'list',
+    message: 'Select Task',
+    choices
+  });
+};

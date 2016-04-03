@@ -15,7 +15,7 @@ const cli = meow(`
 });
 
 if (cli.flags.test) {
-  require('./test-tasks-cli');
+  require('./test-tasks-cli').default(cli.flags);
 } else {
   require('./server');
 }
