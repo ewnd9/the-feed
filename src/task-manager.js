@@ -8,8 +8,8 @@ const tasksModules = fs.readdirSync(__dirname + '/tasks')
     return total;
   }, {});
 
-export const runTask = (pouch, db, task) => {
-  const log = console.log.bind(console, task.name);
+export const runJob = (pouch, db, job) => {
+  const log = console.log.bind(console, job.name);
   log(new Date());
 
   const stats = {
@@ -18,15 +18,10 @@ export const runTask = (pouch, db, task) => {
     overLimit: 0
   };
 
-  let currTask = tasksModules[task.task + '-task.js'];
-
-  if (currTask.default) {
-    currTask = currTask.default; // es6 import workaround
-  }
-
+  const currTask = tasksModules[job.task + '-task.js'].default;
   let refineCount = 0;
 
-  return currTask.task(task.params)
+  return currTask.task(job.params)
     .then((items) => {
       stats.total = items.length;
       return Promise.map(items, processItem);
@@ -38,11 +33,11 @@ export const runTask = (pouch, db, task) => {
 
   function processItem(item) {
     item.meta = {
-      task: task.name,
+      task: job.name,
       seen: false
     };
 
-    item.id = task.name + ':' + item.id.replace(/\W/g, '');
+    item.id = job.name + ':' + item.id.replace(/\W/g, '');
 
     return db.find(item.id)
       .then(item => {
@@ -62,7 +57,7 @@ export const runTask = (pouch, db, task) => {
         if (refineCount < currTask.refineLimit) {
           refineCount++;
 
-          return currTask.refine(task.params, item)
+          return currTask.refine(job.params, item)
             .then(item => db.add(item))
             .then(() => {
               stats.added++;
@@ -88,9 +83,9 @@ export const runTask = (pouch, db, task) => {
 
     if (stats.added > 0) {
       const unseenStat = {
-        id: 'system-unseen:' + task.name,
+        id: 'system-unseen:' + job.name,
         unseen: true,
-        task: task.name
+        task: job.name
       };
 
       return db.find(unseenStat.id)
@@ -109,11 +104,11 @@ export const runTask = (pouch, db, task) => {
   };
 };
 
-export default (pouch, db, tasks) => {
-  tasks.forEach((task, i) => {
+export default (pouch, db, jobs) => {
+  jobs.forEach((job, i) => {
     setTimeout(() => {
-      const fn = runTask.bind(null, pouch, db, task);
-      setInterval(fn, 1000 * 60 * task.interval);
+      const fn = runJob.bind(null, pouch, db, job);
+      setInterval(fn, 1000 * 60 * job.interval);
       fn();
     }, i * 1000 * 10);
   });

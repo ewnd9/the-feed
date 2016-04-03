@@ -42,5 +42,5 @@ const report = _tasks.map(task => {
 
 console.log(table(report));
 
-export const tasks = _tasks;
+export const jobs = _tasks;
 export default config;

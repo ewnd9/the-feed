@@ -10,7 +10,7 @@ import Promise from 'bluebird';
 import dbInit from './db-init';
 import taskManager from './task-manager';
 
-import config, { tasks } from './config';
+import config, { jobs } from './config';
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
 
@@ -35,8 +35,8 @@ dbInit(config.db, config.remote).then(db => {
     ]
   }));
 
-  app.use('/', itemsRoutes(db, tasks));
-  app.use('/', categoriesRoutes(db, tasks));
+  app.use('/', itemsRoutes(db, jobs));
+  app.use('/', categoriesRoutes(db, jobs));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
@@ -57,7 +57,7 @@ dbInit(config.db, config.remote).then(db => {
     if (config['disable-tasks']) {
       console.log('tasks disabled');
     } else {
-      taskManager(db.pouch, db.db, tasks);
+      taskManager(db.pouch, db.db, jobs);
     }
   });
 }).catch((err) => {
