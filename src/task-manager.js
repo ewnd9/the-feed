@@ -8,7 +8,7 @@ const tasksModules = fs.readdirSync(__dirname + '/tasks')
     return total;
   }, {});
 
-export const runJob = (pouch, db, job) => {
+export const runJob = (db, job) => {
   const log = console.log.bind(console, job.name);
   log(new Date());
 
@@ -104,10 +104,10 @@ export const runJob = (pouch, db, job) => {
   };
 };
 
-export default (pouch, db, jobs) => {
+export default (db, jobs) => {
   jobs.forEach((job, i) => {
     setTimeout(() => {
-      const fn = runJob.bind(null, pouch, db, job);
+      const fn = runJob.bind(null, db, job);
       setInterval(fn, 1000 * 60 * job.interval);
       fn();
     }, i * 1000 * 10);

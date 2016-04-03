@@ -57,7 +57,7 @@ dbInit(config.db, config.remote).then(db => {
     if (config['disable-tasks']) {
       console.log('tasks disabled');
     } else {
-      taskManager(db.pouch, db.db, jobs);
+      taskManager(db.db, jobs);
     }
   });
 }).catch((err) => {
