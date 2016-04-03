@@ -14,13 +14,23 @@ import config, { jobs } from './config';
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
 
+let opbeat;
+
 if (process.env.NODE_ENV === 'production') {
-  const opbeat = require('opbeat').start({
+  opbeat = require('opbeat').start({
     organizationId: config.opbeat.organizationId,
     appId: config.opbeat.appId,
     secretToken: config.opbeat.secretToken
   });
 }
+
+function captureError(err) {
+  console.error(err.stack);
+
+  if (opbeat) {
+    opbeat.captureError(err);
+  }
+};
 
 dbInit(config.db, config.remote).then(db => {
   console.log('db init');
@@ -47,7 +57,7 @@ dbInit(config.db, config.remote).then(db => {
       next();
     }
 
-    console.log(err.stack);
+    captureError(err);
     res.status(err.status || 500).json({ error: err.stack });
   });
 
