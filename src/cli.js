@@ -15,7 +15,7 @@ const cli = meow(`
 });
 
 if (cli.flags.test) {
-  require('./test-tasks-cli').default(cli.flags);
+  require('./cli-jobs-runner').default(cli.flags);
 } else {
   require('./server');
 }

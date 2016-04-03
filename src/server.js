@@ -7,7 +7,7 @@ import cors from 'express-cors';
 
 import Promise from 'bluebird';
 
-import dbInit from './db-init';
+import dbInit from './db';
 import taskManager from './task-manager';
 
 import config, { jobs } from './config';
