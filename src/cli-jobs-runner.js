@@ -21,7 +21,7 @@ function runJob(job, flags) {
   return task
     .task(job.params)
     .then(items => {
-      items.forEach(printObject);
+      items.forEach(item => printObject(item));
       console.log(`  ${chalk.red('Total count')}: ${items.length}\n`);
 
       if (flags.refine) {
