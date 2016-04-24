@@ -6,8 +6,16 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import ReactTooltip from 'react-tooltip';
 
+import createPreview from 'html-preview';
+
 export default React.createClass({
+  getInitialState: () => ({ expanded: false }),
+  onExpandClick() {
+    this.setState({ expanded: !this.state.expanded });
+  },
   render: function() {
+    const { expanded } = this.state;
+
     const result = this.props.item;
     const index = this.props.index;
 
@@ -43,7 +51,17 @@ export default React.createClass({
       return _.endsWith(key, '_blob');
     });
 
-    const createMarkup = val => ({__html: val });
+    const createMarkup = (_val, forceExpanded = false) => {
+      if (expanded || forceExpanded) {
+        return { __html: _val };
+      } else {
+        const limit = 200;
+        const preview = createPreview(_val, limit);
+        const result = preview.length === _val.length ? preview : `${preview} ...`;
+
+        return { __html: result };
+      }
+    };
 
     return (
       <div className={itemClass}
@@ -92,7 +110,7 @@ export default React.createClass({
                   <span className={`${styles.data} ${styles.flair}`} key={index}>
                     {key.replace('_label', '')}
                     {': '}
-                    <span dangerouslySetInnerHTML={createMarkup(val)} />
+                    <span dangerouslySetInnerHTML={createMarkup(val)} onClick={this.onExpandClick} />
                     {' '}
                   </span>
                 );
@@ -116,7 +134,7 @@ export default React.createClass({
                       {key.replace('_blob', '')}
                     </span>
                     <ReactTooltip id={result._id + key} class="tooltip" effect="solid">
-                      <span dangerouslySetInnerHTML={createMarkup(val)} />
+                      <span dangerouslySetInnerHTML={createMarkup(val, true)} />
                     </ReactTooltip>
                   </span>
                 );
