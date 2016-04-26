@@ -1,5 +1,7 @@
 # the-feed
 
+[![Build Status](https://travis-ci.org/ewnd9/the-feed.svg?branch=master)](https://travis-ci.org/ewnd9/the-feed)
+
 [WIP] the programmable front page of the internet
 
 ### Technologies
