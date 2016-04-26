@@ -26,6 +26,10 @@
   "author": "ewnd9 <ewndnine@gmail.com>",
   "license": "MIT",
   "nyc": {
+    "exclude": [
+      "public/",
+      "dist/"
+    ],
     "include": [
       "src/**/*.js"
     ]

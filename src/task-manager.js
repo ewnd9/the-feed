@@ -1,7 +1,5 @@
 import Promise from 'bluebird';
 
-const req = require.context('./tasks', true, /\-task\.js$/igm);
-
 export const runJob = (db, job) => {
   const log = console.log.bind(console, job.name);
   log(new Date());
@@ -12,7 +10,7 @@ export const runJob = (db, job) => {
     overLimit: 0
   };
 
-  const currTask = req(`./${job.task}-task/${job.task}-task.js`).default;
+  const currTask = require(`./tasks/${job.task}-task/${job.task}-task.js`).default;
   let refineCount = 0;
 
   return currTask.task(job.params)
