@@ -1,5 +1,4 @@
-// import vk from './../utils/vk';
-const vk = require('./../utils/vk');
+import vk from '../../utils/vk';
 
 const task = owner_id => {
   return vk.method('wall.get', { owner_id })

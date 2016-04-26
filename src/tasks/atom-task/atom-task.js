@@ -1,10 +1,10 @@
-import task from './scrape-xml-task';
+import task from '../scrape-xml-task/scrape-xml-task';
 
-const selector = 'item';
+const selector = 'entry';
 const titleSelector = 'title';
-const urlSelector = 'link';
+const urlSelector = 'id';
 const additional = {
-  description_label: 'description'
+  description_label: 'content'
 };
 
 export default {

@@ -1,10 +1,9 @@
 import test from 'ava';
 import 'babel-core/register';
-import scrapeTask from './../src/tasks/scrape-xml-task';
-import fs from 'fs';
-import Promise from 'bluebird';
 
-import nockHelper from './helpers/nock-helper';
+import scrapeTask from './scrape-xml-task';
+
+import nockHelper from '../_utils/nock-helper';
 const nock = nockHelper(__filename);
 
 test.before(nock.beforeFn);

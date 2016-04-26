@@ -2,9 +2,9 @@ import Promise from 'bluebird';
 import fs from 'fs';
 
 const tasksModules = fs.readdirSync(__dirname + '/tasks')
-  .filter(name => name.indexOf('.map') !== name.length - 4)
+  .filter(name => name[0] !== '_')
   .reduce((total, name) => {
-    total[name] = require('./tasks/' + name);
+    total[name] = require(`./tasks/${name}/${name}`);
     return total;
   }, {});
 
@@ -18,7 +18,7 @@ export const runJob = (db, job) => {
     overLimit: 0
   };
 
-  const currTask = tasksModules[job.task + '-task.js'].default;
+  const currTask = tasksModules[job.task + '-task'].default;
   let refineCount = 0;
 
   return currTask.task(job.params)

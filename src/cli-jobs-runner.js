@@ -16,7 +16,7 @@ function printObject(obj, parent) {
 }
 
 function runJob(job, flags) {
-  const task = require(`./tasks/${job.task}-task.js`).default;
+  const task = require(`./tasks/${job.task}-task/${job.task}-task.js`).default;
 
   return task
     .task(job.params)

@@ -1,15 +1,19 @@
 import test from 'ava';
 import 'babel-core/register';
 
-import { runTask } from '../src/task-manager';
-import dummyTask from '../src/tasks/dummy-task';
+import { runJob } from '../src/task-manager';
+import dummyTask from '../src/tasks/dummy-task/dummy-task';
 
-import initDb from '../src/db-init';
+import initDb from '../src/db';
 
 test.only('task manager', async t => {
   const { pouch, db } = await initDb(`/tmp/${Math.random()}`);
+
   const items = await dummyTask.task();
-  const result = await runTask(pouch, db, { name: 'test-dummy', task: 'dummy' });
+  t.ok(items.length > 0);
+  
+  const result = await runJob(db, { name: 'test-dummy', task: 'dummy' });
+  t.ok(result.id === 'system-unseen:test-dummy');
 
   const docs = await pouch.allDocs({
     include_docs: true,

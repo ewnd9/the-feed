@@ -1,6 +1,6 @@
 import test from 'ava';
 import 'babel-core/register';
-import githubTask from './../src/tasks/github-stars-task';
+import githubTask from './github-stars-task';
 
 test('follow specification', t => {
   t.true(typeof githubTask.task === 'function');

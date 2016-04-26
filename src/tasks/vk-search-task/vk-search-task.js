@@ -1,5 +1,4 @@
-// import vk from './../utils/vk';
-const vk = require('./../utils/vk');
+import vk from '../../utils/vk';
 
 const task = query => {
   return vk.method('newsfeed.search', { q: query })
