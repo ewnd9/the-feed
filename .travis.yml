@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - '5'
-before_deploy: "mv heroku-conf.yml config.yml"
+before_deploy: "cp heroku-conf.yml config.yml && npm run build"
 deploy:
   provider: heroku
   api_key:

@@ -45,7 +45,7 @@ dbInit(config.db, config.remote).then(db => {
     res.status(err.status || 500).json({ error: err.stack });
   });
 
-  var server = app.listen(3000, () => {
+  var server = app.listen(process.env.PORT || 3000, () => {
     console.log('localhost:3000');
 
     if (config['disable-tasks']) {

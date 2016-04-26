@@ -12,6 +12,7 @@
     "test": "echo heroku",
     "test:old": "nyc --require babel-register --all --reporter=lcov --reporter=text ava",
     "test:watch": "nodemon test/*.js --exec ava -- --serial --verbose",
+    "build": "npm run build:backend && npm run build:frontend",
     "build:backend": "babel -s -d lib src",
     "build:backend:watch": "babel --watch -s -d lib src",
     "build:frontend": "rm -rf public/* && wbuild --x-entry frontend/app.js --x-html frontend/index.html --x-dist public --x-vendors react"
