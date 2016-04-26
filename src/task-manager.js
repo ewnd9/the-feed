@@ -22,12 +22,12 @@ export const runJob = (db, job) => {
   let refineCount = 0;
 
   return currTask.task(job.params)
-    .then((items) => {
+    .then(items => {
       stats.total = items.length;
       return Promise.map(items, processItem);
     })
     .then(() => addUnseenCategoriesStatuses())
-    .catch((err) => {
+    .catch(err => {
       log(err, err.stack);
     });
 
@@ -40,16 +40,16 @@ export const runJob = (db, job) => {
     item.id = job.name + ':' + item.id.replace(/\W/g, '');
 
     return db.find(item.id)
-      .then(item => {
+      .then(() => {
         stats.existed++;
-      }, (err) => {
+      }, err => {
         if (err.reason === 'missing') {
           return addIfNotFound(item);
         } else {
           log(err);
         }
       });
-  };
+  }
 
   function addIfNotFound(item) {
     if (currTask.refine) {
@@ -61,7 +61,7 @@ export const runJob = (db, job) => {
             .then(item => db.add(item))
             .then(() => {
               stats.added++;
-            }, (err) => {
+            }, err => {
               log(err);
             });
         } else {
@@ -72,11 +72,11 @@ export const runJob = (db, job) => {
       return db.add(item)
         .then(() => {
           stats.added++;
-        }, (err) => {
+        }, err => {
           log(err);
         });
     }
-  };
+  }
 
   function addUnseenCategoriesStatuses() {
     log(stats);
@@ -101,7 +101,7 @@ export const runJob = (db, job) => {
           }
         });
     }
-  };
+  }
 };
 
 export default (db, jobs) => {

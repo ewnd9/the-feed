@@ -1,6 +1,4 @@
 import express from 'express';
-import path from 'path';
-import sanitize from 'sanitize-html';
 
 export default ({ pouch, db, Category }, tasks) => {
   const router = express.Router();
@@ -20,7 +18,7 @@ export default ({ pouch, db, Category }, tasks) => {
   router.put('/api/v1/categories/:id', (req, res, next) => {
     return Category
       .setCategoryAsSeen(req.params.id)
-      .then(item => {
+      .then(() => {
         res.json('ok');
       })
       .catch(err => next(err));

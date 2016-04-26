@@ -12,7 +12,7 @@ function mapStateToProps(state) {
   return {
     categories
   };
-};
+}
 
 export default connect(mapStateToProps)(React.createClass({
   getInitialState: () => ({ items: [] }),

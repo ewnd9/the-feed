@@ -10,7 +10,7 @@ function requestPosts(category) {
     type: REQUEST_POSTS,
     category
   };
-};
+}
 
 function receivePosts(category, json, clear) {
   return {
@@ -18,17 +18,17 @@ function receivePosts(category, json, clear) {
     items: json,
     clear
   };
-};
+}
 
 export function fetchPosts(category, id, date) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(requestPosts(category));
 
     return api
       .findByCategory(category, id, date)
       .then(json => dispatch(receivePosts(category, json, !!!id)));
   };
-};
+}
 
 export function markPostAsSeen(index, item) {
   api.putSeen(item);
@@ -37,7 +37,7 @@ export function markPostAsSeen(index, item) {
     type: MARK_POST_AS_SEEN,
     index
   };
-};
+}
 
 export function markPostAsClicked(index, item) {
   api.putClicked(item);
@@ -46,4 +46,4 @@ export function markPostAsClicked(index, item) {
     type: MARK_POST_AS_CLICKED,
     index
   };
-};
+}

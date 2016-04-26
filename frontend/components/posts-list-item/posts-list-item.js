@@ -39,15 +39,15 @@ export default React.createClass({
       .map(result.data, (val, key) => ({ val, key }))
       .filter(({ val }) => val !== null && val !== '');
 
-    const labels = dataArray.filter(({ val, key }) => {
+    const labels = dataArray.filter(({ key }) => {
       return _.endsWith(key, '_label');
     });
 
-    const links = dataArray.filter(({ val, key }) => {
+    const links = dataArray.filter(({ key }) => {
       return _.endsWith(key, '_link');
     });
 
-    const blobs = dataArray.filter(({ val, key }) => {
+    const blobs = dataArray.filter(({ key }) => {
       return _.endsWith(key, '_blob');
     });
 
@@ -127,7 +127,7 @@ export default React.createClass({
               })
             }
             {
-              blobs.map(({ val, key }, index) => {
+              blobs.map(({ val, key }) => {
                 return (
                   <span className={`${styles.data} ${styles.blob}`} key={result._id + key}>
                     <span data-tip data-for={result._id + key}>

@@ -13,12 +13,12 @@ const get = (url, token) => {
 };
 
 const processEvents = (items, filterFn, action) => {
-  const mapFn = (action) => {
-    return (item) => {
-      const user = item.actor.login;;
+  const mapFn = action => {
+    return item => {
+      const user = item.actor.login;
       const userUrl = `https://github.com/${user}`;
       const repo = item.repo.name;
-      const repoUrl = `https://github.com/${item.repo.name}`
+      const repoUrl = `https://github.com/${item.repo.name}`;
 
       return [{
         id: item.id,
@@ -36,20 +36,20 @@ const processEvents = (items, filterFn, action) => {
   return items.filter(filterFn).map(mapFn(action));
 };
 
-export const getStars = (items) => {
-  const filterFn = (item) => item.type === 'WatchEvent' &&
-                             item.payload.action === 'started';
+export const getStars = items => {
+  const filterFn = item => item.type === 'WatchEvent' &&
+                           item.payload.action === 'started';
   return processEvents(items, filterFn, 'starred');
 };
 
-export const getRepoCreations = (items) => {
-  const filterFn = (item) => item.type === 'CreateEvent' &&
-                             item.payload.ref_type === 'repository';
+export const getRepoCreations = items => {
+  const filterFn = item => item.type === 'CreateEvent' &&
+                           item.payload.ref_type === 'repository';
   return processEvents(items, filterFn, 'created');
 };
 
-export const getRepoMadePublics = (items) => {
-  const filterFn = (item) => item.type === 'PublicEvent';
+export const getRepoMadePublics = items => {
+  const filterFn = item => item.type === 'PublicEvent';
   return processEvents(items, filterFn, 'made public');
 };
 

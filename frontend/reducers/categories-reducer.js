@@ -37,6 +37,6 @@ function categories(state = {
     default:
       return state;
   }
-};
+}
 
 export default categories;

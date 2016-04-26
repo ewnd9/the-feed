@@ -1,11 +1,8 @@
 import path from 'path';
 import express from 'express';
-var app = express();
 
 import morgan from 'morgan';
 import cors from 'express-cors';
-
-import Promise from 'bluebird';
 
 import dbInit from './db';
 import taskManager from './task-manager';
@@ -15,6 +12,8 @@ import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
 
 import { captureError } from './utils/capture-error';
+
+const app = express();
 
 dbInit(config.db, config.remote).then(db => {
   console.log('db init');
@@ -45,7 +44,7 @@ dbInit(config.db, config.remote).then(db => {
     res.status(err.status || 500).json({ error: err.stack });
   });
 
-  var server = app.listen(process.env.PORT || 3000, () => {
+  app.listen(process.env.PORT || 3000, () => {
     console.log('localhost:3000');
 
     if (config['disable-tasks']) {
@@ -54,6 +53,6 @@ dbInit(config.db, config.remote).then(db => {
       taskManager(db.db, jobs);
     }
   });
-}).catch((err) => {
-  console.log(err.stack);
+}).catch(err => {
+  console.log(err.stack || err);
 });

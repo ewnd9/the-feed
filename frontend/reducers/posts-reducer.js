@@ -24,8 +24,8 @@ function posts(state = {
         }
       },
       ...items.slice(index + 1)
-    ]
-  };
+    ];
+  }
 
   switch (action.type) {
     case REQUEST_POSTS:
@@ -54,6 +54,6 @@ function posts(state = {
     default:
       return state;
   }
-};
+}
 
 export default posts;

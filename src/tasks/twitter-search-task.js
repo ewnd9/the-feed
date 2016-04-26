@@ -25,7 +25,7 @@ const task = ({
   return twitter
     .getAsync('search/tweets', params)
     .then(result => {
-      const isNotSelfQuoted = status => (!status.quoted_status || status.quoted_status.user.screen_name !== user)
+      const isNotSelfQuoted = status => (!status.quoted_status || status.quoted_status.user.screen_name !== user);
       const isNotSelfMention = status => !_.any(status.entities.user_mentions, mention => mention.screen_name === user);
 
       const xs = result.statuses.filter(status => {

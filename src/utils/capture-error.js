@@ -18,4 +18,4 @@ export function captureError(err) {
   if (opbeat) {
     opbeat.captureError(err);
   }
-};
+}

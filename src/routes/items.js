@@ -1,32 +1,31 @@
 import express from 'express';
-import path from 'path';
 import sanitize from 'sanitize-html';
 
-export default ({ pouch, db, findAllByStatus, findByCategory, findAllClicked }, tasks) => {
+export default ({ db, findAllByStatus, findByCategory, findAllClicked }) => {
 
   const router = express.Router();
 
   router.put('/api/v1/items/:id/seen', (req, res, next) => {
     db.find(req.params.id)
-      .then((item) => {
+      .then(item => {
         item.meta.seen = true;
         return db.update(item);
-      }).then((result) => {
+      }).then(result => {
         res.json(result);
-      }).catch((err) => {
+      }).catch(err => {
         next(err);
       });
   });
 
   router.put('/api/v1/items/:id/clicked', (req, res, next) => {
     db.find(req.params.id)
-      .then((item) => {
+      .then(item => {
         item.meta.clicked_at = new Date().toISOString();
         return db.update(item);
       })
-      .then((result) => {
+      .then(result => {
         res.json(result);
-      }).catch((err) => {
+      }).catch(err => {
         next(err);
       });
   });

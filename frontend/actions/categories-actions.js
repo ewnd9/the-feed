@@ -8,24 +8,24 @@ function requestCategories() {
   return {
     type: REQUEST_CATEGORIES
   };
-};
+}
 
 function recieveCategories(categories) {
   return {
     type: RECIEVE_CATEGORIES,
     categories
   };
-};
+}
 
 export function fetchCategories() {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(requestCategories());
 
     return api
       .findCategories()
       .then(categories => dispatch(recieveCategories(categories)));
   };
-};
+}
 
 export function markCategoryAsSeen(index) {
   return (dispatch, getState) => {
@@ -34,4 +34,4 @@ export function markCategoryAsSeen(index) {
     return api.putCategorySeen(category)
       .then(() => dispatch({ type: MARK_CATEGORY_AS_SEEN, index }));
   };
-};
+}

@@ -3,15 +3,13 @@ import cheerio from 'cheerio';
 
 export default {
   task: ({ url, selector, urlSelector, titleSelector, additional = {} }) => {
-    return got(url).then((res) => {
+    return got(url).then(res => {
       const $ = cheerio.load(res.body, {
         normalizeWhitespace: true,
         xmlMode: true
       });
 
-      const result = [];
-
-      return $(selector).toArray().map((el) => {
+      return $(selector).toArray().map(el => {
         const $el = $(el);
         const url = $el.find(urlSelector).text();
 
@@ -27,6 +25,6 @@ export default {
           data
         };
       });
-    })
+    });
   }
 };

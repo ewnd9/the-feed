@@ -1,6 +1,5 @@
 import path from 'expand-tilde';
 import Promise from 'bluebird';
-import _ from 'lodash';
 
 import PouchDB from 'pouchdb';
 
@@ -27,28 +26,30 @@ export const BY_CATEGORY = 'by_category_0';
 export const BY_CLICKED = 'by_clicked';
 export const CATEGORIES_STATS = 'CATEGORIES_STATS';
 
+/*eslint-disable */
 const indexes = [
-  createDesignDoc(BY_CREATED_AT_AND_SEEN, (doc) => {
+  createDesignDoc(BY_CREATED_AT_AND_SEEN, doc => {
     if (doc.meta) {
       emit(doc.meta.seen + '$' + doc.createdAt + '$' + doc._id);
     }
   }),
-  createDesignDoc(BY_CATEGORY, (doc) => {
+  createDesignDoc(BY_CATEGORY, doc => {
     if (doc.meta) {
       emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
     }
   }),
-  createDesignDoc(BY_CLICKED, (doc) => {
+  createDesignDoc(BY_CLICKED, doc => {
     if (doc.meta && doc.meta.clicked_at) {
       emit(doc.createdAt + '$' + doc._id);
     }
   }),
-  createDesignDoc(CATEGORIES_STATS, (doc) => {
+  createDesignDoc(CATEGORIES_STATS, doc => {
     if (doc._id.indexOf('system-unseen') === 0) {
       emit(doc._id);
     }
   })
 ];
+/*eslint-enable */
 
 export default (dbPath, remote) => {
   const pouch = new PouchDB(path(dbPath));
@@ -134,16 +135,18 @@ export default (dbPath, remote) => {
   };
 
   return Promise
-    .map(indexes, (index) => {
-      return pouch.put(index).then((doc) => {
-        console.log(`${index._id} was created`);
-      }, (err) => {
-        if (err.name !== 'conflict') {
-          console.log(err);
-        } else {
-          console.log(`${index._id} already exists`);
-        }
-      });
+    .map(indexes, index => {
+      return pouch
+        .put(index)
+        .then(() => {
+          console.log(`${index._id} was created`);
+        }, err => {
+          if (err.name !== 'conflict') {
+            console.log(err);
+          } else {
+            console.log(`${index._id} already exists`);
+          }
+        });
     })
     .then(() => ({
       pouch, db, findAllByStatus, findByCategory, findAllClicked,

@@ -1,10 +1,7 @@
-import fetch from 'isomorphic-fetch';
-
 import React from 'react';
 import Swipeable from 'react-swipeable';
 import { connect } from 'react-redux';
 
-import * as api from './../../api';
 import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions/posts-actions';
 import Post from './../posts-list-item/posts-list-item';
 
@@ -47,7 +44,7 @@ export default connect(mapStateToProps)(React.createClass({
       dispatch(markPostAsSeen(index, item));
     }
   },
-  handleLinkClick: function(index, link) {
+  handleLinkClick: function(index) {
     const item = this.props.posts.items[index];
     const { dispatch } = this.props;
 

@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { startCase } from 'lodash';
 import inquirer from 'inquirer-question';
 
-import config, { jobs } from './config';
+import { jobs } from './config';
 
 function printObject(obj, parent) {
   Object.keys(obj).forEach(key => {
@@ -13,7 +13,7 @@ function printObject(obj, parent) {
     }
   });
   console.log(); // newline
-};
+}
 
 function runJob(job, flags) {
   const task = require(`./tasks/${job.task}-task.js`).default;
@@ -36,7 +36,7 @@ function runJob(job, flags) {
         }
       }
     });
-};
+}
 
 
 export default (flags, input) => {

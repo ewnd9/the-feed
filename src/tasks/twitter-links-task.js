@@ -26,13 +26,13 @@ const task = params => {
   return twitter
     .getAsync('statuses/home_timeline')
     .then(result => {
-      return result.filter((status) => {
+      return result.filter(status => {
         return status.entities.urls &&
                status.entities.urls.length > 0 &&
-               _.any(status.entities.urls, (_url) => (ignored || []).indexOf(url.parse(_url.expanded_url).hostname) === -1);
+               _.any(status.entities.urls, _url => (ignored || []).indexOf(url.parse(_url.expanded_url).hostname) === -1);
       });
     }).then(result => {
-      return result.map((item) => ({
+      return result.map(item => ({
         id: item.id_str,
         title: `@${item.user.screen_name}: ${item.text}`,
         url: item.entities.urls[0].expanded_url,
