@@ -1,0 +1,10 @@
+db: ~/the-feed-db
+tasks:
+  reddit-node:
+    task: reddit
+    params:
+      subreddits:
+        - node
+        - npm
+    interval: 1h
+    
