@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './style.css';
 
 import { connect } from 'react-redux';
-import { fetchCategories, markCategoryAsSeen } from '../../actions/categories-actions';
+import { markCategoryAsSeen } from '../../actions/categories-actions';
 
 import CategoryLink from './../category-link/category-link';
 
@@ -16,9 +16,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(React.createClass({
   getInitialState: () => ({ items: [] }),
-  componentDidMount: function() {
-    this.props.dispatch(fetchCategories());
-  },
   onClick(index) {
     const category = this.props.categories.categories[index];
 

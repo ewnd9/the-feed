@@ -1,4 +1,16 @@
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : `http://${location.hostname}:3000`;
+import fetch from 'isomorphic-fetch';
+
+const baseUrl = (() => {
+  if (typeof window === 'undefined') {
+    if (process.env.NODE_ENV === 'production') {
+      return 'http://localhost:3000';
+    } else {
+      return 'http://localhost:3000';
+    }
+  } else {
+    return '';
+  }
+})();
 
 export const findByCategory = (categoryId, id, date) => {
   const params = (id && date) ? `id=${id}&date=${date}` : '';

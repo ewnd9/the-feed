@@ -2,7 +2,6 @@ import path from 'path';
 import express from 'express';
 
 import morgan from 'morgan';
-import cors from 'express-cors';
 import compression from 'compression';
 
 import dbInit from './db';
@@ -20,22 +19,44 @@ dbInit(config.db, config.remote).then(db => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
-  app.use(compression());
-  app.use(express.static('public'));
-  app.use(cors({
-    allowedOrigins: [
-      'localhost:3000',
-      'localhost:8080',
-      'localhost:8000',
-    ]
-  }));
 
   app.use('/', itemsRoutes(db, jobs));
   app.use('/', categoriesRoutes(db, jobs));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
-  });
+  if (process.env.NODE_ENV === 'production') {
+    const renderReact = require('./server-render').default;
+
+    app.get('/', reactRoute);
+    app.use(compression());
+    app.use(express.static(path.resolve(__dirname, '..', 'public')));
+    app.get('*', reactRoute);
+
+    function reactRoute(req, res, next) {
+      renderReact(req.path)
+        .then(html => res.end(html))
+        .catch(err => next(err));
+    }
+  } else {
+    const webpack = require('webpack');
+    const webpackMiddleware = require('webpack-dev-middleware');
+    const webpackHotMiddleware = require('webpack-hot-middleware');
+
+    const wconfig = require('../webpack.config.dev');
+    const compiler = webpack(wconfig);
+    const middleware = webpackMiddleware(compiler, {
+      ...wconfig.devServer,
+      contentBase: __dirname
+    });
+
+    app.use(middleware);
+    app.use(webpackHotMiddleware(compiler));
+
+    app.get('*', function response(req, res) {
+      middleware.fileSystem
+        .createReadStream(path.resolve(__dirname + '/../public/index.html'))
+        .pipe(res);
+    });
+  }
 
   app.use(function(err, req, res, next) {
     if (!err) {

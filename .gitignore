@@ -5,8 +5,7 @@ play.js
 /*.sh
 !/example.deploy.sh
 /lib
-/public/*
-!/public/.keep
+/public
 config*.yml
 ecosystem*.json
 .nyc_output

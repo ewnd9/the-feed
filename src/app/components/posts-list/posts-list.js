@@ -1,6 +1,9 @@
 import React from 'react';
+
 import Swipeable from 'react-swipeable';
+
 import { connect } from 'react-redux';
+import { provideHooks } from 'redial';
 
 import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions/posts-actions';
 import Post from './../posts-list-item/posts-list-item';
@@ -15,7 +18,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(React.createClass({
+const hooks = {
+  fetch: ({ dispatch, params }) => dispatch(fetchPosts(params.categoryId || 'unseen'))
+};
+
+export default provideHooks(hooks)(connect(mapStateToProps)(React.createClass({
   componentWillReceiveProps: function(nextProps) {
     const categoryId = this.props.params.categoryId || 'unseen';
     const nextCategoryId = nextProps.params.categoryId || 'unseen';
@@ -76,4 +83,4 @@ export default connect(mapStateToProps)(React.createClass({
       </div>
     );
   }
-}));
+})));
