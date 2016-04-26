@@ -12,7 +12,7 @@ export default React.createClass({
 
         <div className={styles.main}>
           <aside className={styles.aside}>
-            <SideMenu />
+            <SideMenu {...this.props} /> 
           </aside>
 
           <div className={styles.content}>
