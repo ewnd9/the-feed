@@ -3,6 +3,7 @@ import express from 'express';
 
 import morgan from 'morgan';
 import cors from 'express-cors';
+import compression from 'compression';
 
 import dbInit from './db';
 import taskManager from './task-manager';
@@ -19,6 +20,7 @@ dbInit(config.db, config.remote).then(db => {
   console.log('db init');
 
   app.use(morgan('request: :remote-addr :method :url :status'));
+  app.use(compression());
   app.use(express.static('public'));
   app.use(cors({
     allowedOrigins: [
