@@ -6,7 +6,7 @@ import table from 'table';
 import parseInterval from './utils/parse-interval';
 
 const configFile = process.env.CONFIG || 'config.yml';
-const config = yaml.safeLoad(fs.readFileSync('../' + configFile, 'utf8'));
+const config = yaml.safeLoad(fs.readFileSync(__dirname + '/../' + configFile, 'utf8'));
 
 const _tasks = _.map(config.tasks, (task, name) => ({ ...task, name }));
 const report = _tasks.map(task => {
