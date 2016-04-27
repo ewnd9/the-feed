@@ -10,9 +10,7 @@ import { trigger } from 'redial';
 import routes from './app/routes';
 import configureStore from './app/configure-store';
 
-const html = fs.readFileSync(__dirname + '/index.html', 'utf-8'); // dist html after bundling
-
-export default path => new Promise((resolve, reject) => {
+export default (html, path) => new Promise((resolve, reject) => {
   const store = configureStore();
   const { dispatch, getState } = store;
 

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import express from 'express';
 
@@ -15,6 +16,11 @@ import { captureError } from './utils/capture-error';
 
 const app = express();
 
+const publicPath = path.resolve(__dirname, '..', 'public');
+
+const htmlPath = publicPath + '/index.html';
+const html = fs.readFileSync(htmlPath, 'utf-8');
+
 dbInit(config.db, config.remote).then(db => {
   console.log('db init');
 
@@ -28,11 +34,11 @@ dbInit(config.db, config.remote).then(db => {
 
     app.get('/', reactRoute);
     app.use(compression());
-    app.use(express.static(path.resolve(__dirname, '..', 'public')));
+    app.use(express.static(publicPath));
     app.get('*', reactRoute);
 
     function reactRoute(req, res, next) {
-      renderReact(req.path)
+      renderReact(html, req.path)
         .then(html => res.end(html))
         .catch(err => next(err));
     }
@@ -53,7 +59,7 @@ dbInit(config.db, config.remote).then(db => {
 
     app.get('*', function response(req, res) {
       middleware.fileSystem
-        .createReadStream(path.resolve(__dirname + '/../public/index.html'))
+        .createReadStream(htmlPath)
         .pipe(res);
     });
   }

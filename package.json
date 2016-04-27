@@ -4,9 +4,10 @@
   "description": "INSERT_DESCRIPTION",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && npm run build:backend && npm run build:frontend && cp public/index.html dist/index.html && cp dist/*css* public/",
+    "build": "npm run clean && npm run build:backend && npm run build:frontend && cp dist/*css* public/",
     "build:backend": "NODE_ENV=production webpack --config webpack.config.backend.js",
     "build:frontend": "NODE_ENV=production webpack --config webpack.config.prod.js",
+    "clean": "rm -rf dist && rm -rf public",
     "lint": "eslint 'src/**/*.js' 'frontend/**/*.js' 'test/**/*.js'",
     "prepush": "npm run lint && npm test",
     "start": "node dist/backend",
