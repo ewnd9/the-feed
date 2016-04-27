@@ -15,7 +15,8 @@ config.plugins = config.plugins.reduce((total, curr) => {
   if (curr instanceof HtmlWebpackPlugin) {
     total.push(new HtmlWebpackPlugin({
       template: __dirname + '/src/app/index.html',
-      inject: 'body'
+      inject: 'body',
+      favicon: __dirname + '/src/app/favicon.ico'
     }));
   } else {
     total.push(curr);
