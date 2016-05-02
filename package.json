@@ -10,7 +10,7 @@
     "clean": "rm -rf dist && rm -rf public",
     "lint": "eslint 'src/**/*.js' 'frontend/**/*.js' 'test/**/*.js'",
     "prepush": "npm run lint && npm test",
-    "start": "node dist/backend",
+    "start": "node app",
     "start:dev": "CONFIG=config-dev.yml babel-watch --exclude src/app src/server",
     "test": "nyc --require babel-register --all --reporter=lcov --reporter=text ava",
     "test:tasks": "ava src/tasks/**/*.spec.js",

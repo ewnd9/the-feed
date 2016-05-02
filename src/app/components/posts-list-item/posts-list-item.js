@@ -64,7 +64,7 @@ export default React.createClass({
     };
 
     return (
-      <div className={itemClass}
+      <div className={`${itemClass} clearfix`}
            onMouseEnter={() => this.props.handleHover(index)}
            onFocus={() => this.props.handleHover(index)}
            tabIndex={index + 1}>

@@ -35,7 +35,8 @@
 }
 
 .itemImage {
-  max-width: 100px;
+  float: left;
+	max-width: 100px;
   margin-right: 10px;
 }
 
