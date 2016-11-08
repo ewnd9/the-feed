@@ -88,8 +88,24 @@ export default (dbPath, remote) => {
 
   function Item() {
     return {
+      updateStatus(id, seen) {
+        return db
+          .find(id)
+          .then(item => {
+            item.meta.seen = seen;
+            return db.update(item);
+          });
+      },
+      updateClicked(id) {
+        return db
+          .find(id)
+          .then(item => {
+            item.meta.clicked_at = new Date().toISOString();
+            return db.update(item);
+          });
+      },
       findAllByStatus(seen, id, date) {
-        const skip = id && date && 1 | 0;
+        const skip = id && date && 1 || 0;
         const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
 
         return pouch
@@ -97,7 +113,7 @@ export default (dbPath, remote) => {
             include_docs: true,
             descending: true,
             startkey: startkey,
-            endkey: seen,
+            endkey: seen + '',
             limit,
             skip
           })

@@ -1,16 +1,12 @@
 import express from 'express';
 import sanitize from 'sanitize-html';
 
-export default ({ db, Item }) => {
+export default ({ Item }) => {
   const router = express.Router();
 
   router.put('/api/v1/items/:id/seen', (req, res, next) => {
-    db
-      .find(req.params.id)
-      .then(item => {
-        item.meta.seen = true;
-        return db.update(item);
-      })
+    Item
+      .updateStatus(req.params.id, true)
       .then(result => {
         res.json(result);
       })
@@ -18,12 +14,8 @@ export default ({ db, Item }) => {
   });
 
   router.put('/api/v1/items/:id/clicked', (req, res, next) => {
-    db
-      .find(req.params.id)
-      .then(item => {
-        item.meta.clicked_at = new Date().toISOString();
-        return db.update(item);
-      })
+    Item
+      .updateClicked(req.params.id)
       .then(result => {
         res.json(result);
       })
