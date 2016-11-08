@@ -5,8 +5,8 @@ import express from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
 
-import dbInit from './db';
-import taskManager from './task-manager';
+import dbInit from './db/';
+import taskManager from './jobs/task-manager';
 
 import config, { jobs } from './config';
 import itemsRoutes from './routes/items';

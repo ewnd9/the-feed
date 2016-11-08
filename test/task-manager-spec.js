@@ -1,10 +1,10 @@
 import test from 'ava';
 import 'babel-core/register';
 
-import { TaskManager } from '../src/task-manager';
-import dummyTask from '../src/tasks/dummy-task/dummy-task';
+import { TaskManager } from '../src/jobs/task-manager';
+import dummyTask from '../src/jobs/tasks/dummy-task/dummy-task';
 
-import initDb from '../src/db';
+import initDb from '../src/db/';
 
 test('task manager', async t => {
   const { pouch, db } = await initDb(`/tmp/${Math.random()}`);

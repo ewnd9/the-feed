@@ -9,7 +9,7 @@ import pouchFind from 'pouchdb-find';
 PouchDB.plugin(pouchHoodie);
 PouchDB.plugin(pouchFind);
 
-import { captureError } from './utils/capture-error';
+import { captureError } from '../utils/capture-error';
 
 const createDesignDoc = (name, mapFunction) => {
   const ddoc = {
