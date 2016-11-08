@@ -25,3 +25,7 @@ test('task manager', async t => {
   t.ok(docs.rows[0].id === 'system-unseen:test-dummy');
   t.ok(docs.rows[1].id === 'test-dummy:1');
 });
+
+test.only('category model', async t => {
+  console.log('hi')
+})

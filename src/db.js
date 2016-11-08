@@ -65,75 +65,6 @@ export default (dbPath, remote) => {
 
   const mapDoc = data => data.rows.map(_ => _.doc).filter(_ => !!_);
 
-  const findAllByStatus = (seen, id, date) => {
-    const skip = id && date && 1 | 0;
-    const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
-
-    return pouch
-      .query(BY_CREATED_AT_AND_SEEN, {
-        include_docs: true,
-        descending: true,
-        startkey: startkey,
-        endkey: seen,
-        limit,
-        skip
-      }).then(mapDoc);
-  };
-
-  const findAllClicked = (id, date) => {
-    const skip = id && date && 1 | 0;
-    const startkey = id && date && `${date}$${id}` || undefined;
-
-    return pouch
-      .query(BY_CLICKED, {
-        include_docs: true,
-        descending: true,
-        startkey: startkey,
-        limit,
-        skip
-      }).then(mapDoc);
-  };
-
-  const findByCategory = (category, id, date) => {
-    const skip = id && date && 1 | 0;
-    const startkey = id && date && `${category}$${date}$${id}` || `${category}$\uffff`;
-
-    return pouch
-      .query(BY_CATEGORY, {
-        include_docs: true,
-        descending: true,
-        startkey: startkey,
-        endkey: category,
-        limit,
-        skip
-      })
-      .then(mapDoc);
-  };
-
-  const Category = {
-    findUnseenCategories: () => {
-      return pouch
-        .query(CATEGORIES_STATS, {
-          include_docs: true,
-          startkey: 'system-unseen:',
-          endkey: 'system-unseen:\uffff'
-        })
-        .then(mapDoc);
-    },
-    setCategoryAsSeen: categoryName => {
-      return db.
-        find(`system-unseen:${categoryName}`)
-          .then(item => {
-            item.unseen = false;
-            return db.add(item);
-          }, err => {
-            if (err.reason !== 'missing') {
-              throw err;
-            }
-          });
-    }
-  };
-
   return Promise
     .map(indexes, index => {
       return pouch
@@ -149,7 +80,83 @@ export default (dbPath, remote) => {
         });
     })
     .then(() => ({
-      pouch, db, findAllByStatus, findByCategory, findAllClicked,
-      Category
+      pouch,
+      db,
+      Item: new Item(),
+      Category: new Category()
     }));
+
+  function Item() {
+    return {
+      findAllByStatus(seen, id, date) {
+        const skip = id && date && 1 | 0;
+        const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
+
+        return pouch
+          .query(BY_CREATED_AT_AND_SEEN, {
+            include_docs: true,
+            descending: true,
+            startkey: startkey,
+            endkey: seen,
+            limit,
+            skip
+          })
+          .then(mapDoc);
+      },
+      findAllClicked(id, date) {
+        const skip = id && date && 1 | 0;
+        const startkey = id && date && `${date}$${id}` || undefined;
+
+        return pouch
+          .query(BY_CLICKED, {
+            include_docs: true,
+            descending: true,
+            startkey: startkey,
+            limit,
+            skip
+          }).then(mapDoc);
+      },
+      findByCategory(category, id, date) {
+        const skip = id && date && 1 | 0;
+        const startkey = id && date && `${category}$${date}$${id}` || `${category}$\uffff`;
+
+        return pouch
+          .query(BY_CATEGORY, {
+            include_docs: true,
+            descending: true,
+            startkey: startkey,
+            endkey: category,
+            limit,
+            skip
+          })
+          .then(mapDoc);
+      }
+    };
+  }
+
+  function Category() {
+    return {
+      findUnseenCategories() {
+        return pouch
+          .query(CATEGORIES_STATS, {
+            include_docs: true,
+            startkey: 'system-unseen:',
+            endkey: 'system-unseen:\uffff'
+          })
+          .then(mapDoc);
+      },
+      setCategoryAsSeen(categoryName) {
+        return db
+          .find(`system-unseen:${categoryName}`)
+          .then(item => {
+            item.unseen = false;
+            return db.add(item);
+          }, err => {
+            if (err.reason !== 'missing') {
+              return Promise.reject(err);
+            }
+          });
+      }
+    };
+  }
 };
