@@ -50,7 +50,7 @@ export default ({ db, Item }) => {
 
     return fn
       .then(posts => {
-        posts.forEach(post => cleanPost);
+        posts.forEach(post => cleanPost(post));
         res.json(posts);
       })
       .catch(err => next(err));
@@ -58,14 +58,16 @@ export default ({ db, Item }) => {
 
   return router;
 
-  function cleanPost() {
-    Object.keys(post.data || {}).forEach(key => {
-      post.data[key] = sanitize(post.data[key], {
-        allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
-        allowedAttributes: {
-          a: ['href']
-        }
+  function cleanPost(post) {
+    Object
+      .keys(post.data || {})
+      .forEach(key => {
+        post.data[key] = sanitize(post.data[key], {
+          allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
+          allowedAttributes: {
+            a: ['href']
+          }
+        });
       });
-    });
   }
 };

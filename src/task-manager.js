@@ -37,19 +37,18 @@ TaskManager.prototype.addUnseenCategoriesStatuses = function(job, log, stats) {
       return item;
     });
   }
-}
+};
 
 function Task(db, job, log, stats) {
   this.db = db;
   this.job = job;
   this.log = log;
   this.stats = stats;
+  this.refineCount = 0;
   this.executor = require(`./tasks/${job.task}-task/${job.task}-task.js`).default;
 }
 
 Task.prototype.run = function() {
-  let refineCount = 0;
-
   return this.executor
     .task(this.job.params)
     .then(items => {
@@ -59,7 +58,7 @@ Task.prototype.run = function() {
     .catch(err => {
       this.log(err, err.stack);
     });
-}
+};
 
 Task.prototype.processItem = function(item) {
   item.meta = {
@@ -80,13 +79,13 @@ Task.prototype.processItem = function(item) {
     },
     this.addIfNotFound.bind(this)
   );
-}
+};
 
 Task.prototype.addIfNotFound = function(item) {
   if (this.executor.refine) {
     if (this.executor.refineLimit) {
-      if (refineCount < this.executor.refineLimit) {
-        refineCount++;
+      if (this.refineCount < this.executor.refineLimit) {
+        this.refineCount++;
 
         return this.executor
           .refine(this.job.params, item)
@@ -94,7 +93,7 @@ Task.prototype.addIfNotFound = function(item) {
           .then(() => {
             this.stats.added++;
           }, err => {
-            log(err);
+            this.log(err);
           });
       } else {
         this.stats.overLimit++;
@@ -107,10 +106,10 @@ Task.prototype.addIfNotFound = function(item) {
         this.stats.added++;
         return res;
       }, err => {
-        log(err);
+        this.log(err);
       });
   }
-}
+};
 
 function DB(db) {
   this.db = db;
@@ -137,7 +136,7 @@ DB.prototype.upsert = function(item, upd = x => x, onNotFound) {
 
       return Promise.reject(err);
     });
-}
+};
 
 export default (db, jobs) => {
   const manager = new TaskManager(db);

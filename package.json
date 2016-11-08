@@ -9,7 +9,7 @@
     "build:frontend": "NODE_ENV=production webpack --config webpack.config.prod.js",
     "clean": "rm -rf dist && rm -rf public",
     "lint": "eslint 'src/**/*.js' 'frontend/**/*.js' 'test/**/*.js'",
-    "prepush": "npm run lint && npm test",
+    "precommit": "npm run lint && npm test",
     "start": "node app",
     "start:dev": "CONFIG=config-dev.yml babel-watch --exclude src/app src/server",
     "test": "nyc --require babel-register --all --reporter=lcov --reporter=text ava",
