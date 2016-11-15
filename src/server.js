@@ -11,6 +11,7 @@ import taskManager from './jobs/task-manager';
 import config, { jobs } from './config';
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
+import initServices from './services/';
 
 import { captureError } from './utils/capture-error';
 
@@ -26,8 +27,10 @@ dbInit(config.db, config.remote).then(db => {
 
   app.use(morgan('request: :remote-addr :method :url :status'));
 
-  app.use('/', itemsRoutes(db, jobs));
-  app.use('/', categoriesRoutes(db, jobs));
+  const services = initServices(db);
+
+  app.use('/', itemsRoutes(services, jobs));
+  app.use('/', categoriesRoutes(services, jobs));
 
   if (process.env.NODE_ENV === 'production') {
     const renderReact = require('./server-render').default;

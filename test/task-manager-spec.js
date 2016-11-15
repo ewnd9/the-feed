@@ -2,12 +2,14 @@ import test from 'ava';
 import 'babel-core/register';
 
 import { TaskManager } from '../src/jobs/task-manager';
+import initServices from '../src/services/';
 import dummyTask from '../src/jobs/tasks/dummy-task/dummy-task';
 
 import initDb from '../src/db/';
 
 test.beforeEach(async t => {
   t.context.db = await initDb(`/tmp/${Math.random()}`);
+  t.context.services = initServices(t.context.db);
 });
 
 test('task manager', async t => {
@@ -30,27 +32,30 @@ test('task manager', async t => {
   t.ok(docs.rows[1].id === 'test-dummy:1');
 });
 
-test('Item#findAllByStatus, Item#updateStatus', async t => {
-  const { db, Item } = t.context.db;
+test('itemsService#findAllByStatus, itemsService#updateStatus', async t => {
+  const { db } = t.context.db;
+  const { itemsService } = t.context.services;
+
   await populateDb(db);
 
-  const seen = await Item.findAllByStatus(false);
+  const seen = await itemsService.findAllByStatus(false);
   t.ok(seen.length === 1);
 
-  t.ok((await Item.findAllByStatus(true)).length === 0);
-  await Item.updateStatus(seen[0]._id, true);
-  t.ok((await Item.findAllByStatus(true)).length === 1);
+  t.ok((await itemsService.findAllByStatus(true)).length === 0);
+  await itemsService.updateStatus(seen[0]._id, true);
+  t.ok((await itemsService.findAllByStatus(true)).length === 1);
 });
 
 test('Item#findAllClicked, Item#updateClicked', async t => {
-  const { db, Item } = t.context.db;
+  const { db } = t.context.db;
+  const { itemsService } = t.context.services;
+
   await populateDb(db);
+  const seen = await itemsService.findAllByStatus(false);
 
-  const seen = await Item.findAllByStatus(false);
-
-  t.ok((await Item.findAllClicked()).length === 0);
-  await Item.updateClicked(seen[0]._id, true);
-  t.ok((await Item.findAllClicked()).length === 1);
+  t.ok((await itemsService.findAllClicked()).length === 0);
+  await itemsService.updateClicked(seen[0]._id, true);
+  t.ok((await itemsService.findAllClicked()).length === 1);
 });
 
 async function populateDb(db) {
