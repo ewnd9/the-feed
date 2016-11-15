@@ -1,10 +1,10 @@
 import test from 'ava';
-import 'babel-core/register';
 
 import { TaskManager } from '../src/jobs/task-manager';
 import initServices from '../src/services/';
 import dummyTask from '../src/jobs/tasks/dummy-task/dummy-task';
 
+import populateDb from './fixtures/populate-db';
 import initDb from '../src/db/';
 
 test.beforeEach(async t => {
@@ -13,16 +13,17 @@ test.beforeEach(async t => {
 });
 
 test('task manager', async t => {
-  const { pouch, db } = t.context.db;
+  const { services, db: { Item } } = t.context;
 
   const items = await dummyTask.task();
   t.ok(items.length > 0);
 
-  const manager = new TaskManager(db);
-  const result = await manager.runJob({ name: 'test-dummy', task: 'dummy' });
-  t.ok(result.id === 'system-unseen:test-dummy');
+  const manager = new TaskManager(services);
 
-  const docs = await pouch.allDocs({
+  const result = await manager.runJob({ name: 'test-dummy', task: 'dummy' });
+  t.ok(result._id === 'system-unseen:test-dummy');
+
+  const docs = await Item.db.allDocs({
     include_docs: true,
     startkey: 'design_\uffff'
   });
@@ -33,10 +34,8 @@ test('task manager', async t => {
 });
 
 test('itemsService#findAllByStatus, itemsService#updateStatus', async t => {
-  const { db } = t.context.db;
   const { itemsService } = t.context.services;
-
-  await populateDb(db);
+  await populateDb(t.context.services);
 
   const seen = await itemsService.findAllByStatus(false);
   t.ok(seen.length === 1);
@@ -47,18 +46,12 @@ test('itemsService#findAllByStatus, itemsService#updateStatus', async t => {
 });
 
 test('Item#findAllClicked, Item#updateClicked', async t => {
-  const { db } = t.context.db;
   const { itemsService } = t.context.services;
+  await populateDb(t.context.services);
 
-  await populateDb(db);
   const seen = await itemsService.findAllByStatus(false);
 
   t.ok((await itemsService.findAllClicked()).length === 0);
   await itemsService.updateClicked(seen[0]._id, true);
   t.ok((await itemsService.findAllClicked()).length === 1);
 });
-
-async function populateDb(db) {
-  const manager = new TaskManager(db);
-  await manager.runJob({ name: 'test-dummy', task: 'dummy' });
-}

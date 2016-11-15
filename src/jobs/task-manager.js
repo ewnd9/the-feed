@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 
-export function TaskManager(db) {
-  this.db = new DB(db);
+export function TaskManager(services) {
+  this.services = services;
 }
 
 TaskManager.prototype.runJob = function(job) {
@@ -14,8 +14,7 @@ TaskManager.prototype.runJob = function(job) {
     overLimit: 0
   };
 
-  const task = new Task(this.db, job, log, stats);
-
+  const task = new Task(this.services, job, log, stats);
   return task
     .run()
     .then(() => this.addUnseenCategoriesStatuses(job, log, stats))
@@ -28,19 +27,15 @@ TaskManager.prototype.addUnseenCategoriesStatuses = function(job, log, stats) {
   if (stats.added > 0) {
     const unseenStat = {
       _id: 'system-unseen:' + job.name,
-      unseen: true,
       task: job.name
     };
 
-    return this.db.upsert(unseenStat, item => {
-      item.unseen = true;
-      return item;
-    });
+    return this.services.categoriesService.setCategoryAsUnseen(unseenStat);
   }
 };
 
-function Task(db, job, log, stats) {
-  this.db = db;
+function Task(services, job, log, stats) {
+  this.services = services;
   this.job = job;
   this.log = log;
   this.stats = stats;
@@ -60,25 +55,39 @@ Task.prototype.run = function() {
     });
 };
 
-Task.prototype.processItem = function(item) {
-  item.meta = {
-    task: this.job.name,
-    seen: false
+Task.prototype.processItem = function(data) {
+  const { itemsService } = this.services;
+
+  const item = {
+    meta: {
+      task: this.job.name,
+      seen: false
+    },
+    data
   };
 
-  item._id = this.job.name + ':' + item.id.replace(/\W/g, '') + '';
+  item._id = this.job.name + ':' + item.data.id.replace(/\W/g, '') + '';
 
-  item.original_id = item.id;
-  delete item.id;
+  return itemsService.upsert(item, this.addIfNotFound.bind(this))
+    .then(
+      ([ isUpdated, res ]) => {
+        if (isUpdated) {
+          this.stats.existed++;
+        } else {
+          this.stats.added++;
+        }
 
-  return this.db.upsert(
-    item,
-    data => {
-      this.stats.existed++;
-      return data;
-    },
-    this.addIfNotFound.bind(this)
-  );
+        return res;
+      },
+      err => {
+        if (err.message === 'Over Limit') {
+          this.stats.overLimit++;
+          return null;
+        }
+
+        return Promise.reject(err);
+      }
+    );
 };
 
 Task.prototype.addIfNotFound = function(item) {
@@ -88,58 +97,18 @@ Task.prototype.addIfNotFound = function(item) {
         this.refineCount++;
 
         return this.executor
-          .refine(this.job.params, item)
-          .then(item => this.db.add(item))
-          .then(() => {
-            this.stats.added++;
-          }, err => {
-            this.log(err);
-          });
+          .refine(this.job.params, item);
       } else {
-        this.stats.overLimit++;
+        return Promise.reject(new Error(`Over Limit`));
       }
     }
   } else {
-    return this.db
-      .add(item)
-      .then(res => {
-        this.stats.added++;
-        return res;
-      }, err => {
-        this.log(err);
-      });
+    return Promise.resolve(item);
   }
 };
 
-function DB(db) {
-  this.db = db;
-}
-
-DB.prototype.add = function(item) {
-  return this.db.add(item);
-};
-
-DB.prototype.upsert = function(item, upd = x => x, onNotFound) {
-  return this.db
-    .find(item._id)
-    .then(data => {
-      return this.db.add(upd(data));
-    })
-    .catch(err => {
-      if (err.name === 'Not found') {
-        if (onNotFound) {
-          return onNotFound(item);
-        } else {
-          return this.db.add(item);
-        }
-      }
-
-      return Promise.reject(err);
-    });
-};
-
-export default (db, jobs) => {
-  const manager = new TaskManager(db);
+export default (services, jobs = []) => {
+  const manager = new TaskManager(services);
 
   jobs.forEach((job, i) => {
     setTimeout(() => {

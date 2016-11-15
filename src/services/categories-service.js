@@ -1,36 +1,45 @@
 import {
   CATEGORIES_STATS
-} from '../db/';
+} from '../db/category';
 
 export default CategoriesService;
 
-function CategoriesService({ pouch, db }) {
-  this.db = db;
-  this.pouch = pouch;
+function CategoriesService({ Category }) {
+  this.Category = Category;
 }
 
 CategoriesService.prototype.findUnseenCategories = function() {
-  return this.pouch
-    .query(CATEGORIES_STATS, {
+  return this.Category
+    .findByIndex(CATEGORIES_STATS, {
       include_docs: true,
       startkey: 'system-unseen:',
       endkey: 'system-unseen:\uffff'
-    })
-    .then(data => data.rows.map(_ => _.doc));
+    });
 };
 
 CategoriesService.prototype.setCategoryAsSeen = function(categoryName) {
-  return this.db
-    .find(`system-unseen:${categoryName}`)
+  return this.Category
+    .findOne({ _id: `system-unseen:${categoryName}` })
     .then(
       item => {
         item.unseen = false;
-        return this.db.add(item);
+        return this.Category.put(item);
       },
       err => {
         if (err.reason !== 'missing') {
           return Promise.reject(err);
+        } else {
+          return Promise.reject(new Error(`Can't find category: "${categoryName}"`));
         }
       }
     );
+};
+
+CategoriesService.prototype.setCategoryAsUnseen = function(data) {
+  return this.Category
+    .update(data)
+    .then(data => {
+      data.unseen = true;
+      return this.Category.put(data);
+    });
 };
