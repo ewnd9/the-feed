@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production' && config.opbeat) {
 }
 
 export function captureError(err) {
-  console.error(err.stack);
+  console.error(err.stack || err);
 
   if (opbeat) {
     opbeat.captureError(err);

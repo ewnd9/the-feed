@@ -1,0 +1,34 @@
+[
+    {
+        "scope": "https://query.yahooapis.com:443",
+        "method": "GET",
+        "path": "/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20%28%22USDEUR%22,%20%22USDJPY%22,%20%22USDBGN%22,%20%22USDCZK%22,%20%22USDDKK%22,%20%22USDGBP%22,%20%22USDHUF%22,%20%22USDLTL%22,%20%22USDLVL%22,%20%22USDPLN%22,%20%22USDRON%22,%20%22USDSEK%22,%20%22USDCHF%22,%20%22USDNOK%22,%20%22USDHRK%22,%20%22USDRUB%22,%20%22USDTRY%22,%20%22USDAUD%22,%20%22USDBRL%22,%20%22USDCAD%22,%20%22USDCNY%22,%20%22USDHKD%22,%20%22USDIDR%22,%20%22USDILS%22,%20%22USDINR%22,%20%22USDKRW%22,%20%22USDMXN%22,%20%22USDMYR%22,%20%22USDNZD%22,%20%22USDPHP%22,%20%22USDSGD%22,%20%22USDTHB%22,%20%22USDZAR%22,%20%22USDISK%22%29&env=store://datatables.org/alltableswithkeys",
+        "body": "",
+        "status": 200,
+        "response": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<query xmlns:yahoo=\"http://www.yahooapis.com/v1/base.rng\" yahoo:count=\"34\" yahoo:created=\"2016-11-16T01:38:00Z\" yahoo:lang=\"en-US\"><results><rate id=\"USDEUR\"><Name>USD/EUR</Name><Rate>0.9317</Rate><Date>11/15/2016</Date><Time>9:10pm</Time><Ask>0.9322</Ask><Bid>0.9317</Bid></rate><rate id=\"USDJPY\"><Name>USD/JPY</Name><Rate>108.9840</Rate><Date>11/15/2016</Date><Time>10:56pm</Time><Ask>108.9920</Ask><Bid>108.9840</Bid></rate><rate id=\"USDBGN\"><Name>USD/BGN</Name><Rate>1.8168</Rate><Date>11/15/2016</Date><Time>3:15pm</Time><Ask>N/A</Ask><Bid>1.8168</Bid></rate><rate id=\"USDCZK\"><Name>USD/CZK</Name><Rate>25.2179</Rate><Date>11/15/2016</Date><Time>11:35pm</Time><Ask>25.2211</Ask><Bid>25.2179</Bid></rate><rate id=\"USDDKK\"><Name>USD/DKK</Name><Rate>6.9373</Rate><Date>11/15/2016</Date><Time>9:31pm</Time><Ask>6.9396</Ask><Bid>6.9373</Bid></rate><rate id=\"USDGBP\"><Name>USD/GBP</Name><Rate>0.8033</Rate><Date>11/15/2016</Date><Time>11:07pm</Time><Ask>0.8034</Ask><Bid>0.8033</Bid></rate><rate id=\"USDHUF\"><Name>USD/HUF</Name><Rate>288.7400</Rate><Date>11/15/2016</Date><Time>9:39pm</Time><Ask>289.0100</Ask><Bid>288.7400</Bid></rate><rate id=\"USDLTL\"><Name>USD/LTL</Name><Rate>3.0487</Rate><Date>6/22/2015</Date><Time>8:39am</Time><Ask>3.0491</Ask><Bid>3.0487</Bid></rate><rate id=\"USDLVL\"><Name>USD/LVL</Name><Rate>0.6205</Rate><Date>6/22/2015</Date><Time>8:37am</Time><Ask>0.6206</Ask><Bid>0.6205</Bid></rate><rate id=\"USDPLN\"><Name>USD/PLN</Name><Rate>4.1070</Rate><Date>11/15/2016</Date><Time>9:13pm</Time><Ask>4.1081</Ask><Bid>4.1070</Bid></rate><rate id=\"USDRON\"><Name>USD/RON</Name><Rate>4.2012</Rate><Date>11/15/2016</Date><Time>9:44pm</Time><Ask>4.2133</Ask><Bid>4.2012</Bid></rate><rate id=\"USDSEK\"><Name>USD/SEK</Name><Rate>9.1824</Rate><Date>11/15/2016</Date><Time>9:28pm</Time><Ask>9.1863</Ask><Bid>9.1824</Bid></rate><rate id=\"USDCHF\"><Name>USD/CHF</Name><Rate>1.0014</Rate><Date>11/15/2016</Date><Time>9:19pm</Time><Ask>1.0014</Ask><Bid>1.0014</Bid></rate><rate id=\"USDNOK\"><Name>USD/NOK</Name><Rate>8.4272</Rate><Date>11/15/2016</Date><Time>9:30pm</Time><Ask>8.4312</Ask><Bid>8.4272</Bid></rate><rate id=\"USDHRK\"><Name>USD/HRK</Name><Rate>6.9709</Rate><Date>11/15/2016</Date><Time>11:19pm</Time><Ask>7.0442</Ask><Bid>6.9709</Bid></rate><rate id=\"USDRUB\"><Name>USD/RUB</Name><Rate>64.1630</Rate><Date>11/16/2016</Date><Time>0:04am</Time><Ask>64.5849</Ask><Bid>64.1630</Bid></rate><rate id=\"USDTRY\"><Name>USD/TRY</Name><Rate>3.2881</Rate><Date>11/15/2016</Date><Time>11:07pm</Time><Ask>3.2898</Ask><Bid>3.2881</Bid></rate><rate id=\"USDAUD\"><Name>USD/AUD</Name><Rate>1.3241</Rate><Date>11/16/2016</Date><Time>1:15am</Time><Ask>1.3246</Ask><Bid>1.3241</Bid></rate><rate id=\"USDBRL\"><Name>USD/BRL</Name><Rate>3.4405</Rate><Date>11/15/2016</Date><Time>10:34pm</Time><Ask>3.4415</Ask><Bid>3.4405</Bid></rate><rate id=\"USDCAD\"><Name>USD/CAD</Name><Rate>1.3455</Rate><Date>11/15/2016</Date><Time>10:35pm</Time><Ask>1.3457</Ask><Bid>1.3455</Bid></rate><rate id=\"USDCNY\"><Name>USD/CNY</Name><Rate>6.8555</Rate><Date>11/15/2016</Date><Time>7:44pm</Time><Ask>6.8565</Ask><Bid>6.8555</Bid></rate><rate id=\"USDHKD\"><Name>USD/HKD</Name><Rate>7.7578</Rate><Date>11/15/2016</Date><Time>9:39pm</Time><Ask>7.7582</Ask><Bid>7.7578</Bid></rate><rate id=\"USDIDR\"><Name>USD/IDR</Name><Rate>13360.0000</Rate><Date>11/15/2016</Date><Time>9:45pm</Time><Ask>13370.0000</Ask><Bid>13360.0000</Bid></rate><rate id=\"USDILS\"><Name>USD/ILS</Name><Rate>3.8373</Rate><Date>11/15/2016</Date><Time>9:50pm</Time><Ask>3.8458</Ask><Bid>3.8373</Bid></rate><rate id=\"USDINR\"><Name>USD/INR</Name><Rate>67.7450</Rate><Date>11/15/2016</Date><Time>11:34pm</Time><Ask>67.7950</Ask><Bid>67.7450</Bid></rate><rate id=\"USDKRW\"><Name>USD/KRW</Name><Rate>1168.8000</Rate><Date>11/15/2016</Date><Time>7:44pm</Time><Ask>1169.8000</Ask><Bid>1168.8000</Bid></rate><rate id=\"USDMXN\"><Name>USD/MXN</Name><Rate>20.3025</Rate><Date>11/16/2016</Date><Time>1:15am</Time><Ask>20.3087</Ask><Bid>20.3025</Bid></rate><rate id=\"USDMYR\"><Name>USD/MYR</Name><Rate>4.3400</Rate><Date>11/15/2016</Date><Time>10:19pm</Time><Ask>4.3450</Ask><Bid>4.3400</Bid></rate><rate id=\"USDNZD\"><Name>USD/NZD</Name><Rate>1.4081</Rate><Date>11/15/2016</Date><Time>11:04pm</Time><Ask>1.4091</Ask><Bid>1.4081</Bid></rate><rate id=\"USDPHP\"><Name>USD/PHP</Name><Rate>49.1600</Rate><Date>11/15/2016</Date><Time>11:35pm</Time><Ask>49.2100</Ask><Bid>49.1600</Bid></rate><rate id=\"USDSGD\"><Name>USD/SGD</Name><Rate>1.4135</Rate><Date>11/15/2016</Date><Time>9:56pm</Time><Ask>1.4139</Ask><Bid>1.4135</Bid></rate><rate id=\"USDTHB\"><Name>USD/THB</Name><Rate>35.4100</Rate><Date>11/16/2016</Date><Time>0:37am</Time><Ask>35.4400</Ask><Bid>35.4100</Bid></rate><rate id=\"USDZAR\"><Name>USD/ZAR</Name><Rate>14.1729</Rate><Date>11/15/2016</Date><Time>11:35pm</Time><Ask>14.1869</Ask><Bid>14.1729</Bid></rate><rate id=\"USDISK\"><Name>USD/ISK</Name><Rate>112.1000</Rate><Date>11/15/2016</Date><Time>7:52pm</Time><Ask>112.8200</Ask><Bid>112.1000</Bid></rate></results></query><!-- total: 36 -->\n<!-- prod_bf1_1;paas.yql;queryyahooapiscomproductionbf1;181c7137-ab71-11e6-b5e7-d4ae52974741 -->\n",
+        "rawHeaders": [
+            "X-YQL-Host",
+            "prod_bf1_1;paas.yql;queryyahooapiscomproductionbf1;181c7137-ab71-11e6-b5e7-d4ae52974741",
+            "X-Content-Type-Options",
+            "nosniff",
+            "Access-Control-Allow-Origin",
+            "*",
+            "Content-Type",
+            "text/xml;charset=utf-8",
+            "Cache-Control",
+            "no-cache",
+            "Date",
+            "Wed, 16 Nov 2016 01:38:00 GMT",
+            "Age",
+            "0",
+            "Transfer-Encoding",
+            "chunked",
+            "Connection",
+            "close",
+            "Via",
+            "http/1.1 a18.ue.bf1.yahoo.net (ApacheTrafficServer [cMsSf ])",
+            "Server",
+            "ATS"
+        ]
+    }
+]
