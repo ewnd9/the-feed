@@ -1,5 +1,5 @@
 import test from 'ava';
-import 'babel-core/register';
+
 import githubTask from './github-stars-task';
 
 test('follow specification', t => {

@@ -3,7 +3,7 @@ import Twitter from 'twitter';
 import Promise from 'bluebird';
 import url from 'url';
 
-import getTitleFromUrl from '../../utils/get-title-from-url';
+import getTitleFromUrl from '../../../utils/get-title-from-url';
 
 const getTwitter = ({
   consumer_key,

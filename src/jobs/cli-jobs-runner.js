@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { startCase } from 'lodash';
 import inquirer from 'inquirer-question';
 
-import { jobs } from './config';
+import { jobs } from '../config';
 
 function printObject(obj, parent) {
   Object.keys(obj).forEach(key => {

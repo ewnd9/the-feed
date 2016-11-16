@@ -1,5 +1,5 @@
 import test from 'ava';
-import 'babel-core/register';
+
 import twitterTask from './../src/tasks/twitter-search-task';
 
 test('follow specification', t => {

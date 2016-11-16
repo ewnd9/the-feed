@@ -5,7 +5,8 @@ export default () => {
     './config': {
       default: {
         db: `/tmp/the-feed-${Math.random()}`,
-        'disable-tasks': true
+        'disable-tasks': true,
+        port: 1024 + (Math.random() * (65536 - 1024) | 0)
       },
       jobs: [
         {

@@ -76,7 +76,8 @@ function start() {
         res.status(err.status || 500).json({ error: err.stack });
       });
 
-      const server = app.listen(process.env.PORT || config.port, () => {
+      const port = process.env.PORT || config.port;
+      const server = app.listen(port, () => {
         console.log(server.address());
 
         if (config['disable-tasks']) {

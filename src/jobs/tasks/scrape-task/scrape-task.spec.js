@@ -1,13 +1,15 @@
 import test from 'ava';
-import 'babel-core/register';
 
 import scrapeTask from './scrape-task';
+import nockHook from 'nock-hook/ava';
 
-import nockHelper from '../_utils/nock-helper';
-const nock = nockHelper(__filename);
+test.beforeEach(t => {
+  t.context.closeNock = nockHook(t, __filename, { dirname: __dirname + '/fixtures' });
+});
 
-test.before(nock.beforeFn);
-test.after(nock.afterFn);
+test.afterEach(t => {
+  t.context.closeNock();
+});
 
 test('follow specification', t => {
   t.true(typeof scrapeTask.task === 'function');
@@ -52,7 +54,7 @@ test('get avito posts', async t => {
   };
 
   const items = await scrapeTask.task(params);
-  t.is(items.length, 50);
+  t.is(items.length, 52);
 
   setTimeout(() => t.fail(), 1000);
 });

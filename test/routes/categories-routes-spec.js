@@ -52,7 +52,7 @@ test('GET /api/v1/categories', async t => {
     }
   };
 
-  const { body: body1 } = await agent.put('/api/v1/categories/:id', opts1);
+  await agent.put('/api/v1/categories/:id', opts1);
 
   const { body: body2 } = await agent.get('/api/v1/categories');
   t.truthy(body2[0].unseen === false);
