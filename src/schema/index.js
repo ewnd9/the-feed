@@ -8,7 +8,7 @@ export const Model = t.struct({
   updatedAt: t.maybe(t.String)
 });
 
-export const Item = Model.extend({
+export const Post = Model.extend({
   meta: t.struct({
       task: t.String,
       seen: t.Boolean,

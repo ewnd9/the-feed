@@ -12,14 +12,14 @@ test.beforeEach(async t => {
 });
 
 test('task manager', async t => {
-  const { services, db: { Item, Job } } = t.context;
+  const { services, db: { Post, Job } } = t.context;
 
   const items = await dummyTask.task();
   t.ok(items.length > 0);
 
   await populateDb(services);
 
-  const docs0 = await Item.db.allDocs({
+  const docs0 = await Post.db.allDocs({
     include_docs: true,
     startkey: 'design_\uffff'
   });
@@ -36,25 +36,25 @@ test('task manager', async t => {
   t.ok(docs1.rows[0].id === 'dummy-job');
 });
 
-test('itemsService#findAllByStatus, itemsService#updateStatus', async t => {
-  const { itemsService } = t.context.services;
+test('postsService#findAllByStatus, postsService#updateStatus', async t => {
+  const { postsService } = t.context.services;
   await populateDb(t.context.services);
 
-  const seen = await itemsService.findAllByStatus(false);
+  const seen = await postsService.findAllByStatus(false);
   t.ok(seen.length === 1);
 
-  t.ok((await itemsService.findAllByStatus(true)).length === 0);
-  await itemsService.updateStatus(seen[0]._id, true);
-  t.ok((await itemsService.findAllByStatus(true)).length === 1);
+  t.ok((await postsService.findAllByStatus(true)).length === 0);
+  await postsService.updateStatus(seen[0]._id, true);
+  t.ok((await postsService.findAllByStatus(true)).length === 1);
 });
 
-test('Item#findAllClicked, Item#updateClicked', async t => {
-  const { itemsService } = t.context.services;
+test('postsService#findAllClicked, postsService#updateClicked', async t => {
+  const { postsService } = t.context.services;
   await populateDb(t.context.services);
 
-  const seen = await itemsService.findAllByStatus(false);
+  const seen = await postsService.findAllByStatus(false);
 
-  t.ok((await itemsService.findAllClicked()).length === 0);
-  await itemsService.updateClicked(seen[0]._id, true);
-  t.ok((await itemsService.findAllClicked()).length === 1);
+  t.ok((await postsService.findAllClicked()).length === 0);
+  await postsService.updateClicked(seen[0]._id, true);
+  t.ok((await postsService.findAllClicked()).length === 1);
 });

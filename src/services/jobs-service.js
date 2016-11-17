@@ -58,7 +58,7 @@ JobsService.prototype.startJob = function(job, timeout = 0) {
 
 JobsService.prototype.defaultParams = function(data) {
   data.interval = data.interval || '40m';
-  data.unseen = typeof data.unseen !== 'boolean' ? true : data.unseen;
+  data.unseen = typeof data.unseen !== 'boolean' ? false : data.unseen;
 
   try {
     const minutes = parseInterval(data.interval);

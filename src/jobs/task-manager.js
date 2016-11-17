@@ -51,7 +51,7 @@ Task.prototype.run = function() {
 };
 
 Task.prototype.processItem = function({ id, url, title, data }) {
-  const { itemsService } = this.services;
+  const { postsService } = this.services;
 
   const item = {
     meta: {
@@ -65,7 +65,7 @@ Task.prototype.processItem = function({ id, url, title, data }) {
 
   item._id = this.job.name + ':' + id.replace(/\W/g, '') + '';
 
-  return itemsService.upsert(item, this.addIfNotFound.bind(this))
+  return postsService.upsert(item, this.addIfNotFound.bind(this))
     .then(
       ([ isUpdated, res ]) => {
         if (isUpdated) {

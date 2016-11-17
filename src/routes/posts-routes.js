@@ -2,65 +2,65 @@ import t from 'tcomb';
 import Router from 'express-router-tcomb';
 import sanitize from 'sanitize-html';
 
-import { Item } from '../schema/';
+import { Post } from '../schema/';
 
-export default ({ itemsService }) => {
+export default ({ postsService }) => {
   const router = Router();
 
   router.get({
-    path: '/api/v1/items/category/:id',
+    path: '/api/v1/posts/job/:id',
     schema: {
-      response: t.struct({ items: t.list(Item) })
+      response: t.struct({ posts: t.list(Post) })
     },
     handler: (req, res, next) => {
-      const category = req.params.id;
+      const job = req.params.id;
 
       const id = req.query.id;
       const date = req.query.date;
 
       let fn;
 
-      if (category === 'seen') {
-        fn = itemsService.findAllByStatus(true, id, date);
-      } else if (category === 'unseen') {
-        fn = itemsService.findAllByStatus(false, id, date);
-      } else if (category === 'clicked') {
-        fn = itemsService.findAllClicked(id, date);
+      if (job === 'seen') {
+        fn = postsService.findAllByStatus(true, id, date);
+      } else if (job === 'unseen') {
+        fn = postsService.findAllByStatus(false, id, date);
+      } else if (job === 'clicked') {
+        fn = postsService.findAllClicked(id, date);
       } else {
-        fn = itemsService.findByCategory(category, id, date);
+        fn = postsService.findByCategory(job, id, date);
       }
 
       return fn
-        .then(items => {
-          items.forEach(item => cleanItem(item));
-          res.json({ items });
+        .then(posts => {
+          posts.forEach(post => cleanPost(post));
+          res.json({ posts });
         })
         .catch(err => next(err));
     }
   });
 
   router.put({
-    path: '/api/v1/items/:id/seen',
+    path: '/api/v1/posts/:id/seen',
     schema: {
-      response: t.struct({ item: Item })
+      response: t.struct({ post: Post })
     },
     handler: (req, res, next) => {
-      itemsService
+      postsService
         .updateStatus(req.params.id, true)
-        .then(item => res.json({ item }))
+        .then(post => res.json({ post }))
         .catch(err => next(err));
     }
   });
 
   router.put({
-    path: '/api/v1/items/:id/clicked',
+    path: '/api/v1/posts/:id/clicked',
     schema: {
-      response: t.struct({ item: Item })
+      response: t.struct({ post: Post })
     },
     handler: (req, res, next) => {
-      itemsService
+      postsService
         .updateClicked(req.params.id)
-        .then(item => res.json({ item }))
+        .then(post => res.json({ post }))
         .catch(err => next(err));
     }
   });
@@ -68,7 +68,7 @@ export default ({ itemsService }) => {
   return router.getRoutes();
 };
 
-function cleanItem(post) {
+function cleanPost(post) {
   Object
     .keys(post.data || {})
     .forEach(key => {

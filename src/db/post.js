@@ -2,7 +2,7 @@ export const BY_CREATED_AT_AND_SEEN = 'by_created_at_and_seen_0';
 export const BY_CATEGORY = 'by_category_0';
 export const BY_CLICKED = 'by_clicked_0';
 
-const File = {
+const Post = {
   createId: ({ _id }) => _id,
   indexes: [
     {
@@ -32,4 +32,4 @@ const File = {
   ]
 };
 
-export default File;
+export default Post;

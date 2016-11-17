@@ -2,38 +2,38 @@ import {
   BY_CREATED_AT_AND_SEEN,
   BY_CLICKED,
   BY_CATEGORY
-} from '../db/item';
+} from '../db/post';
 
-export default ItemsService;
+export default PostsService;
 
-function ItemsService({ Item }) {
-  this.Item = Item;
+function PostsService({ Post }) {
+  this.Post = Post;
   this.limit = 40;
 }
 
-ItemsService.prototype.updateStatus = function(_id, seen) {
-  return this.Item
+PostsService.prototype.updateStatus = function(_id, seen) {
+  return this.Post
     .findOne({ _id })
     .then(item => {
       item.meta.seen = seen;
-      return this.Item.put(item);
+      return this.Post.put(item);
     });
 };
 
-ItemsService.prototype.updateClicked = function(_id) {
-  return this.Item
+PostsService.prototype.updateClicked = function(_id) {
+  return this.Post
     .findOne({ _id })
     .then(item => {
       item.meta.clickedAt = new Date().toISOString();
-      return this.Item.put(item);
+      return this.Post.put(item);
     });
 };
 
-ItemsService.prototype.findAllByStatus = function(seen, id, date) {
+PostsService.prototype.findAllByStatus = function(seen, id, date) {
   const skip = id && date && 1 || 0;
   const startkey = id && date && `${seen}$${date}$${id}` || `${seen}$\uffff`;
 
-  return this.Item
+  return this.Post
     .findByIndex(BY_CREATED_AT_AND_SEEN, {
       descending: true,
       startkey: startkey,
@@ -43,11 +43,11 @@ ItemsService.prototype.findAllByStatus = function(seen, id, date) {
     });
 };
 
-ItemsService.prototype.findAllClicked = function(id, date) {
+PostsService.prototype.findAllClicked = function(id, date) {
   const skip = id && date && 1 | 0;
   const startkey = id && date && `${date}$${id}` || undefined;
 
-  return this.Item
+  return this.Post
     .findByIndex(BY_CLICKED, {
       descending: true,
       startkey: startkey,
@@ -56,11 +56,11 @@ ItemsService.prototype.findAllClicked = function(id, date) {
     });
 };
 
-ItemsService.prototype.findByCategory = function(category, id, date) {
+PostsService.prototype.findByCategory = function(category, id, date) {
   const skip = id && date && 1 | 0;
   const startkey = id && date && `${category}$${date}$${id}` || `${category}$\uffff`;
 
-  return this.Item
+  return this.Post
     .findByIndex(BY_CATEGORY, {
       descending: true,
       startkey: startkey,
@@ -70,17 +70,17 @@ ItemsService.prototype.findByCategory = function(category, id, date) {
     });
 };
 
-ItemsService.prototype.put = function(data) {
-  return this.Item.put(data);
+PostsService.prototype.put = function(data) {
+  return this.Post.put(data);
 };
 
-ItemsService.prototype.upsert = function(data, onNotFound) {
+PostsService.prototype.upsert = function(data, onNotFound) {
   let isUpdated = true;
 
-  return this.Item
+  return this.Post
     .findOneOrInit(data, () => {
       isUpdated = false;
-      return onNotFound(data).then(res => this.Item.put(res));
+      return onNotFound(data).then(res => this.Post.put(res));
     })
     .then(res => {
       return [isUpdated, res];

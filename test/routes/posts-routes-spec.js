@@ -15,7 +15,7 @@ test.beforeEach(async t => {
       }
     };
 
-    return t.context.agent.get('/api/v1/items/category/:id', opts);
+    return t.context.agent.get('/api/v1/posts/job/:id', opts);
   };
   t.context.getUnseen = () => {
     const opts = {
@@ -24,7 +24,7 @@ test.beforeEach(async t => {
       }
     };
 
-    return t.context.agent.get('/api/v1/items/category/:id', opts);
+    return t.context.agent.get('/api/v1/posts/job/:id', opts);
   };
 });
 
@@ -32,47 +32,47 @@ test.afterEach(t => {
   t.context.server.close();
 });
 
-test('PUT /api/v1/items/:id/seen', async t => {
+test('PUT /api/v1/posts/:id/seen', async t => {
   const { services, agent, getUnseen } = t.context;
   await populateDb(services);
 
   const { body: body0 } = await getUnseen();
 
-  t.truthy(body0.items.length === 1);
-  t.truthy(body0.items[0].meta.task === 'dummy-job');
+  t.truthy(body0.posts.length === 1);
+  t.truthy(body0.posts[0].meta.task === 'dummy-job');
 
   const opts1 = {
     params: {
-      id: body0.items[0]._id
+      id: body0.posts[0]._id
     }
   };
 
-  const { body: body1 } = await agent.put('/api/v1/items/:id/seen', opts1);
-  t.truthy(body1.item._id === opts1.params.id);
+  const { body: body1 } = await agent.put('/api/v1/posts/:id/seen', opts1);
+  t.truthy(body1.post._id === opts1.params.id);
 
   const { body: body2 } = await getUnseen();
-  t.truthy(body2.items.length === 0);
+  t.truthy(body2.posts.length === 0);
 });
 
-test('PUT /api/v1/items/:id/clicked', async t => {
+test('PUT /api/v1/posts/:id/clicked', async t => {
   const { services, agent, getUnseen, getClicked } = t.context;
   await populateDb(services);
 
   const { body: body0 } = await getClicked();
-  t.truthy(body0.items.length === 0);
+  t.truthy(body0.posts.length === 0);
 
   const { body: body1 } = await getUnseen();
 
   const opts2 = {
     params: {
-      id: body1.items[0]._id
+      id: body1.posts[0]._id
     }
   };
 
-  const { body: body2 } = await agent.put('/api/v1/items/:id/clicked', opts2);
-  t.truthy(body2.item._id === opts2.params.id);
+  const { body: body2 } = await agent.put('/api/v1/posts/:id/clicked', opts2);
+  t.truthy(body2.post._id === opts2.params.id);
 
   const { body: body3 } = await getClicked();
-  t.truthy(body3.items.length === 1);
-  t.truthy(body3.items[0].meta.task === 'dummy-job');
+  t.truthy(body3.posts.length === 1);
+  t.truthy(body3.posts[0].meta.task === 'dummy-job');
 });
