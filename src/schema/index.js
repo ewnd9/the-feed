@@ -8,12 +8,6 @@ export const Model = t.struct({
   updatedAt: t.maybe(t.String)
 });
 
-export const Category = Model.extend({
-  task: t.String,
-  name: t.maybe(t.String),
-  unseen: t.Boolean
-});
-
 export const Item = Model.extend({
   meta: t.struct({
       task: t.String,
@@ -31,5 +25,6 @@ export const Job = Model.extend({
   name: t.String,
   task: t.String,
   interval: t.maybe(t.String),
-  params: t.Object
+  params: t.Object,
+  unseen: t.Boolean
 });

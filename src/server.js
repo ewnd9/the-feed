@@ -10,7 +10,6 @@ import dbInit from './db/';
 import config from './config';
 
 import itemsRoutes from './routes/items';
-import categoriesRoutes from './routes/categories';
 import jobsRoutes from './routes/jobs-routes';
 
 import initServices from './services/';
@@ -36,7 +35,6 @@ function start() {
       app.use(bodyParser.json({ limit: '50mb' }));
 
       app.use('/', itemsRoutes(services));
-      app.use('/', categoriesRoutes(services));
       app.use('/', jobsRoutes(services));
 
       if (process.env.NODE_ENV === 'production') {

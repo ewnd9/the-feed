@@ -14,13 +14,14 @@ const baseUrl = (() => {
 
 export const findByCategory = (categoryId, id, date) => {
   const params = (id && date) ? `id=${id}&date=${date}` : '';
-  return fetch(baseUrl + `/api/v1/categories/items/${categoryId}?${params}`)
+  return fetch(baseUrl + `/api/v1/items/category/${categoryId}?${params}`)
     .then(_ => _.json());
 };
 
 export const findCategories = () => {
-  return fetch(baseUrl + '/api/v1/categories')
-    .then(_ => _.json());
+  return fetch(baseUrl + '/api/v1/jobs')
+    .then(_ => _.json())
+    .then(({ jobs }) => jobs);
 };
 
 const put = (url, body) => {
@@ -36,4 +37,4 @@ const put = (url, body) => {
 
 export const putSeen = item => put(baseUrl + `/api/v1/items/${item._id}/seen`, { seen: true });
 export const putClicked = item => put(baseUrl + `/api/v1/items/${item._id}/clicked`, { clicked: true });
-export const putCategorySeen = category => put(baseUrl + `/api/v1/categories/${category.name}`, {});
+export const putCategorySeen = category => put(baseUrl + `/api/v1/jobs/unseen/${category.name}`, {});

@@ -58,6 +58,7 @@ JobsService.prototype.startJob = function(job, timeout = 0) {
 
 JobsService.prototype.defaultParams = function(data) {
   data.interval = data.interval || '40m';
+  data.unseen = typeof data.unseen !== 'boolean' ? true : data.unseen;
 
   try {
     const minutes = parseInterval(data.interval);
@@ -70,4 +71,22 @@ JobsService.prototype.defaultParams = function(data) {
   }
 
   return data;
+};
+
+JobsService.prototype.updateUnseenStatus = function(job, status) {
+  return this.Job
+    .findOne(job)
+    .then(
+      job => {
+        job.unseen = status;
+        return this.Job.put(job);
+      },
+      err => {
+        if (err.reason !== 'missing') {
+          return Promise.reject(err);
+        } else {
+          return Promise.reject(new Error(`Can't find job: "${job.name}"`));
+        }
+      }
+    );
 };

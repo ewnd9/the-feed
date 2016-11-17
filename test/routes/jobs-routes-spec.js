@@ -67,3 +67,24 @@ test('POST /api/v1/jobs', async t => {
   const { body: body1 } = await agent.post('/api/v1/jobs', opts);
   t.truthy(body1.job.interval === job.interval);
 });
+
+test('POST /api/v1/jobs/unseen/:id', async t => {
+  const { services, agent } = t.context;
+  await populateDb(services);
+
+  const { body: body0 } = await agent.get('/api/v1/jobs');
+
+  const job = body0.jobs[0];
+  t.truthy(job.unseen === true);
+
+  const opts1 = {
+    params: {
+      name: job.name
+    }
+  };
+
+  await agent.post('/api/v1/jobs/unseen/:name', opts1);
+
+  const { body: body2 } = await agent.get('/api/v1/jobs');
+  t.truthy(body2.jobs[0].unseen === false);
+});

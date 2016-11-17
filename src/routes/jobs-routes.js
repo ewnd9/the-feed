@@ -46,5 +46,21 @@ export default ({ jobsService }) => {
     }
   });
 
+  router.post({
+    path: '/api/v1/jobs/unseen/:name',
+    schema: {
+      params: t.struct({ name: t.String }),
+      response: t.struct({ job: Job })
+    },
+    handler: (req, res, next) => {
+      const { name } = req.params;
+
+      jobsService
+        .updateUnseenStatus({ name }, false)
+        .then(job => res.json({ job }))
+        .catch(err => next(err));
+    }
+  });
+
   return router.getRoutes();
 };

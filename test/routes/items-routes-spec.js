@@ -15,7 +15,7 @@ test.beforeEach(async t => {
       }
     };
 
-    return t.context.agent.get('/api/v1/categories/items/:id', opts);
+    return t.context.agent.get('/api/v1/items/category/:id', opts);
   };
   t.context.getUnseen = () => {
     const opts = {
@@ -24,7 +24,7 @@ test.beforeEach(async t => {
       }
     };
 
-    return t.context.agent.get('/api/v1/categories/items/:id', opts);
+    return t.context.agent.get('/api/v1/items/category/:id', opts);
   };
 });
 

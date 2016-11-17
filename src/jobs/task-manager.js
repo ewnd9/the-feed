@@ -25,12 +25,7 @@ TaskManager.prototype.addUnseenCategoriesStatuses = function(job, log, stats) {
   log(stats);
 
   if (stats.added > 0) {
-    const unseenStat = {
-      _id: 'system-unseen:' + job.name,
-      task: job.name
-    };
-
-    return this.services.categoriesService.setCategoryAsUnseen(unseenStat);
+    return this.services.jobsService.updateUnseenStatus(job, true);
   }
 };
 
