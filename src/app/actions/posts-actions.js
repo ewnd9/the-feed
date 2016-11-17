@@ -1,49 +1,28 @@
-import * as api from '../api';
+export const FETCH_POSTS = 'FETCH_POSTS';
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const MARK_POST_AS_SEEN = 'MARK_POST_AS_SEEN';
 export const MARK_POST_AS_CLICKED = 'MARK_POST_AS_CLICKED';
 
-function requestPosts(category) {
+export function fetchPosts(job, id, date) {
   return {
-    type: REQUEST_POSTS,
-    category
-  };
-}
-
-function receivePosts(category, json, clear) {
-  return {
-    type: RECEIVE_POSTS,
-    items: json,
-    clear
-  };
-}
-
-export function fetchPosts(category, id, date) {
-  return dispatch => {
-    dispatch(requestPosts(category));
-
-    return api
-      .findByCategory(category, id, date)
-      .then(json => dispatch(receivePosts(category, json, !!!id)));
+    type: FETCH_POSTS,
+    callAPI: ({ api }) => api.findByJob(job, id, date),
+    payload: { job, id, date }
   };
 }
 
 export function markPostAsSeen(index, item) {
-  api.putSeen(item);
-
   return {
     type: MARK_POST_AS_SEEN,
-    index
+    callAPI: ({ api }) => api.putSeen(item),
+    payload: { index, item }
   };
 }
 
 export function markPostAsClicked(index, item) {
-  api.putClicked(item);
-
   return {
     type: MARK_POST_AS_CLICKED,
-    index
+    callAPI: ({ api }) => api.putClicked(item),
+    payload: { index, item }
   };
 }

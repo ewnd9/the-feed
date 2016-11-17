@@ -2,85 +2,92 @@ import React from 'react';
 
 import Swipeable from 'react-swipeable';
 
+import t from 'tcomb';
 import { connect } from 'react-redux';
 import { provideHooks } from 'redial';
+import { propTypes } from 'tcomb-react';
 
-import { fetchPosts, markPostAsSeen, markPostAsClicked } from './../../actions/posts-actions';
+import {
+  fetchPosts,
+  markPostAsSeen,
+  markPostAsClicked
+} from './../../actions/posts-actions';
+
 import Post from './../posts-list-item/posts-list-item';
+import { schema } from '../../reducers/posts-reducer';
+import { reactRouterPropTypes } from '../../../schema';
 
 const InfiniteScroll = require('react-infinite-scroll')(React);
-
-function mapStateToProps(state) {
-  const { posts } = state;
-
-  return {
-    posts
-  };
-}
 
 const hooks = {
   fetch: ({ dispatch, params }) => dispatch(fetchPosts(params.categoryId || 'unseen'))
 };
 
-export default provideHooks(hooks)(connect(mapStateToProps)(React.createClass({
-  componentWillReceiveProps: function(nextProps) {
-    const categoryId = this.props.params.categoryId || 'unseen';
-    const nextCategoryId = nextProps.params.categoryId || 'unseen';
+const mapStateToProps = ({ posts }) => ({ posts });
+const mapDispatchToProps = { fetchPosts, markPostAsSeen, markPostAsClicked };
 
-    const { dispatch } = this.props;
+const PostsList = React.createClass({
+  propTypes: propTypes({
+    ...reactRouterPropTypes,
+    children: t.Nil,
+    posts: schema,
 
-    if (categoryId !== nextCategoryId) {
-      dispatch(fetchPosts(nextCategoryId));
+    fetchPosts: t.Function,
+    markPostAsSeen: t.Function,
+    markPostAsClicked: t.Function
+  }),
+  loadMore() {
+    const { params, posts: { posts }, fetchPosts } = this.props;
+
+    const categoryId = params.categoryId || 'unseen';
+
+    const id = posts.length > 0 ? posts[posts.length - 1]._id : undefined;
+    const date = posts.length > 0 ? posts[posts.length - 1].createdAt : undefined;
+
+    console.log('more');
+
+    return fetchPosts(categoryId, id, date);
+  },
+  handleHover(index) {
+    const { posts: { posts }, markPostAsSeen } = this.props;
+    const post = posts[index];
+
+    if (!post.meta.seen) {
+      markPostAsSeen(index, post);
     }
   },
-  loadMore: function() {
-    const categoryId = this.props.params.categoryId || 'unseen';
-    const items = this.props.posts.items;
+  handleLinkClick(index) {
+    const { posts: { posts }, markPostAsClicked } = this.props;
+    const post = posts[index];
 
-    const id = items.length > 0 ? items[items.length - 1]._id : undefined;
-    const date = items.length > 0 ? items[items.length - 1].createdAt : undefined;
-    const { dispatch } = this.props;
-
-    return dispatch(fetchPosts(categoryId, id, date));
-  },
-  handleHover: function(index) {
-    const item = this.props.posts.items[index];
-    const { dispatch } = this.props;
-
-    if (!item.meta.seen) {
-      dispatch(markPostAsSeen(index, item));
+    if (!post.meta.clicked) {
+      markPostAsClicked(index, post);
     }
   },
-  handleLinkClick: function(index) {
-    const item = this.props.posts.items[index];
-    const { dispatch } = this.props;
+  render() {
+    const { posts: { isFetching, hasMore, posts } } = this.props;
 
-    if (!item.meta.clicked) {
-      dispatch(markPostAsClicked(index, item));
-    }
-  },
-  render: function() {
     return (
       <div>
         <InfiniteScroll
             loadMore={this.loadMore}
-            hasMore={!this.props.posts.isFetching && this.props.posts.hasMore}
+            hasMore={!isFetching && hasMore}
             loader={<div className="loader">Loading ...</div>}>
           {
-            this.props.posts.items.map((result, index) => {
-              return (
-                <Swipeable onSwipingLeft={this.handleHover.bind(this, index)}>
-                  <Post item={result}
-                      index={index}
-                      key={result._id}
-                      handleLinkClick={this.handleLinkClick}
-                      handleHover={this.handleHover} />
-                </Swipeable>
-              );
-            })
+            posts.map((post, index) => (
+              <Swipeable key={post._id} onSwipingLeft={this.handleHover.bind(this, index)}>
+                <Post
+                    post={post}
+                    index={index}
+                    handleLinkClick={this.handleLinkClick}
+                    handleHover={this.handleHover} />
+              </Swipeable>
+            ))
           }
         </InfiniteScroll>
       </div>
     );
   }
-})));
+});
+
+export default provideHooks(hooks)(connect(mapStateToProps, mapDispatchToProps)(PostsList));

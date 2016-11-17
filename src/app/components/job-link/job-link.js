@@ -1,25 +1,32 @@
 import React from 'react';
 import styles from './style.css';
 
+import t from 'tcomb';
+import { propTypes } from 'tcomb-react';
 import { Link } from 'react-router';
 
 export default React.createClass({
+  propTypes: propTypes({
+    jobName: t.String,
+    onClick: t.maybe(t.Function)
+  }),
   onClick() {
-    if (this.props.onClick) {
-      this.props.onClick();
+    const { onClick } = this.props;
+
+    if (onClick) {
+      onClick();
     }
   },
   render: function() {
-    const category = this.props.category;
-    const path = `/r/${category.toLowerCase()}`;
+    const { jobName } = this.props;
+    const path = `/r/${jobName.toLowerCase()}`;
 
     return (
       <Link className={styles.category}
             activeClassName={styles.active}
-            key={category}
             onClick={this.onClick}
             to={path}>
-        {category}
+        {jobName}
       </Link>
     );
   }

@@ -1,59 +1,79 @@
+import t from 'tcomb';
+import { createCheckedReducer } from './utils';
+import { Post } from '../../schema/';
+
 import {
-  REQUEST_POSTS,
-  RECEIVE_POSTS,
+  FETCH_POSTS,
   MARK_POST_AS_SEEN,
   MARK_POST_AS_CLICKED
 } from './../actions/posts-actions';
 
-function posts(state = {
+export const schema = t.struct({
+  isFetching: t.Boolean,
+  hasMore: t.Boolean,
+  page: t.Number,
+  posts: t.list(Post)
+});
+
+export default createCheckedReducer({
   isFetching: false,
-  hasMore: true,
-  items: [],
-  page: 0
-}, action) {
-  function updatedItemsAt(items, index, obj) {
-    const item = state.items[index];
-
-    return [
-      ...items.slice(0, index),
-      {
-        ...item,
-        meta: {
-          ...item.meta,
-          ...obj
-        }
-      },
-      ...items.slice(index + 1)
-    ];
-  }
-
-  switch (action.type) {
-    case REQUEST_POSTS:
+  hasMore: false, // needed for InfiniteScroll, but first request is from Recall
+  page: 0,
+  posts: []
+}, {
+  [FETCH_POSTS](state, action) {
+    if (action.status === 'request') {
       return {
         ...state,
         isFetching: true,
-        page: action.page
+        page: action.payload.page || 1
       };
-    case RECEIVE_POSTS:
+    } else if (action.status === 'success') {
       return {
         ...state,
         isFetching: false,
-        items: action.clear ? action.items : [...state.items, ...action.items],
-        hasMore: action.items.length === 40
+        posts: !!!action.payload.id ? action.response : [...state.posts, ...action.response],
+        hasMore: action.response.length === 40
       };
-    case MARK_POST_AS_SEEN:
-      return {
-        ...state,
-        items: updatedItemsAt(state.items, action.index, { seen: true })
-      };
-    case MARK_POST_AS_CLICKED:
-      return {
-        ...state,
-        items: updatedItemsAt(state.items, action.index, { clicked: true })
-      };
-    default:
+    } else {
       return state;
-  }
-}
+    }
+  },
+  [MARK_POST_AS_SEEN](state, action) {
+    if (action.status === 'request') {
+      return {
+        ...state,
+        posts: updatedPostsAt(state, action.payload.index, { seen: true })
+      };
+    } else {
+      return state;
+    }
+  },
+  [MARK_POST_AS_CLICKED](state, action) {
+    if (action.status === 'request') {
+      return {
+        ...state,
+        posts: updatedPostsAt(state, action.payload.index, { clicked: true })
+      };
+    } else {
+      return state;
+    }
+  },
+}, schema);
 
-export default posts;
+function updatedPostsAt(state, index, obj) {
+  const { posts } = state;
+  const post = posts[index];
+
+  return [
+    ...posts.slice(0, index),
+    {
+      ...post,
+      meta: {
+        ...post.meta,
+        ...obj
+      }
+    },
+    ...posts.slice(index + 1)
+  ];
+}

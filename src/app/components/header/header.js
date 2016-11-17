@@ -1,12 +1,15 @@
 import React from 'react';
 import styles from './style.css';
 
+import { propTypes } from 'tcomb-react';
+
 import { Link } from 'react-router';
-import CategoryLink from './../category-link/category-link';
+import JobLink from '../job-link/job-link';
 
 export default React.createClass({
-  render: function() {
-    const categories = [
+  propTypes: propTypes({}),
+  render() {
+    const jobs = [
       'Clicked',
       'Seen'
     ];
@@ -18,9 +21,9 @@ export default React.createClass({
         </div>
         <div className={styles.menu}>
           {
-            categories.map(category => {
-              return (<CategoryLink category={category} key={category} />);
-            })
+            jobs.map(jobName => (
+              <JobLink jobName={jobName} key={jobName} />
+            ))
           }
         </div>
       </header>

@@ -1,23 +1,32 @@
 import React from 'react';
 import styles from './style.css';
 
+import t from 'tcomb';
+import { propTypes } from 'tcomb-react';
+
 import moment from 'moment';
 import classNames from 'classnames';
 import _ from 'lodash';
 import ReactTooltip from 'react-tooltip';
 
 import createPreview from 'html-preview';
+import { Post } from '../../../schema/';
 
 export default React.createClass({
+  propTypes: propTypes({
+    post: Post,
+    index: t.Number,
+
+    handleHover: t.Function,
+    handleLinkClick: t.Function
+  }),
   getInitialState: () => ({ expanded: false }),
   onExpandClick() {
     this.setState({ expanded: !this.state.expanded });
   },
-  render: function() {
+  render() {
     const { expanded } = this.state;
-
-    const result = this.props.item;
-    const index = this.props.index;
+    const { post: result, index } = this.props;
 
     const fromNow = moment(result.createdAt).fromNow();
 

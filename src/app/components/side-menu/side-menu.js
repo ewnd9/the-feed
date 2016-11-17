@@ -1,47 +1,49 @@
 import React from 'react';
 import styles from './style.css';
 
+import t from 'tcomb';
+import { propTypes } from 'tcomb-react';
 import { connect } from 'react-redux';
-import { markCategoryAsSeen } from '../../actions/categories-actions';
+import { markJobAsSeen } from '../../actions/jobs-actions';
 
-import CategoryLink from './../category-link/category-link';
+import JobLink from '../job-link/job-link';
+import { schema } from '../../reducers/jobs-reducer';
 
-function mapStateToProps(state) {
-  const { categories } = state;
+const mapStateToProps = ({ jobs }) => ({ jobs });
+const mapDispatchToProps = { markJobAsSeen };
 
-  return {
-    categories
-  };
-}
-
-export default connect(mapStateToProps)(React.createClass({
-  getInitialState: () => ({ items: [] }),
+const SideMenu = React.createClass({
+  propTypes: propTypes({
+    jobs: schema,
+    markJobAsSeen: t.Function
+  }),
   onClick(index) {
-    const category = this.props.categories.categories[index];
+    const { jobs: { jobs }, markJobAsSeen } = this.props;
+    const job = jobs[index];
 
-    if (category.unseen === true) {
-      this.props.dispatch(markCategoryAsSeen(index));
+    if (job.unseen === true) {
+      markJobAsSeen(index);
     }
   },
-  render: function() {
+  render() {
+    const { jobs: { jobs } } = this.props;
+
     return (
       <ul className={styles.sideMenu}>
         {
-          this.props.categories.categories.map((category, index) => {
-            const { name, unseen } = category;
+          jobs.map(({ name, unseen }, index) => (
+            <li key={index} className={styles.sideMenuItem}>
+              <JobLink jobName={name} onClick={this.onClick.bind(this, index)} />
 
-            return (
-              <li key={index} className={styles.sideMenuItem}>
-                <CategoryLink category={name} onClick={this.onClick.bind(this, index)} />
-
-                { unseen && (
-                  <span className={styles.unseenBadge}>●</span>
-                )}
-              </li>
-            );
-          })
+              { unseen && (
+                <span className={styles.unseenBadge}>●</span>
+              )}
+            </li>
+          ))
         }
       </ul>
     );
   }
-}));
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

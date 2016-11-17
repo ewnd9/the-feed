@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import posts from './posts-reducer';
-import categories from './categories-reducer';
+import jobs from './jobs-reducer';
 
 const rootReducer = combineReducers({
   posts,
-  categories
+  jobs
 });
 
 export default rootReducer;

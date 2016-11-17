@@ -28,3 +28,12 @@ export const Job = Model.extend({
   params: t.Object,
   unseen: t.Boolean
 });
+
+export const reactRouterPropTypes = {
+  history: t.Object,
+  location: t.Object,
+  params: t.Object,
+  route: t.Object,
+  routeParams: t.Object,
+  routes: t.Array
+};

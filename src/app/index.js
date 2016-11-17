@@ -12,11 +12,25 @@ import browserHistory from 'react-router/lib/browserHistory';
 import { Provider } from 'react-redux';
 
 import routes from './routes';
+import createApi from './api';
 import configureStore from './configure-store';
 
 const initialState = window.INITIAL_STATE || {};
 
-const store = configureStore(initialState);
+const baseUrl = (() => {
+  if (typeof window === 'undefined') {
+    if (process.env.NODE_ENV === 'production') {
+      return `http://localhost:${process.env.PORT || 3000}`;
+    } else {
+      return 'http://localhost:3000';
+    }
+  } else {
+    return '';
+  }
+})();
+
+const api = createApi(baseUrl);
+const store = configureStore(initialState, api);
 
 const { dispatch } = store;
 const { pathname, search, hash } = window.location;

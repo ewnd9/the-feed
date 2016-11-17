@@ -1,41 +1,57 @@
 import fetch from 'isomorphic-fetch';
 
-const baseUrl = (() => {
-  if (typeof window === 'undefined') {
-    if (process.env.NODE_ENV === 'production') {
-      return `http://localhost:${process.env.PORT || 3000}`;
-    } else {
-      return 'http://localhost:3000';
-    }
-  } else {
-    return '';
-  }
-})();
+export default createAPI;
 
-export const findByCategory = (categoryId, id, date) => {
-  const params = (id && date) ? `id=${id}&date=${date}` : '';
-  return fetch(baseUrl + `/api/v1/posts/category/${categoryId}?${params}`)
-    .then(_ => _.json())
-    .then(({ posts }) => posts);
-};
+function createAPI(baseUrl) {
+  return {
+    findByJob(jobId, id, date) {
+      const params = (id && date) ? `id=${id}&date=${date}` : '';
 
-export const findCategories = () => {
-  return fetch(baseUrl + '/api/v1/jobs')
-    .then(_ => _.json())
-    .then(({ jobs }) => jobs);
-};
-
-const put = (url, body) => {
-  return fetch(url, {
-    method: 'put',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      return request(baseUrl + `/api/v1/posts/job/${jobId}?${params}`)
+        .then(({ posts }) => posts);
     },
-    body: JSON.stringify(body)
-  });
-};
+    fetchJobs() {
+      return request(baseUrl + '/api/v1/jobs')
+        .then(({ jobs }) => jobs);
+    },
+    putSeen(item) {
+      return put(baseUrl + `/api/v1/posts/${item._id}/seen`, { seen: true });
+    },
+    putClicked(item) {
+      return put(baseUrl + `/api/v1/posts/${item._id}/clicked`, { clicked: true });
+    },
+    putJobAsSeen(job) {
+      return post(baseUrl + `/api/v1/jobs/unseen/${job.name}`, {});
+    }
+  };
 
-export const putSeen = item => put(baseUrl + `/api/v1/posts/${item._id}/seen`, { seen: true });
-export const putClicked = item => put(baseUrl + `/api/v1/posts/${item._id}/clicked`, { clicked: true });
-export const putCategorySeen = category => put(baseUrl + `/api/v1/jobs/unseen/${category.name}`, {});
+  function request(url, opts = {}) {
+    return fetch(url, opts)
+      .then(_ => _.json());
+  }
+
+  function requestJson(url, opts = {}) {
+    return request(url, {
+      ...opts,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(opts.body),
+    });
+  }
+
+  function post(url, body) {
+    return requestJson(url, {
+      method: 'post',
+      body
+    });
+  }
+
+  function put(url, body) {
+    return requestJson(url, {
+      method: 'put',
+      body
+    });
+  }
+}
