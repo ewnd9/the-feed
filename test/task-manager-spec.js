@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { TaskManager } from '../src/jobs/task-manager';
+import TaskManager from '../src/jobs/task-manager';
 import initServices from '../src/services/';
 import dummyTask from '../src/jobs/tasks/dummy-task/dummy-task';
 

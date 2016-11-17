@@ -4,7 +4,7 @@ import sanitize from 'sanitize-html';
 
 import { Category, Item } from '../schema/';
 
-export default ({ itemsService, categoriesService }, tasks) => {
+export default ({ itemsService, categoriesService, jobsService }) => {
   const router = Router();
 
   router.get({
@@ -13,14 +13,17 @@ export default ({ itemsService, categoriesService }, tasks) => {
       response: t.list(Category)
     },
     handler: (req, res, next) => {
-      categoriesService
-        .findUnseenCategories()
-        .then(categories => {
-          res.json(tasks.map(task => {
-            const category = categories.find(category => category.task === task.name);
+      Promise
+        .all([
+          categoriesService.findUnseenCategories(),
+          jobsService.findAll()
+        ])
+        .then(([ categories, jobs ]) => {
+          res.json(jobs.map(job => {
+            const category = categories.find(category => category.task === job.name);
 
             return category || {
-              name: task.name
+              name: job.name
             };
           }));
         })

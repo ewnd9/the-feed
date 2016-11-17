@@ -7,9 +7,7 @@ import compression from 'compression';
 import bodyParser from 'body-parser';
 
 import dbInit from './db/';
-import taskManager from './jobs/task-manager';
-
-import config, { jobs } from './config';
+import config from './config';
 
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
@@ -37,9 +35,9 @@ function start() {
       app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
       app.use(bodyParser.json({ limit: '50mb' }));
 
-      app.use('/', itemsRoutes(services, jobs));
-      app.use('/', categoriesRoutes(services, jobs));
-      app.use('/', jobsRoutes(services, jobs));
+      app.use('/', itemsRoutes(services));
+      app.use('/', categoriesRoutes(services));
+      app.use('/', jobsRoutes(services));
 
       if (process.env.NODE_ENV === 'production') {
         const renderReact = require('./server-render').default;
@@ -92,7 +90,7 @@ function start() {
         if (config['disable-tasks']) {
           console.log('tasks disabled');
         } else {
-          taskManager(services, jobs);
+          services.jobsService.init();
         }
       });
 

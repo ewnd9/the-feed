@@ -1,6 +1,6 @@
-import Promise from 'bluebird';
+export default TaskManager;
 
-export function TaskManager(services) {
+function TaskManager(services) {
   this.services = services;
 }
 
@@ -48,7 +48,7 @@ Task.prototype.run = function() {
     .task(this.job.params)
     .then(items => {
       this.stats.total = items.length;
-      return Promise.map(items, item => this.processItem(item));
+      return Promise.all(items.map(item => this.processItem(item)));
     })
     .catch(err => {
       this.log(err, err.stack);
@@ -105,16 +105,4 @@ Task.prototype.addIfNotFound = function(item) {
   } else {
     return Promise.resolve(item);
   }
-};
-
-export default (services, jobs = []) => {
-  const manager = new TaskManager(services);
-
-  jobs.forEach((job, i) => {
-    setTimeout(() => {
-      const fn = manager.runJob.bind(manager, job);
-      setInterval(fn, 1000 * 60 * job.interval);
-      fn();
-    }, i * 1000 * 10);
-  });
 };
