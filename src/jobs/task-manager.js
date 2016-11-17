@@ -55,7 +55,7 @@ Task.prototype.run = function() {
     });
 };
 
-Task.prototype.processItem = function(data) {
+Task.prototype.processItem = function({ id, url, title, data }) {
   const { itemsService } = this.services;
 
   const item = {
@@ -63,10 +63,12 @@ Task.prototype.processItem = function(data) {
       task: this.job.name,
       seen: false
     },
+    url,
+    title,
     data
   };
 
-  item._id = this.job.name + ':' + item.data.id.replace(/\W/g, '') + '';
+  item._id = this.job.name + ':' + id.replace(/\W/g, '') + '';
 
   return itemsService.upsert(item, this.addIfNotFound.bind(this))
     .then(

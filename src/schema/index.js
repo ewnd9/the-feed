@@ -20,6 +20,10 @@ export const Item = Model.extend({
       seen: t.Boolean,
       clickedAt: t.maybe(t.String)
   }),
+
+  url: t.String,
+  title: t.String,
+
   data: t.Object
 });
 

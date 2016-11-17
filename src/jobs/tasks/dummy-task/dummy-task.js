@@ -2,7 +2,9 @@ export default {
   task: () => {
     const testItem = {
       id: '1',
-      url: 'http://ewnd9.com/'
+      title: 'test-1',
+      url: 'http://ewnd9.com/',
+      data: {}
     };
 
     return Promise.resolve([testItem]);

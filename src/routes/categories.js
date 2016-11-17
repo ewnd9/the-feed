@@ -83,11 +83,13 @@ function cleanPost(post) {
   Object
     .keys(post.data || {})
     .forEach(key => {
-      post.data[key] = sanitize(post.data[key], {
-        allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
-        allowedAttributes: {
-          a: ['href']
-        }
-      });
+      if (typeof post.data[key] === 'string') {
+        post.data[key] = sanitize(post.data[key], {
+          allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br'],
+          allowedAttributes: {
+            a: ['href']
+          }
+        });
+      }
     });
 }
