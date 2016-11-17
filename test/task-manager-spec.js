@@ -13,7 +13,7 @@ test.beforeEach(async t => {
 });
 
 test('task manager', async t => {
-  const { services, db: { Item } } = t.context;
+  const { services, db: { Item, Category } } = t.context;
 
   const items = await dummyTask.task();
   t.ok(items.length > 0);
@@ -23,14 +23,21 @@ test('task manager', async t => {
   const result = await manager.runJob({ name: 'test-dummy', task: 'dummy' });
   t.ok(result._id === 'system-unseen:test-dummy');
 
-  const docs = await Item.db.allDocs({
+  const docs0 = await Item.db.allDocs({
     include_docs: true,
     startkey: 'design_\uffff'
   });
 
-  t.ok(docs.rows.length === 2);
-  t.ok(docs.rows[0].id === 'system-unseen:test-dummy');
-  t.ok(docs.rows[1].id === 'test-dummy:1');
+  t.ok(docs0.rows.length === 1);
+  t.ok(docs0.rows[0].id === 'test-dummy:1');
+
+  const docs1 = await Category.db.allDocs({
+    include_docs: true,
+    startkey: 'design_\uffff'
+  });
+
+  t.ok(docs1.rows.length === 1);
+  t.ok(docs1.rows[0].id === 'system-unseen:test-dummy');
 });
 
 test('itemsService#findAllByStatus, itemsService#updateStatus', async t => {

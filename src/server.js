@@ -4,13 +4,17 @@ import express from 'express';
 
 import morgan from 'morgan';
 import compression from 'compression';
+import bodyParser from 'body-parser';
 
 import dbInit from './db/';
 import taskManager from './jobs/task-manager';
 
 import config, { jobs } from './config';
+
 import itemsRoutes from './routes/items';
 import categoriesRoutes from './routes/categories';
+import jobsRoutes from './routes/jobs-routes';
+
 import initServices from './services/';
 
 import { captureError } from './utils/capture-error';
@@ -29,8 +33,13 @@ function start() {
       const services = initServices(db);
 
       app.use(morgan('request: :remote-addr :method :url :status'));
+
+      app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
+      app.use(bodyParser.json({ limit: '50mb' }));
+
       app.use('/', itemsRoutes(services, jobs));
       app.use('/', categoriesRoutes(services, jobs));
+      app.use('/', jobsRoutes(services, jobs));
 
       if (process.env.NODE_ENV === 'production') {
         const renderReact = require('./server-render').default;
@@ -73,7 +82,7 @@ function start() {
         }
 
         captureError(err);
-        res.status(err.status || 500).json({ error: err.stack });
+        res.status(err.status || 500).json({ error: err.stack || err });
       });
 
       const port = process.env.PORT || config.port;
