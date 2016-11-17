@@ -10,7 +10,7 @@ export default ({ itemsService }) => {
   router.get({
     path: '/api/v1/items/category/:id',
     schema: {
-      response: t.list(Item)
+      response: t.struct({ items: t.list(Item) })
     },
     handler: (req, res, next) => {
       const category = req.params.id;
@@ -31,9 +31,9 @@ export default ({ itemsService }) => {
       }
 
       return fn
-        .then(posts => {
-          posts.forEach(post => cleanPost(post));
-          res.json(posts);
+        .then(items => {
+          items.forEach(item => cleanItem(item));
+          res.json({ items });
         })
         .catch(err => next(err));
     }
@@ -42,12 +42,12 @@ export default ({ itemsService }) => {
   router.put({
     path: '/api/v1/items/:id/seen',
     schema: {
-      response: Item
+      response: t.struct({ item: Item })
     },
     handler: (req, res, next) => {
       itemsService
         .updateStatus(req.params.id, true)
-        .then(result => res.json(result))
+        .then(item => res.json({ item }))
         .catch(err => next(err));
     }
   });
@@ -55,12 +55,12 @@ export default ({ itemsService }) => {
   router.put({
     path: '/api/v1/items/:id/clicked',
     schema: {
-      response: Item
+      response: t.struct({ item: Item })
     },
     handler: (req, res, next) => {
       itemsService
         .updateClicked(req.params.id)
-        .then(result => res.json(result))
+        .then(item => res.json({ item }))
         .catch(err => next(err));
     }
   });
@@ -68,7 +68,7 @@ export default ({ itemsService }) => {
   return router.getRoutes();
 };
 
-function cleanPost(post) {
+function cleanItem(post) {
   Object
     .keys(post.data || {})
     .forEach(key => {

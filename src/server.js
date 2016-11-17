@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import dbInit from './db/';
 import config from './config';
 
-import itemsRoutes from './routes/items';
+import itemsRoutes from './routes/items-routes';
 import jobsRoutes from './routes/jobs-routes';
 
 import initServices from './services/';

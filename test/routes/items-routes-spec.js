@@ -38,20 +38,20 @@ test('PUT /api/v1/items/:id/seen', async t => {
 
   const { body: body0 } = await getUnseen();
 
-  t.truthy(body0.length === 1);
-  t.truthy(body0[0].meta.task === 'dummy-job');
+  t.truthy(body0.items.length === 1);
+  t.truthy(body0.items[0].meta.task === 'dummy-job');
 
   const opts1 = {
     params: {
-      id: body0[0]._id
+      id: body0.items[0]._id
     }
   };
 
   const { body: body1 } = await agent.put('/api/v1/items/:id/seen', opts1);
-  t.truthy(body1._id === opts1.params.id);
+  t.truthy(body1.item._id === opts1.params.id);
 
   const { body: body2 } = await getUnseen();
-  t.truthy(body2.length === 0);
+  t.truthy(body2.items.length === 0);
 });
 
 test('PUT /api/v1/items/:id/clicked', async t => {
@@ -59,20 +59,20 @@ test('PUT /api/v1/items/:id/clicked', async t => {
   await populateDb(services);
 
   const { body: body0 } = await getClicked();
-  t.truthy(body0.length === 0);
+  t.truthy(body0.items.length === 0);
 
   const { body: body1 } = await getUnseen();
 
   const opts2 = {
     params: {
-      id: body1[0]._id
+      id: body1.items[0]._id
     }
   };
 
   const { body: body2 } = await agent.put('/api/v1/items/:id/clicked', opts2);
-  t.truthy(body2._id === opts2.params.id);
+  t.truthy(body2.item._id === opts2.params.id);
 
   const { body: body3 } = await getClicked();
-  t.truthy(body3.length === 1);
-  t.truthy(body3[0].meta.task === 'dummy-job');
+  t.truthy(body3.items.length === 1);
+  t.truthy(body3.items[0].meta.task === 'dummy-job');
 });
