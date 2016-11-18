@@ -18,7 +18,7 @@ JobsService.prototype.findOneByName = function(name) {
 
 JobsService.prototype.create = function(data) {
   return this.Job
-    .put(this.defaultParams(data))
+    .put(data)
     .then(job => this.startJob(job));
 };
 
@@ -31,10 +31,10 @@ JobsService.prototype.update = function(data) {
         data._rev = null;
 
         return this.Job.db.remove(prevValue)
-          .then(() => this.Job.put(this.defaultParams(data)));
+          .then(() => this.Job.put(data));
       }
 
-      return this.Job.put(this.defaultParams(data));
+      return this.Job.put(data);
     })
     .then(job => this.startJob(job));
 };
@@ -64,23 +64,6 @@ JobsService.prototype.startJob = function(job, timeout = 0) {
   }
 
   return job;
-};
-
-JobsService.prototype.defaultParams = function(data) {
-  data.interval = data.interval || '40m';
-  data.unseen = typeof data.unseen !== 'boolean' ? false : data.unseen;
-
-  try {
-    const minutes = parseInterval(data.interval);
-
-    if (minutes === 0) {
-      throw new Error(`0`);
-    }
-  } catch (e) {
-    throw new Error(`${data.name} has incorrect interval: "${data.interval}"`);
-  }
-
-  return data;
 };
 
 JobsService.prototype.updateUnseenStatus = function(job, status) {

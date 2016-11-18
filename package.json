@@ -84,6 +84,7 @@
     "table": "^3.7.4",
     "tcomb": "^3.2.15",
     "tcomb-form": "^0.9.10",
+    "tcomb-property": "^1.0.0",
     "tcomb-react": "^0.9.3",
     "tcomb-validation": "^3.3.0",
     "twitter": "^1.2.5",

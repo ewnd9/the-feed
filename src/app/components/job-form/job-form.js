@@ -10,6 +10,7 @@ import { propTypes } from 'tcomb-react';
 import tasks from '../../tasks';
 import { schema } from '../../reducers/jobs-reducer';
 import { Job, reactRouterPropTypes } from '../../../schema';
+import { createInstance } from 'tcomb-property';
 
 import { upsertJob, fetchJobs, updateJobValue } from '../../actions/jobs-actions';
 
@@ -18,18 +19,18 @@ const mapDispatchToProps = { upsertJob, fetchJobs, updateJobValue };
 
 const taskName = Object.keys(tasks)[0];
 const task = tasks[taskName];
-const defaultJob = { task: taskName };
+const defaultJob = () => createInstance(Job, { task: taskName });
 
 const hooks = {
   fetch({ dispatch, params, getState }) {
     if (!params.id) {
-      return dispatch(updateJobValue(defaultJob));
+      return dispatch(updateJobValue(defaultJob()));
     }
 
     return dispatch(fetchJobs())
       .then(() => {
         const jobs = getState().jobs.jobs;
-        const job = jobs.find(job => job.name === params.id) || defaultJob;
+        const job = jobs.find(job => job.name === params.id) || defaultJob();
 
         return dispatch(updateJobValue(job));
       });
