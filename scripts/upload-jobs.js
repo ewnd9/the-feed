@@ -17,7 +17,12 @@ let queue = Promise.resolve();
 
 Object.keys(config.tasks)
   .reduce((total, curr) => {
-    total.push(Object.assign({}, config.tasks[curr], { name: curr }));
+    const obj = config.tasks[curr];
+    const ret = Object.assign({}, config.tasks[curr], { name: curr, task: obj.task + '-task' });
+
+    total.push(ret);
+    console.log(JSON.stringify(ret, null, 2));
+
     return total;
   }, [])
   .map(task => {

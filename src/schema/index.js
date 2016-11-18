@@ -10,9 +10,11 @@ export const Model = t.struct({
 
 export const Post = Model.extend({
   meta: t.struct({
-      task: t.String,
-      seen: t.Boolean,
-      clickedAt: t.maybe(t.String)
+    jobId: t.String,
+    jobName: t.String,
+    task: t.String,
+    seen: t.Boolean,
+    clickedAt: t.maybe(t.String)
   }),
 
   url: t.String,
@@ -26,7 +28,7 @@ export const Job = Model.extend({
   task: t.String,
   interval: t.maybe(t.String),
   params: t.Object,
-  unseen: t.Boolean
+  unseen: t.maybe(t.Boolean)
 });
 
 export const reactRouterPropTypes = {

@@ -17,7 +17,7 @@ const Post = {
       name: BY_CATEGORY,
       fn: `function(doc) {
         if (doc.meta) {
-          emit(doc.meta.task + '$' + doc.createdAt + '$' + doc._id);
+          emit(doc.meta.jobId + '$' + doc.createdAt + '$' + doc._id);
         }
       }`
     },

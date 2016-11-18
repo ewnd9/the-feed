@@ -25,7 +25,17 @@ JobsService.prototype.create = function(data) {
 JobsService.prototype.update = function(data) {
   return this.Job
     .findOne(data)
-    .then(() => this.Job.put(this.defaultParams(data)))
+    .then(prevValue => {
+      if (prevValue._id !== this.Job._createId(data)) {
+        data._id = this.Job._createId(data);
+        data._rev = null;
+
+        return this.Job.db.remove(prevValue)
+          .then(() => this.Job.put(this.defaultParams(data)));
+      }
+
+      return this.Job.put(this.defaultParams(data));
+    })
     .then(job => this.startJob(job));
 };
 

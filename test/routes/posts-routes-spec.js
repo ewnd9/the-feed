@@ -39,7 +39,7 @@ test('PUT /api/v1/posts/:id/seen', async t => {
   const { body: body0 } = await getUnseen();
 
   t.truthy(body0.posts.length === 1);
-  t.truthy(body0.posts[0].meta.task === 'dummy-job');
+  t.truthy(body0.posts[0].meta.jobName === 'dummy-job');
 
   const opts1 = {
     params: {
@@ -74,5 +74,5 @@ test('PUT /api/v1/posts/:id/clicked', async t => {
 
   const { body: body3 } = await getClicked();
   t.truthy(body3.posts.length === 1);
-  t.truthy(body3.posts[0].meta.task === 'dummy-job');
+  t.truthy(body3.posts[0].meta.jobName === 'dummy-job');
 });

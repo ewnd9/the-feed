@@ -22,7 +22,7 @@ test('GET /api/v1/jobs', async t => {
   const { body } = await getJobs();
 
   t.truthy(body.jobs.length === 1);
-  t.truthy(body.jobs[0].task === 'dummy');
+  t.truthy(body.jobs[0].task === 'dummy-task');
 });
 
 test('PUT /api/v1/jobs', async t => {

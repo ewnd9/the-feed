@@ -13,7 +13,7 @@ export default ({ postsService }) => {
       response: t.struct({ posts: t.list(Post) })
     },
     handler: (req, res, next) => {
-      const job = req.params.id;
+      const job = encodeURIComponent(req.params.id);
 
       const id = req.query.id;
       const date = req.query.date;

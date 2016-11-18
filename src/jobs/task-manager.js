@@ -35,7 +35,8 @@ function Task(services, job, log, stats) {
   this.log = log;
   this.stats = stats;
   this.refineCount = 0;
-  this.executor = require(`./tasks/${job.task}-task/${job.task}-task.js`).default;
+
+  this.executor = require(`./tasks/${job.task}/${job.task}.js`).default;
 }
 
 Task.prototype.run = function() {
@@ -55,7 +56,9 @@ Task.prototype.processItem = function({ id, url, title, data }) {
 
   const item = {
     meta: {
-      task: this.job.name,
+      jobId: this.job._id,
+      jobName: this.job.name,
+      task: this.job.task,
       seen: false
     },
     url,
@@ -63,7 +66,7 @@ Task.prototype.processItem = function({ id, url, title, data }) {
     data
   };
 
-  item._id = this.job.name + ':' + id.replace(/\W/g, '') + '';
+  item._id = this.job._id + ':' + id.replace(/\W/g, '') + '';
 
   return postsService.upsert(item, this.addIfNotFound.bind(this))
     .then(

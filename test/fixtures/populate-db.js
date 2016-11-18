@@ -8,4 +8,4 @@ export default function populateDb(services) {
     .then(job => manager.runJob(job));
 }
 
-export const dummyJob = { name: 'dummy-job', task: 'dummy', params: {} };
+export const dummyJob = { name: 'dummy-job', task: 'dummy-task', params: {} };

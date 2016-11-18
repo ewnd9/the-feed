@@ -1,5 +1,5 @@
 import test from 'ava';
-import twitterTask from './../src/tasks/twitter-links-task';
+import twitterTask from './twitter-links-task';
 
 test('follow specification', t => {
   t.true(typeof twitterTask.task === 'function');

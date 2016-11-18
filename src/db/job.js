@@ -1,5 +1,5 @@
 const Job = {
-  createId: ({ name }) => name
+  createId: ({ name }) => encodeURIComponent(name)
 };
 
 export default Job;
