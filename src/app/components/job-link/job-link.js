@@ -19,7 +19,7 @@ export default React.createClass({
   },
   render: function() {
     const { jobName } = this.props;
-    const path = `/r/${jobName.toLowerCase()}`;
+    const path = `/r/${encodeURIComponent(jobName.toLowerCase())}`;
 
     return (
       <Link className={styles.category}

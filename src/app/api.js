@@ -5,14 +5,21 @@ export default createAPI;
 function createAPI(baseUrl) {
   return {
     findByJob(jobId, id, date) {
+      console.log(jobId, encodeURIComponent(jobId));
       const params = (id && date) ? `id=${id}&date=${date}` : '';
 
-      return request(baseUrl + `/api/v1/posts/job/${jobId}?${params}`)
+      return request(baseUrl + `/api/v1/posts/job/${encodeURIComponent(jobId)}?${params}`)
         .then(({ posts }) => posts);
     },
     fetchJobs() {
       return request(baseUrl + '/api/v1/jobs')
         .then(({ jobs }) => jobs);
+    },
+    createJob(job) {
+      return put(baseUrl + '/api/v1/jobs', { job });
+    },
+    updateJob(job) {
+      return post(baseUrl + '/api/v1/jobs', { job });
     },
     putSeen(item) {
       return put(baseUrl + `/api/v1/posts/${item._id}/seen`, { seen: true });
@@ -21,7 +28,7 @@ function createAPI(baseUrl) {
       return put(baseUrl + `/api/v1/posts/${item._id}/clicked`, { clicked: true });
     },
     putJobAsSeen(job) {
-      return post(baseUrl + `/api/v1/jobs/unseen/${job.name}`, {});
+      return post(baseUrl + `/api/v1/jobs/unseen/${job._id}`, {});
     }
   };
 

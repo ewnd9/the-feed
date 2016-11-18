@@ -87,7 +87,7 @@ export default React.createClass({
           }
           <span>
             <span className={`${styles.data} ${styles.task}`}>
-              { result.meta.task }:
+              { result.meta.jobName }:
             </span>
             {' '}
             {

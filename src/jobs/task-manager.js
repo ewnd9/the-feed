@@ -44,7 +44,7 @@ Task.prototype.run = function() {
     .task(this.job.params)
     .then(items => {
       this.stats.total = items.length;
-      return Promise.all(items.map(item => this.processItem(item)));
+      return Promise.all(items.reverse().map(item => this.processItem(item)));
     })
     .catch(err => {
       this.log(err, err.stack);

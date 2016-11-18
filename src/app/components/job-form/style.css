@@ -1,0 +1,19 @@
+@import '../../variables.css';
+
+.form {
+  padding: 10px;
+  border: 1px solid var(--borderColor);
+}
+
+.fields {
+  border: 1px;
+  margin-bottom: 10px;
+}
+
+.submitGroup {
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  composes: btn from '../../style.css';
+}

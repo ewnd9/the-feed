@@ -53,7 +53,8 @@ browserHistory.listen(location => {
       path: renderProps.location.pathname,
       query: renderProps.location.query,
       params: renderProps.params,
-      dispatch
+      dispatch,
+      getState: store.getState
     };
 
     if (window.INITIAL_STATE) {

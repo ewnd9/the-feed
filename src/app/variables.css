@@ -1,6 +1,7 @@
 :root {
   --unreadGreen: #8BC34A;
   --borderColor: #CFD8DC;
+  --borderErrorColor: #A94442;
   --backgroundGrey: #FAFAFA;
   --hoverGrey: #ECEFF1;
   --white: #FFF;

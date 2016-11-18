@@ -6,6 +6,7 @@ import { propTypes } from 'tcomb-react';
 import { connect } from 'react-redux';
 import { markJobAsSeen } from '../../actions/jobs-actions';
 
+import { Link } from 'react-router';
 import JobLink from '../job-link/job-link';
 import { schema } from '../../reducers/jobs-reducer';
 
@@ -31,19 +32,39 @@ const SideMenu = React.createClass({
     return (
       <ul className={styles.sideMenu}>
         {
-          jobs.map(({ name, unseen }, index) => (
-            <li key={index} className={styles.sideMenuItem}>
-              <JobLink jobName={name} onClick={this.onClick.bind(this, index)} />
+          jobs.map(({ _id, name, unseen, interval }, index) => (
+            <Item key={name}>
+              <div>
+                <JobLink jobName={name} onClick={this.onClick.bind(this, index)} />
 
-              { unseen && (
-                <span className={styles.unseenBadge}>●</span>
-              )}
-            </li>
+                { unseen && (
+                  <span className={styles.unseenBadge}>●</span>
+                )}
+              </div>
+              <div className={styles.actions}>
+                <span>Every {interval}</span>
+                {' | '}
+                <Link to={`/jobs/${_id}`}>Edit</Link>
+              </div>
+            </Item>
           ))
         }
+        <Item key="new">
+          <div>
+            <Link to="/jobs/new">Create New</Link>
+          </div>
+        </Item>
       </ul>
     );
   }
 });
+
+function Item({ children }) {
+  return (
+    <li className={styles.sideMenuItem}>
+      {children}
+    </li>
+  );
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);
