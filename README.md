@@ -1,6 +1,7 @@
 # the-feed
 
 [![Build Status](https://travis-ci.org/ewnd9/the-feed.svg?branch=master)](https://travis-ci.org/ewnd9/the-feed)
+[![Coverage Status](https://coveralls.io/repos/ewnd9/the-feed/badge.svg?branch=master&service=github)](https://coveralls.io/github/ewnd9/the-feed?branch=master)
 
 [WIP] the programmable front page of the internet
 
