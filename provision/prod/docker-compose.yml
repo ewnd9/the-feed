@@ -1,0 +1,12 @@
+version: '2'
+services:
+  app:
+    build: ./
+    volumes:
+      - ${DB_PATH}:/db
+    environment:
+      DB_PATH: /db
+      PORT: ${PORT}
+      NODE_ENV: production
+    ports:
+      - "${PORT}:3000"

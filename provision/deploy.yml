@@ -1,0 +1,44 @@
+- hosts: all
+  remote_user: pi
+  vars_files:
+    - 'variables.yml'
+  tasks:
+    - name: build
+      local_action: shell npm run build
+      environment:
+        PORT: "{{ port }}"
+        NODE_ENV: production
+
+    - name: ensure dir
+      file: path="{{ app_dir }}" state=directory
+
+    - name: copy package.json
+      copy: src=../package.json dest={{ app_dir }}/
+
+    - name: copy yarn.lock
+      copy: src=../yarn.lock dest={{ app_dir }}/
+
+    - name: copy Dockerfile
+      copy: src=prod/Dockerfile dest={{ app_dir }}/
+
+    - name: copy docker-compose.yml
+      copy: src=prod/docker-compose.yml dest={{ app_dir }}/
+
+    - name: copy app.js
+      synchronize: src=app.js dest={{ app_dir }}/
+
+    - name: copy dist
+      synchronize: src=dist/ dest={{ app_dir }}/dist/ delete=yes recursive=yes
+
+    - name: copy public
+      synchronize: src=public/ dest={{ app_dir }}/public/ delete=yes recursive=yes
+
+    - name: run docker-compose
+      shell: docker-compose -p feed up -d --build
+      async: 45000
+      poll: 5
+      environment:
+        DB_PATH: "{{ db_dir }}"
+        PORT: "{{ port }}"
+      args:
+        chdir: "{{ app_dir }}"

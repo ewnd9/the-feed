@@ -13,3 +13,4 @@ coverage
 
 /db/
 provision/ansible/variables.yml
+provision/backup.sh

@@ -107,6 +107,19 @@ $ cp example.ecosystem.json ecosystem.json # replace /home/user/media to yours
 $ chmod +x deploy.sh
 ```
 
+### Provision
+
+```sh
+$ ansible-playbook -i <raspberry-ip>, provision/deploy.yml
+$ ansible-playbook -i <raspberry-ip>, provision/backup-cron-setup.yml
+```
+
+### Deploy
+
+```sh
+$ ansible-playbook -i <raspberry-ip>, provision/deploy.yml
+```
+
 ## License
 
 MIT © [ewnd9](http://ewnd9.com)
