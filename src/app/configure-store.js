@@ -3,8 +3,25 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from './reducers/index';
 import createApiCallMiddleware from './middleware/api-call-middleware';
+import createApi from './api';
 
 export default function configureStore(initialState, api) {
+  if (!api) {
+    const baseUrl = (() => {
+      if (typeof window === 'undefined') {
+        if (process.env.NODE_ENV === 'production') {
+          return `http://localhost:${process.env.PORT || 3000}`;
+        } else {
+          return 'http://localhost:3000';
+        }
+      } else {
+        return '';
+      }
+    })();
+
+    api = createApi(baseUrl);
+  }
+
   const middleware = [
     thunkMiddleware.withExtraArgument({ api }),
     createApiCallMiddleware({ api })

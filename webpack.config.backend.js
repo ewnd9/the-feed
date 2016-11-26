@@ -7,7 +7,7 @@ const nodeExternals = require('webpack-node-externals');
 const config = require(__dirname + '/webpack.config.prod');
 
 config.target = 'node';
-config.entry = __dirname + '/src/cli.js';
+config.entry = __dirname + '/src/server.js';
 config.node = {
   console: false,
   global: false,
@@ -18,6 +18,7 @@ config.node = {
 };
 config.output.path = __dirname + '/dist';
 config.output.filename = 'backend.js';
+config.output.libraryTarget = 'commonjs2';
 config.externals = [nodeExternals()];
 
 config.plugins = config.plugins.reduce(function(total, curr) {

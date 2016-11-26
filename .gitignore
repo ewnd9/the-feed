@@ -10,3 +10,6 @@ config*.yml
 ecosystem*.json
 .nyc_output
 coverage
+
+/db/
+provision/ansible/variables.yml
