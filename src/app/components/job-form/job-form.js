@@ -96,7 +96,7 @@ const JobForm = React.createClass({
       upsertJob(job)
         .then(res => {
           return fetchJobs(true)
-            .then(() => this.context.router.push(`/jobs/${res.response._id}`));
+            .then(() => this.context.router.push(`/jobs/${res.response.job._id}`));
         });
     } else {
       console.log('invalid', job, this.refs.form.validate());
