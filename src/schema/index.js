@@ -8,6 +8,7 @@ export const Model = t.struct({
   _rev: t.maybe(t.String),
   _key: t.maybe(t.String),
 
+  createdAt: t.maybe(t.String),
   updatedAt: t.maybe(t.String)
 });
 

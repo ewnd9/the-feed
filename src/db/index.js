@@ -5,6 +5,9 @@ import { captureError } from '../utils/capture-error';
 import PouchDB from 'pouchdb-node';
 import init from 'pouchdb-model/dist/init';
 
+import MigratePlugin from 'pouchdb-migrate';
+PouchDB.plugin(MigratePlugin);
+
 import Post from './post';
 import Job from './job';
 
