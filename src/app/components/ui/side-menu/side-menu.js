@@ -32,10 +32,10 @@ const SideMenu = React.createClass({
     return (
       <ul className={styles.sideMenu}>
         {
-          jobs.map(({ _id, name, unseen, interval }, index) => (
-            <Item key={name}>
+          jobs.map(({ _id, unseen, interval }, index) => (
+            <Item key={_id}>
               <div>
-                <JobLink jobName={name} onClick={this.onClick.bind(this, index)} />
+                <JobLink jobName={_id} onClick={this.onClick.bind(this, index)} />
 
                 { unseen && (
                   <span className={styles.unseenBadge}>●</span>
