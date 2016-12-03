@@ -1,5 +1,5 @@
 const Job = {
-  createId: ({ name }) => encodeURIComponent(name),
+  createId: ({ name }) => name.replace(/\W+/g, '-'),
   migrations: [
     function(doc) {
       if (doc.createdAt) {

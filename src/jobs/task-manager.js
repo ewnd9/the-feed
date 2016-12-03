@@ -66,7 +66,7 @@ Task.prototype.processItem = function({ id, url, title, data }) {
     data
   };
 
-  item._id = this.job._id + ':' + id.replace(/\W/g, '') + '';
+  item._id = this.job._id + '-' + id.replace(/\W+/g, '-');
 
   return postsService.upsert(item, this.addIfNotFound.bind(this))
     .then(

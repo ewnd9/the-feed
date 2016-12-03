@@ -25,7 +25,7 @@ test('task manager', async t => {
   });
 
   t.ok(docs0.rows.length === 1);
-  t.ok(docs0.rows[0].id === 'dummy-job:1');
+  t.ok(docs0.rows[0].id === 'dummy-job-1');
 
   const docs1 = await Job.db.allDocs({
     include_docs: true,
