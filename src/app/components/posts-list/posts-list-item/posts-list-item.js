@@ -10,7 +10,7 @@ import _ from 'lodash';
 import ReactTooltip from 'react-tooltip';
 
 import createPreview from 'html-preview';
-import { Post } from '../../../schema/';
+import { Post } from '../../../../schema/';
 
 export default React.createClass({
   propTypes: propTypes({

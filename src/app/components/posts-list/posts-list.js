@@ -13,7 +13,7 @@ import {
   markPostAsClicked
 } from './../../actions/posts-actions';
 
-import Post from './../posts-list-item/posts-list-item';
+import Post from './posts-list-item/posts-list-item';
 import { schema } from '../../reducers/posts-reducer';
 import { reactRouterPropTypes } from '../../../schema';
 

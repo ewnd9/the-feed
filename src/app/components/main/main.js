@@ -6,8 +6,8 @@ import { propTypes } from 'tcomb-react';
 import { provideHooks } from 'redial';
 import { fetchJobs } from '../../actions/jobs-actions';
 
-import Header from '../header/header';
-import SideMenu from '../side-menu/side-menu';
+import Header from '../ui/header/header';
+import SideMenu from '../ui/side-menu/side-menu';
 
 import t from 'tcomb';
 import { reactRouterPropTypes } from '../../../schema/';

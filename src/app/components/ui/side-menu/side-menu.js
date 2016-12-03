@@ -4,11 +4,11 @@ import styles from './style.css';
 import t from 'tcomb';
 import { propTypes } from 'tcomb-react';
 import { connect } from 'react-redux';
-import { markJobAsSeen } from '../../actions/jobs-actions';
+import { markJobAsSeen } from '../../../actions/jobs-actions';
 
 import { Link } from 'react-router';
 import JobLink from '../job-link/job-link';
-import { schema } from '../../reducers/jobs-reducer';
+import { schema } from '../../../reducers/jobs-reducer';
 
 const mapStateToProps = ({ jobs }) => ({ jobs });
 const mapDispatchToProps = { markJobAsSeen };
