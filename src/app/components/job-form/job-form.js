@@ -48,6 +48,9 @@ const options = {
     _key: {
       type: 'hidden'
     },
+    createdAt: {
+      type: 'hidden'
+    },
     updatedAt: {
       type: 'hidden'
     },
